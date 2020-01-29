@@ -5,6 +5,3 @@ build_job:
     stage: build
     script:
         - ./gradlew clean assembleRelease
-    artifacts:
-    paths:
-        - app/build/outputs/
