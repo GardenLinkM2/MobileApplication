@@ -2,7 +2,7 @@ stages:
     - build
 
 build_job:
-    image: openjdk:11
+    image: openjdk:8
     stage: build
     script:
         - ./gradlew clean assembleRelease
