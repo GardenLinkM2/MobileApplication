@@ -6,7 +6,6 @@ stages:
 build_job:
     stage: build
     script:
-        - export GRADLE_USER_HOME="/root/.m2"
         - gradle clean assembleRelease
     after_script:
         - echo "Build complete"
