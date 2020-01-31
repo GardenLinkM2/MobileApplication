@@ -1,4 +1,4 @@
-image: mobile
+image: local_android
 
 stages:
     - build
@@ -6,6 +6,6 @@ stages:
 build_job:
     stage: build
     script:
-        - ./gradlew clean assembleRelease
+        - gradle clean assembleRelease
     after_script:
         - echo "Build complete"
