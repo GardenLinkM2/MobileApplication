@@ -10,6 +10,8 @@ build_prd:
     script:
         - gradle clean test
         - gradle clean assembleRelease
+        - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(grep -Po '"versionName": *\K"[^"]*' app/build/outputs/apk/release/output.json | cut -d '"' -f 2).apk"
+        - sonar-scanner
 
 build_dev:
     stage: build
@@ -18,7 +20,9 @@ build_dev:
     script:
         - gradle clean test
         - gradle clean assembleDebug
-        
+        - curl -u $CURL_CREDENTIALS -T app/build/outputs/apk/debug/app-debug.apk "https://binaries.artheriom.fr/artifactory/gradle-dev-local/app/app-$(grep -Po '"versionName": *\K"[^"]*' app/build/outputs/apk/debug/output.json | cut -d '"' -f 2).apk"
+        - sonar-scanner
+		
 test_all:
     stage: build
     except:
