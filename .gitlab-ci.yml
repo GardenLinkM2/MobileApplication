@@ -21,7 +21,7 @@ build_dev:
     script:
         - gradle clean test
         - gradle clean assembleDebug
-               - sonar-scanner
+        - sonar-scanner
 		
 test_all:
     stage: build
