@@ -3,9 +3,26 @@ image: local_android
 stages:
     - build
 
-build_job:
+build_prd:
     stage: build
+    only:
+        - master
     script:
+        - gradle clean test
         - gradle clean assembleRelease
-    after_script:
-        - echo "Build complete"
+
+build_dev:
+    stage: build
+    only:
+        - develop
+    script:
+        - gradle clean test
+        - gradle clean assembleDebug
+        
+test_all:
+    stage: build
+    except:
+        - master
+        - develop
+    script:
+        - gradle clean test
