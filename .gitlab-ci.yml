@@ -22,7 +22,7 @@ build_dev:
         - gradle clean test
         - gradle clean assembleDebug
         - sonar-scanner
-		
+
 test_all:
     stage: build
     except:
