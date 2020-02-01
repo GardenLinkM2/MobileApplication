@@ -12,7 +12,7 @@ build_prd:
         - gradle clean assembleRelease
         - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(/root/prod.sh).apk"
         - cd app
-        - sonar-scanner -Dsonar.host.url=https://quality.artheriom.fr/ -Dsonar.login=9afcb6be31a8be44ff41ebd0010c5477b7cffb56 -Dsonar.projectKey=mobile -Dsonar.java.binaries=build/intermediates/classes
+        - sonar-scanner
 
 build_dev:
     stage: build
@@ -22,7 +22,7 @@ build_dev:
         - gradle clean test
         - gradle clean assembleDebug
         - curl -u $CURL_CREDENTIALS -T app/build/outputs/apk/debug/app-debug.apk "https://binaries.artheriom.fr/artifactory/gradle-dev-local/app/app-$(/root/dev.sh).apk"
-        - sonar-scanner $SONAR
+        - sonar-scanner
 
 test_all:
     stage: build
