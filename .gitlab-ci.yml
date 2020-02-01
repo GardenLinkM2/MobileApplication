@@ -10,8 +10,8 @@ build_prd:
     script:
         - gradle clean test
         - gradle clean assembleRelease
-        - cd app
         - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(/root/prod.sh).apk"
+        - cd app
         - sonar-scanner $SONAR
 
 build_dev:
