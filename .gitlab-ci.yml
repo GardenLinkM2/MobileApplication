@@ -12,7 +12,7 @@ build_prd:
         - gradle clean assembleRelease
         - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(/root/prod.sh).apk"
         - cd app/src
-        - sonar-scanner $SONAR
+        - sonar-scanner -Dsonar.host.url=https://quality.artheriom.fr/ -Dsonar.login=9afcb6be31a8be44ff41ebd0010c5477b7cffb56 -Dsonar.projectName=mobile
 
 build_dev:
     stage: build
