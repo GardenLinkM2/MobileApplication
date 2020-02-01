@@ -22,6 +22,7 @@ build_dev:
         - gradle clean test
         - gradle clean assembleDebug
         - curl -u $CURL_CREDENTIALS -T app/build/outputs/apk/debug/app-debug.apk "https://binaries.artheriom.fr/artifactory/gradle-dev-local/app/app-$(/root/dev.sh).apk"
+        - cd app
         - sonar-scanner
 
 test_all:
