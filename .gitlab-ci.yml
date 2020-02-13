@@ -1,11 +1,34 @@
-image: mobile
+image: local_android
 
 stages:
     - build
 
-build_job:
+build_prd:
     stage: build
+    only:
+        - master
     script:
-        - ./gradlew clean assembleRelease
-    after_script:
-        - echo "Build complete"
+        - gradle clean test
+        - gradle clean assembleRelease
+        - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(/root/prod.sh).apk"
+        - cd app
+        - sonar-scanner 
+
+build_dev:
+    stage: build
+    only:
+        - develop
+    script:
+        - gradle clean test
+        - gradle clean assembleDebug
+        - curl -u $CURL_CREDENTIALS -T app/build/outputs/apk/debug/app-debug.apk "https://binaries.artheriom.fr/artifactory/gradle-dev-local/app/app-$(/root/dev.sh).apk"
+        - cd app
+        - sonar-scanner
+
+test_all:
+    stage: build
+    except:
+        - master
+        - develop
+    script:
+        - gradle clean test
