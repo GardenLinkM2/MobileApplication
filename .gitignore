@@ -31,7 +31,9 @@ build/
 .idea/dictionaries
 .idea/caches
 .idea/modules.xml
-/idea/navEditor.xml
+.idea/navEditor.xml
+.idea/codeStyles/Project.xml
+.idea/misc.xml
 
 # External build folder
 .externalNativeBuild
