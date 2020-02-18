@@ -12,10 +12,16 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MyAccountActivity"/>
+        <activity android:name=".HomeActivity"/>
+        <activity android:name=".WalletActivity"/>
+        <activity android:name=".MessagingActivity"/>
+        <activity android:name=".MyLeasingActivity"/>
+        <activity android:name=".MyLandsActivity"/>
+        <activity android:name=".SignOutActivity"/>
     </application>
 
 </manifest>

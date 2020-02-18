@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:id="@+id/home"
+            android:title="@string/home"
+            android:icon="@drawable/ic_home_white_24dp"/>
+        <item android:id="@+id/myAccount"
+            android:title="@string/myAccount"
+            android:icon="@drawable/ic_person_white_24dp"/>
+        <item android:id="@+id/wallet"
+            android:title="@string/wallet"
+            android:icon="@drawable/ic_monetization_white_24dp"/>
+        <item android:id="@+id/messaging"
+            android:title="@string/messaging"
+            android:icon="@drawable/ic_email_white_24dp"/>
+        <item android:id="@+id/myLeasing"
+            android:title="@string/myLeasing"
+            android:icon="@drawable/ic_folder_shared_white_24dp"/>
+        <item android:id="@+id/myLands"
+            android:title="@string/myLands"
+            android:icon="@drawable/ic_local_florist_white_24dp"/>
+        <item android:id="@+id/signOut"
+            android:title="@string/signOut"
+            android:icon="@drawable/ic_exit_to_app_white_24dp"/>
+    </group>
+</menu>
