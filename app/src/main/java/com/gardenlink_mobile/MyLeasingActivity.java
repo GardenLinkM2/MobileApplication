@@ -2,12 +2,12 @@ package com.gardenlink_mobile;
 
 import android.os.Bundle;
 
-public class MainActivity extends NavigableActivity {
+public class MyLeasingActivity extends NavigableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.myleasing_layout);
 
         initMenu();
     }

@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">GardenLink-Mobile</string>
+    <string name="app_name">GardenLink</string>
+    <string name="home">Accueil</string>
+    <string name="myAccount">Mon Compte</string>
+    <string name="wallet">Mon Porte-Monnaie</string>
+    <string name="messaging">Messagerie</string>
+    <string name="myLeasing">Mes Locations</string>
+    <string name="myLands">Mes Terrains</string>
+    <string name="signOut">Se Déconnecter</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
 </resources>
