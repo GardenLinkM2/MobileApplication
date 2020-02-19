@@ -17,7 +17,7 @@ build_prd:
 build_dev:
     stage: build
     only:
-        - develop
+        - dev
     script:
         - gradle clean test
         - gradle clean assembleDebug
@@ -29,6 +29,6 @@ test_all:
     stage: build
     except:
         - master
-        - develop
+        - dev
     script:
         - gradle clean test
