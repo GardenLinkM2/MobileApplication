@@ -7,7 +7,7 @@ public class HomeActivity extends NavigableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_layout);
+        setContentView(R.layout.home_activity);
 
         initMenu();
     }
