@@ -10,7 +10,7 @@ build_prd:
     script:
         - gradle clean test
         - gradle clean assembleRelease
-        - sonar-scanner 
+        - sonar-scanner -Dsonar.java.binaries=app/build/intermediates/javac/release/classes/com/gardenlink_mobile/
         - curl $CURL_CREDENTIALS -T app/build/outputs/apk/release/app-release-unsigned.apk "https://binaries.artheriom.fr/artifactory/gradle-release-local/app/app-$(/root/prod.sh).apk"
 
 build_dev:
@@ -20,7 +20,7 @@ build_dev:
     script:
         - gradle clean test
         - gradle clean assembleDebug
-        - sonar-scanner
+        - sonar-scanner -Dsonar.java.binaries=app/build/intermediates/javac/debug/classes/com/gardenlink_mobile/
         - curl $CURL_CREDENTIALS -T app/build/outputs/apk/debug/app-debug.apk "https://binaries.artheriom.fr/artifactory/gradle-dev-local/app/app-$(/root/dev.sh).apk"
 
 test_all:
