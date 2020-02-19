@@ -7,7 +7,7 @@ public class MyLeasingActivity extends NavigableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.myleasing_layout);
+        setContentView(R.layout.myleasing_activity);
 
         initMenu();
     }

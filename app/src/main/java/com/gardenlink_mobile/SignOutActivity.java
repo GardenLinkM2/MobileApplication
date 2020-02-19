@@ -11,7 +11,7 @@ public class SignOutActivity extends NavigableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signout_layout);
+        setContentView(R.layout.signout_activity);
 
         initMenu();
     }
