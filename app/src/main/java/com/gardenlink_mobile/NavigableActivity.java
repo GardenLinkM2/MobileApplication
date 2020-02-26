@@ -60,24 +60,6 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         createHeader(headerView);
     }
 
-    protected void initMenu(int idCurrentActivity) {
-
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        headerView = navigationView.inflateHeaderView(R.layout.header);
-        createHeader(headerView);
-
-        navigationView.setCheckedItem(idCurrentActivity);
-    }
-
-
     private void createHeader(View headerView) {
         //TODO: Update with real UserData
         //Todo:getUserAvatar()
@@ -144,5 +126,35 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         Bundle newBundle = new Bundle();
         newBundle.putInt(CURRENT_ACTIVITY_ID, id);
         intent.putExtras(newBundle);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (!this.getClass().getSimpleName().contains("MainActivity")) {
+            Bundle currentBundle = getIntent().getExtras();
+            int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
+
+            navigationView.setCheckedItem(id);
+            super.onResume();
+        } else {
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
+            super.onResume();
+        }
     }
 }
