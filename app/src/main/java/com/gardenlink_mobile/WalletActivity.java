@@ -9,6 +9,8 @@ public class WalletActivity extends NavigableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wallet_activity);
 
-        initMenu();
+        Bundle currentBundle = getIntent().getExtras();
+        int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
+        initMenu(id);
     }
 }
