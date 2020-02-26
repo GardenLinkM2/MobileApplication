@@ -9,6 +9,8 @@ public class MyLandsActivity extends NavigableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mylands_activity);
 
-        initMenu();
+        Bundle currentBundle = getIntent().getExtras();
+        int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
+        initMenu(id);
     }
 }

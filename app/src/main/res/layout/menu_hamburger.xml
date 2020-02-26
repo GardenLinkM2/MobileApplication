@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:menu="@menu/drawermenu"
-        app:itemTextColor="@color/colorWhite"
-        app:itemIconTint="@color/colorWhite"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
         android:layout_gravity="start"
         android:background="@color/colorGreen_topBar"
         />

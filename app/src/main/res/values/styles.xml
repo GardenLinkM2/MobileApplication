@@ -12,4 +12,8 @@
         <item name="listPreferredItemPaddingLeft">50dp</item>
     </style>
 
+    <style name="TextAppearance">
+        <item name="android:textColor">@color/colorBlue_accueil_postButton</item>
+    </style>
+
 </resources>

@@ -1,10 +1,6 @@
 package com.gardenlink_mobile;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
-import androidx.annotation.RequiresApi;
 
 public class SignOutActivity extends NavigableActivity {
 
@@ -13,13 +9,8 @@ public class SignOutActivity extends NavigableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signout_activity);
 
-        initMenu();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void SignOut(View view){
-        Toast.makeText(this, "Au revoir !", Toast.LENGTH_SHORT).show();
-        finishAffinity();
-        finish();
+        Bundle currentBundle = getIntent().getExtras();
+        int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
+        initMenu(id);
     }
 }

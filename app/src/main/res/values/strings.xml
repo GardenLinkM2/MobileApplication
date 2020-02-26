@@ -9,4 +9,5 @@
     <string name="signOut">Se Déconnecter</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
+    <string name="name">Nom Prénom</string>
 </resources>
