@@ -9,8 +9,6 @@ public class MyAccountActivity extends NavigableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myaccount_activity);
 
-        Bundle currentBundle = getIntent().getExtras();
-        int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
-        initMenu(id);
+        initMenu();
     }
 }
