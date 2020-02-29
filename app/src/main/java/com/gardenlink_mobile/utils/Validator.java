@@ -3,19 +3,18 @@ package com.gardenlink_mobile.utils;
 import java.util.regex.Pattern;
 
 public class Validator {
-
-    public final String MAIL_REGEX_MESSAGE = "Format email non respectée";
-    public final String NAME_REGEX_MESSAGE = "De 3 à 25 lettres et -";
-    public final String PHONE_REGEX_MESSAGE = "0 suivi de 9 chiffres";
-    public final String POST_TITLE_REGEX_MESSAGE = "De 5 à 255 lettres et espace";
-    public final String INTEGER_REGEX_SIMPLE_MESSAGE = "Valeur entre 0 et 9999";
-    public final String PRICE_REGEX_DECIMAL_MESSAGE = "Max 4 chiffres avant , ou . et max 2 chiffres décimaux";
-    public final String INTEGER_REGEX_MAX_MESSAGE  = "Valeur max 10000";
-    public final String DURATION_REGEX_SIMPLE_MESSAGE = "De 1 à 36 mois";
-    public final String DURATION_REGEX_MAX_MESSAGE = "De 1 à 36 mois";
-    public final String STREET_NAME_REGEX_MESSAGE = "De 6 à 255 lettres";
-    public final String POST_CODE_REGEX_MESSAGE = "5 chiffres";
-    public final String CITY_REGEX_MESSAGE = "De 1 à 255 lettres";
+    public final static String MAIL_REGEX_MESSAGE = "Format email non respectée";
+    public final static String NAME_REGEX_MESSAGE = "De 3 à 25 lettres et -";
+    public final static String PHONE_REGEX_MESSAGE = "0 suivi de 9 chiffres";
+    public final static String POST_TITLE_REGEX_MESSAGE = "De 5 à 255 lettres et espace";
+    public final static String INTEGER_REGEX_SIMPLE_MESSAGE = "Valeur entre 0 et 9999";
+    public final static String PRICE_REGEX_DECIMAL_MESSAGE = "Max 4 chiffres avant , ou . et max 2 chiffres décimaux";
+    public final static String INTEGER_REGEX_MAX_MESSAGE  = "Valeur max 10000";
+    public final static String DURATION_REGEX_SIMPLE_MESSAGE = "De 1 à 36 mois";
+    public final static String DURATION_REGEX_MAX_MESSAGE = "De 1 à 36 mois";
+    public final static String STREET_NAME_REGEX_MESSAGE = "De 6 à 255 lettres";
+    public final static String POST_CODE_REGEX_MESSAGE = "5 chiffres";
+    public final static String CITY_REGEX_MESSAGE = "De 1 à 255 lettres";
 
     private final static String MAIL_REGEX= "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
