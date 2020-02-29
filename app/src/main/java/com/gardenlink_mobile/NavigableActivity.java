@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -48,7 +49,27 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     protected void initMenu() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        {
+            @Override
+            public void onDrawerSlide(View drawerView,float slideOffset) {
+                super.onDrawerSlide(drawerView,slideOffset);
+                ( (View)drawerLayout).bringToFront();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView)
+            {
+                super.onDrawerClosed(drawerView);
+                final ViewGroup parent = ((ViewGroup)drawerView.getParent().getParent());
+                final ViewGroup lInclude = (ViewGroup)drawerView.getParent();
+                if(parent!=null)
+                {
+                    parent.removeViewInLayout(lInclude);
+                    parent.addView(lInclude,0);
+                }
+            }
+        };
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
