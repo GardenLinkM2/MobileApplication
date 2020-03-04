@@ -1,5 +1,22 @@
 <resources>
-    <string name="app_name">GardenLink</string>
+    <string name="app_name">GardenLink-Mobile</string>
+
+    <string name="connexion_activity">Connexion</string>
+    <string name="connexion_title">Bienvenue ! </string>
+    <string name="connexion_SubTitle">Merci de vous connecter</string>
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="forgottenPassword">Mot de passe oublié</string>
+    <string name="connectButton">SE CONNECTER</string>
+    <string name="signUpButton">S\'INSCRIRE</string>
+
+
+    <string name="forgotten_password_activity">Mot de passe oublié</string>
+    <string name="forgotten_password_title">Mot de passe oublié ? </string>
+    <string name="forgtten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
+    <string name="email_hint">Adresse E-Mail</string>
+    <string name="forgotten_password_send_request">Envoyer</string>
+
     <string name="home">Accueil</string>
     <string name="myAccount">Mon Compte</string>
     <string name="wallet">Mon Porte-Monnaie</string>

@@ -22,6 +22,8 @@
         <activity android:name=".MyLeasingActivity"/>
         <activity android:name=".MyLandsActivity"/>
         <activity android:name=".SignOutActivity"/>
+        <activity android:name=".ConnexionActivity"/>
+        <activity android:name=".ForgottenPasswordActivity"/>
     </application>
 
 </manifest>
