@@ -43,4 +43,20 @@
     <string name="signUp_subTitle">Créez un compte pour accéder à toute les fonctionnalités de GardenLink !</string>
     <string name="signUp_title">Bonjour !</string>
     <string name="signUp_valid">Valide!</string>
+    <string name="NameField">Name</string>
+    <string name="Name">Nom</string>
+    <string name="FirstNameField">FirstName</string>
+    <string name="FirstName">Prénom</string>
+    <string name="Login">Nom d\'utilisateur</string>
+    <string name="LoginField">Login</string>
+    <string name="Password">Mot de passe</string>
+    <string name="PasswordField">Password</string>
+    <string name="Mail">Adresse E-mail</string>
+    <string name="MailField">Mail.mail@mail.fr</string>
+    <string name="Phone">Téléphone</string>
+    <string name="PhoneField">0123456789</string>
+    <string name="NewsLetter">Inscription a la NewsLetter</string>
+    <string name="Modification">Modification</string>
+    <string name="save">SAUVERGARDER</string>
+    <string name="deleteAccount">SUPPRIMER MON COMPTE</string>
 </resources>

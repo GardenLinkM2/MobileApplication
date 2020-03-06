@@ -28,7 +28,7 @@ Every Layouts need to include @layout/menu_hamburger
       layout="@layout/menu_hamburger"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent"/>
-Need to call initMenu(id) in onCreate methode */
+Need to call initMenu() in onCreate methode */
 public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CURRENT_ACTIVITY_ID = "CurrentActivityID";
@@ -167,7 +167,6 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
             Bundle currentBundle = getIntent().getExtras();
             int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
-
             navigationView.setCheckedItem(id);
             super.onResume();
         } else {

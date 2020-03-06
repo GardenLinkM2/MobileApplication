@@ -24,7 +24,7 @@ public class Validator {
 
     private final static String POST_TITLE_REGEX="[A-Za-z \\s]{5,255}";
 
-    private final static  String INTEGER_REGEX_SIMPLE ="[0-9]{1,4}";
+    private final static String INTEGER_REGEX_SIMPLE ="[0-9]{1,4}";
 
     private final static String PRICE_REGEX_DECIMAL = INTEGER_REGEX_SIMPLE +"[.,][0-9]{1,2}";
 
@@ -32,7 +32,7 @@ public class Validator {
 
     private final static String DURATION_REGEX_SIMPLE = "[1-2]{0,1}[0-9]";
 
-    private final static  String DURATION_REGEX_MAX = "3[0-6]";
+    private final static String DURATION_REGEX_MAX = "3[0-6]";
 
     private final static String STREET_NAME_REGEX="[A-Za-z \\s]{6,255}";
 
@@ -46,7 +46,7 @@ public class Validator {
 
     private static final Pattern mMailPattern = Pattern.compile(MAIL_REGEX);
 
-    private static  final Pattern mNamePattern= Pattern.compile(NAME_REGEX);
+    private static final Pattern mNamePattern= Pattern.compile(NAME_REGEX);
 
     private static final Pattern mPhoneRegex= Pattern.compile(PHONE_REGEX);
 
