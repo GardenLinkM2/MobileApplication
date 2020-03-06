@@ -3,7 +3,7 @@
     <!-- Default colors -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#448233</color>
     <!-- Maquette colors -->
     <color name="colorBlue_accueil_postButton">#0387B7</color>
     <color name="colorGray_labelInput_font">#737471</color>
