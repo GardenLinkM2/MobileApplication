@@ -119,8 +119,8 @@ public class ConnexionActivity extends AppCompatActivity {
     public void toSignUp(View view)
     {
         //TODO : replace with real call
-        //Intent lItent = new Intent(this.SignUpActivity.class);
-        //startActivity(lItent);
+        Intent lItent = new Intent(this, SignUpActivity.class);
+        startActivity(lItent);
     }
 
     public void toForgottenPassword(View view)

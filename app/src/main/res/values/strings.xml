@@ -27,4 +27,20 @@
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">Close</string>
     <string name="name">Nom Prénom</string>
+    <string name="signUp_name">Nom</string>
+    <string name="signUp_activity">Inscription</string>
+    <string name="signUp_firstName">Prénom</string>
+    <string name="signUp_phone">N° de téléphone</string>
+    <string name="signUp_email">Adresse e-mail</string>
+    <string name="signUp_password">Mot de passe</string>
+    <string name="signUp_passwordAgain">Confirmer mot de passe</string>
+    <string name="signUp_captcha">Je ne suis pas un robot</string>
+    <string name="mandatory">Obligatoire</string>
+    <string name="signUp_newsletter">Inscription à la newsletter de GardenLink</string>
+    <string name="signUp_signUpButton">S\'INSCRIRE</string>
+    <string name="signUp_CGU_HTML"><![CDATA[J\'accepte les <a href=\'https://i.postimg.cc/PJk6717h/cgu-eated.jpg\'>Conditions Générales d\'Utilisation</a>]]></string>
+    <string name="signUp_not_equals_password">Erreur: les mots de passe entrés ne sont pas identiques</string>
+    <string name="signUp_subTitle">Créez un compte pour accéder à toute les fonctionnalités de GardenLink !</string>
+    <string name="signUp_title">Bonjour !</string>
+    <string name="signUp_valid">Valide!</string>
 </resources>

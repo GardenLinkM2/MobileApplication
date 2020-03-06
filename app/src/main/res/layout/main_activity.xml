@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_Activity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent" >
 
     <TextView
         android:id="@+id/textView"
@@ -18,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/main_connexionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TO CONNEXION"
@@ -25,6 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         />
 
     <!-- If the menu isn't at the end of the document it will be displayed under the TextView-->

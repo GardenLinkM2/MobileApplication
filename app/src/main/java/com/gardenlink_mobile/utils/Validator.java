@@ -3,7 +3,7 @@ package com.gardenlink_mobile.utils;
 import java.util.regex.Pattern;
 
 public class Validator {
-    public final static String MAIL_REGEX_MESSAGE = "Format email non respectée";
+    public final static String MAIL_REGEX_MESSAGE = "Format email";
     public final static String NAME_REGEX_MESSAGE = "De 3 à 25 lettres et -";
     public final static String PHONE_REGEX_MESSAGE = "0 suivi de 9 chiffres";
     public final static String POST_TITLE_REGEX_MESSAGE = "De 5 à 255 lettres et espace";
