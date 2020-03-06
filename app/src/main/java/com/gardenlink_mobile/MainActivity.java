@@ -13,12 +13,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
     }
 
-
     public void toConnexion(View view) {
-        Intent lIntent = new Intent(this, ConnexionActivity.class);
-        startActivity(lIntent);
+        Intent localIntentConnexion = new Intent(this, ConnexionActivity.class);
+        startActivity(localIntentConnexion);
 
     }
-
 
 }
