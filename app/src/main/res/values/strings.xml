@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GardenLink-Mobile</string>
+    <string name="app_name">GardenLink</string>
 
     <string name="connexion_activity">Connexion</string>
     <string name="connexion_title">Bienvenue ! </string>

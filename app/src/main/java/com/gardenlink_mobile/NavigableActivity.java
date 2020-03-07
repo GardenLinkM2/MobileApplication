@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.NumberFormat;
@@ -132,8 +133,12 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
                 intent = new Intent(this, MyLandsActivity.class);
                 break;
             case R.id.signOut:
-                intent = new Intent(this, SignOutActivity.class);
-                break;
+                new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
+                        .setTitle("Voulez-vous vraiment vous déconnecter ?")
+                        .setPositiveButton("Valider", (dialog, which) -> doSignOut())
+                        .setNegativeButton("Retour", (dialog, which) -> {
+                        }).show();
+                return true;
         }
 
         createBundle(intent, id);
@@ -141,6 +146,15 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void doSignOut() {
+        //TODO: process de déconnexion
+        Intent intent = new Intent(this, ConnexionActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void createBundle(Intent intent, int id) {

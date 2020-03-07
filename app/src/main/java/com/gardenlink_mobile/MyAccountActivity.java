@@ -1,7 +1,8 @@
 package com.gardenlink_mobile;
 
-import android.content.DialogInterface;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -19,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import com.gardenlink_mobile.utils.Validator;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -63,7 +66,7 @@ public class MyAccountActivity extends NavigableActivity {
     private Map<Integer, String> inputValidatorMessages;
 
     private static final String PASSWORD_ERROR = "Le mot de passe doit faire entre 5 et 30 caractères";
-
+    public static final int readStoragePermission = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,13 @@ public class MyAccountActivity extends NavigableActivity {
         editAvatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openImage();
+                if (ActivityCompat.checkSelfPermission(MyAccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MyAccountActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            readStoragePermission);
+                } else {
+                    openImage();
+                }
             }
         });
     }
@@ -246,7 +255,7 @@ public class MyAccountActivity extends NavigableActivity {
         } else {
             userPasswordLayout.setError("Erreur ! " + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
         }
-        if (okPhone && okPassword){
+        if (okPhone && okPassword) {
             enableSaveButton();
         } else {
             disableSaveButton();
@@ -350,6 +359,21 @@ public class MyAccountActivity extends NavigableActivity {
                 }
             } else {
                 Toast.makeText(this, "Ce n'est pas une image !", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case readStoragePermission: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openImage();
+                }
+                return;
             }
         }
     }

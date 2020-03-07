@@ -35,7 +35,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    private static final String TAG="SearchFragment";
+    private static final String TAG = "SearchFragment";
 
     private View mView;
 
@@ -50,7 +50,7 @@ public class SearchFragment extends Fragment {
 
     private LocationManager locationManager = null;
 
-    public static final int GeolocPermission=0;
+    public static final int GeolocPermission = 0;
 
     private RotateAnimation rotateOpen;
 
@@ -61,7 +61,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.search_fragment, parent, false);
-        mView= view;
+        mView = view;
 
         View.OnClickListener criteriasListener = new View.OnClickListener() {
             @Override
@@ -108,7 +108,6 @@ public class SearchFragment extends Fragment {
         rotateClose.setDuration(300);
         rotateClose.setInterpolator(new LinearInterpolator());
         rotateClose.setFillAfter(true);
-
 
 
         return view;
@@ -191,18 +190,16 @@ public class SearchFragment extends Fragment {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         }
 
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(getActivity().getApplicationContext(), "Localisation en cours...", Toast.LENGTH_SHORT).show();
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }
-        else
-        {
+        } else {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("GPS désactivé")
                     .setMessage("Votre GPS semble être désactivé, veuillez l'activer pour bénéficier des services de localisation")
-                    .setPositiveButton("OK",null);
+                    .setPositiveButton("OK", null);
 
-            final AlertDialog alert=builder.create();
+            final AlertDialog alert = builder.create();
             alert.show();
 
         }
@@ -219,8 +216,7 @@ public class SearchFragment extends Fragment {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     GeolocPermission);
 
-        }
-        else{
+        } else {
             findLocation();
         }
 
@@ -228,17 +224,16 @@ public class SearchFragment extends Fragment {
     }
 
 
-    private void processLocation(Location location)
-    {
+    private void processLocation(Location location) {
 
         Geocoder geocoder = new Geocoder(getActivity());
         List<Address> addreses = null;
-        if(location != null) {
+        if (location != null) {
             try {
                 addreses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
             } catch (IOException loE) {
-               Log.e(TAG, "Error trying to get location");
+                Log.e(TAG, "Error trying to get location");
             }
             if (addreses == null) {
                 Toast.makeText(getActivity().getApplicationContext(), "Erreur : Aucune Localisation trouvée", Toast.LENGTH_SHORT).show();
@@ -252,8 +247,7 @@ public class SearchFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "Localisation terminée !", Toast.LENGTH_SHORT).show();
 
             }
-        }
-        else{
+        } else {
             Toast.makeText(getActivity().getApplicationContext(), "Localisation indisponible", Toast.LENGTH_SHORT).show();
         }
 
@@ -278,9 +272,6 @@ public class SearchFragment extends Fragment {
         }
 
     }
-
-
-
 
 
     @Override
