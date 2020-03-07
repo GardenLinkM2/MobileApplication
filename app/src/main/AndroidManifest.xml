@@ -3,7 +3,7 @@
     package="com.gardenlink_mobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_gardenlink"
@@ -30,6 +30,7 @@
         <activity android:name=".SignOutActivity"/>
         <activity android:name=".ConnexionActivity"/>
         <activity android:name=".ForgottenPasswordActivity"/>
+
     </application>
 
 </manifest>

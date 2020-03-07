@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/criteriaFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/durationTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:text="Durée"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/minTimeInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/durationSlider"
+        app:layout_constraintEnd_toStartOf="@+id/durationSlider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/durationSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/minTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/durationSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="130dp"
+        android:value="0.0"
+        android:valueFrom="0.0"
+        android:valueTo="36.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/durationTitle"
+        app:layout_constraintVertical_bias="0.145" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/maxTimeInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/durationSlider"
+        app:layout_constraintStart_toEndOf="@+id/durationSlider"
+        app:layout_constraintTop_toTopOf="@+id/durationSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/maxTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/durationUnit"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:text="Mois"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/durationSlider"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/durationSlider" />
+
+
+
+    <!--Area inputs-->
+
+    <TextView
+        android:id="@+id/areaTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Surface"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/durationSlider" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/minAreaInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/areaSlider"
+        app:layout_constraintEnd_toStartOf="@+id/areaSlider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/areaSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/minArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/areaSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="130dp"
+        android:value="0"
+        android:valueFrom="0"
+        android:valueTo="10000"
+        app:layout_constraintStart_toStartOf="@+id/areaTitle"
+        app:layout_constraintTop_toBottomOf="@+id/areaTitle" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/maxAreaInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/areaSlider"
+        app:layout_constraintStart_toEndOf="@+id/areaSlider"
+        app:layout_constraintTop_toTopOf="@+id/areaSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/maxArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/areaUnit"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:text="m²"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/areaSlider"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/areaSlider" />
+
+
+    <!-- Price Inputs-->
+
+    <TextView
+        android:id="@+id/priceTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Prix"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/areaSlider" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/minPriceInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/priceSlider"
+        app:layout_constraintEnd_toStartOf="@+id/priceSlider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/priceSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/minPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/priceSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="130dp"
+        android:value="0.0"
+        android:valueFrom="0.0"
+        android:valueTo="10000.0"
+        app:layout_constraintStart_toStartOf="@+id/priceTitle"
+        app:layout_constraintTop_toBottomOf="@+id/priceTitle" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/maxPriceInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/priceSlider"
+        app:layout_constraintStart_toEndOf="@+id/priceSlider"
+        app:layout_constraintTop_toTopOf="@+id/priceSlider">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/maxPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/priceUnit"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:text="€/Mois"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/priceSlider"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/priceSlider" />
+
+
+    <!--Location Inputs-->
+
+    <TextView
+        android:id="@+id/locationTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Localisation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceSlider" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/streetNumberTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_weight="0.7"
+        android:hint="Numéro de rue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationTitle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/streetNumberField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/streetNameTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_weight="0.7"
+        android:hint="Nom de rue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streetNumberTextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/streetNameField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/postCodeTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_weight="0.7"
+        android:hint="Code postal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/streetNameTextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/postNameField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/CityTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_weight="0.7"
+        android:hint="Ville"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postCodeTextInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cityField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- distance slider-->
+
+    <TextView
+        android:id="@+id/distanceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:text="Distance"
+        app:layout_constraintBottom_toBottomOf="@+id/distanceSlider"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/distanceSlider" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/distanceSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="100dp"
+        android:value="0.0"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        app:layout_constraintStart_toStartOf="@+id/CityTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/CityTextInputLayout" />
+
+    <TextView
+        android:id="@+id/distanceUnit"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:text="Km"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/distanceSlider"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/distanceSlider" />
+
+
+    <!--Orientation -->
+
+    <TextView
+        android:id="@+id/orientationTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Orientation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/distanceSlider" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/orientationButtons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@+id/orientationTitle">
+
+
+        <RadioButton
+            android:id="@+id/radio_north"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Nord" />
+
+        <RadioButton
+            android:id="@+id/radio_south"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="Sud"
+            app:layout_constraintLeft_toRightOf="@+id/radio_north"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+
+        <RadioButton
+            android:id="@+id/radio_east"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="5dp"
+            android:text="Est"
+            app:layout_constraintTop_toBottomOf="@+id/radio_north" />
+
+        <RadioButton
+            android:id="@+id/radio_west"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ouest"
+            app:layout_constraintStart_toStartOf="@+id/radio_south"
+            app:layout_constraintTop_toTopOf="@+id/radio_east"
+
+            />
+
+
+        <RadioButton
+            android:id="@+id/radio_northEast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Nord-Est"
+            app:layout_constraintTop_toBottomOf="@+id/radio_east" />
+
+        <RadioButton
+            android:id="@+id/radio_northWest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nord-Ouest"
+            app:layout_constraintLeft_toLeftOf="@+id/radio_south"
+            app:layout_constraintTop_toTopOf="@+id/radio_northEast" />
+
+
+        <RadioButton
+            android:id="@+id/radio_southWest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Sud-Ouest"
+            app:layout_constraintTop_toBottomOf="@+id/radio_northEast" />
+
+        <RadioButton
+            android:id="@+id/radio_southEst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sud-Est"
+            app:layout_constraintLeft_toLeftOf="@+id/radio_south"
+            app:layout_constraintTop_toTopOf="@+id/radio_southWest" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- soil type-->
+
+    <TextView
+        android:id="@+id/soilTypeTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Type de sol"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orientationButtons" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/soilButtons"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@+id/soilTypeTitle">
+
+
+        <RadioButton
+            android:id="@+id/radio_argileux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Argileux" />
+
+        <RadioButton
+            android:id="@+id/radio_sableux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:text="Sableux"
+            app:layout_constraintLeft_toRightOf="@+id/radio_argileux"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+
+        <RadioButton
+            android:id="@+id/radio_tourbeux"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="5dp"
+            android:text="Tourbeux"
+            app:layout_constraintTop_toBottomOf="@+id/radio_argileux" />
+
+        <RadioButton
+            android:id="@+id/radio_humifere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Humifère"
+            app:layout_constraintStart_toStartOf="@+id/radio_sableux"
+            app:layout_constraintTop_toTopOf="@+id/radio_tourbeux"
+
+            />
+
+
+        <RadioButton
+            android:id="@+id/radio_silicieuse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Silicieuse"
+            app:layout_constraintTop_toBottomOf="@+id/radio_tourbeux" />
+
+        <RadioButton
+            android:id="@+id/radio_calcaire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calcaire"
+            app:layout_constraintLeft_toLeftOf="@+id/radio_sableux"
+            app:layout_constraintTop_toTopOf="@+id/radio_silicieuse" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--Water provided-->
+
+    <TextView
+        android:id="@+id/waterProvidedTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Eau fournie"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/soilButtons" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/waterProvidedTitle"
+        android:orientation="horizontal"
+        android:id="@+id/waterProvidedButtons"
+        >
+
+        <RadioButton
+            android:id="@+id/radio_waterYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oui"
+             />
+
+        <RadioButton
+            android:id="@+id/radio_waterNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non"
+            />
+
+
+
+    </RadioGroup>
+
+    <!-- Equipment provided-->
+
+    <TextView
+        android:id="@+id/equipmentProvidedTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Equipements fournis"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/waterProvidedButtons" />
+
+    <RadioGroup
+        android:id="@+id/equipmentProvidedButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/equipmentProvidedTitle"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/radio_equipmentYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oui"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_equipmentNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non"
+            />
+
+
+
+    </RadioGroup>
+
+    <!-- Direct access to field -->
+
+    <TextView
+        android:id="@+id/directAccessTitle"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="36dp"
+        android:text="Accès Direct au terrain"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/equipmentProvidedButtons" />
+
+    <RadioGroup
+        android:id="@+id/directAccessButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/directAccessTitle"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/radio_accessYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oui"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_accessNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non"
+            />
+
+
+
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/resetCriteriaButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.ActionButton"
+        app:layout_constraintTop_toBottomOf="@id/directAccessButtons"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="24dp"
+        android:text="Réinitialiser les critères"
+        android:backgroundTint="@color/colorWhite"
+        android:textColor="@color/colorBlack"
+        />
+
+
+    <!-- <com.google.android.material.slider.Slider
+         android:id="@+id/range_slider"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="32dp"
+         android:layout_gravity="center"
+         android:valueFrom="0.0"
+         android:valueTo="11.0"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/slider"
+     app:layout_constraintVertical_bias="0.145"/>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

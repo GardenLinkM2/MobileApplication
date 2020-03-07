@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginRight="24dp"
+        android:hint="@string/search_hint"
+        app:endIconDrawable="@drawable/ic_search_24dp"
+        app:endIconMode="custom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_location_24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <ImageView
+        android:id="@+id/criteriaArrow"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_arrow_down_24dp"
+        app:layout_constraintStart_toStartOf="@+id/searchTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/searchTextInputLayout"
+        android:clickable="true"
+        />
+
+
+    <TextView
+        android:id="@+id/criteriaText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Critères"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toEndOf="@+id/criteriaArrow"
+        app:layout_constraintTop_toBottomOf="@+id/searchTextInputLayout"
+        android:clickable="true"
+        />
+
+
+    <FrameLayout
+        android:id="@+id/criteriaFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/searchTextInputLayout"
+        app:layout_constraintTop_toBottomOf="@+id/criteriaText"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/criteria_bg"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

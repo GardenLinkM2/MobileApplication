@@ -59,4 +59,5 @@
     <string name="Modification">Modification</string>
     <string name="save">SAUVERGARDER</string>
     <string name="deleteAccount">SUPPRIMER MON COMPTE</string>
+    <string name="search_hint">Rechercher</string>
 </resources>
