@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_gardenlink"
@@ -19,18 +21,32 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:theme="@style/GardenLink"
-            android:label="@string/signUp_activity" />
-        <activity android:name=".MyAccountActivity"/>
-        <activity android:name=".HomeActivity"/>
-        <activity android:name=".WalletActivity"/>
-        <activity android:name=".MessagingActivity"/>
-        <activity android:name=".MyLeasingActivity"/>
-        <activity android:name=".MyLandsActivity"/>
-        <activity android:name=".SignOutActivity"/>
-        <activity android:name=".ConnexionActivity"/>
-        <activity android:name=".ForgottenPasswordActivity"/>
-
+            android:label="@string/signUp_activity"
+            android:theme="@style/GardenLink" />
+        <activity
+            android:name=".MyAccountActivity"
+            android:label="@string/myAccount" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/home" />
+        <activity
+            android:name=".WalletActivity"
+            android:label="@string/wallet" />
+        <activity
+            android:name=".MessagingActivity"
+            android:label="@string/messaging" />
+        <activity
+            android:name=".MyLeasingActivity"
+            android:label="@string/myLeasing" />
+        <activity
+            android:name=".MyLandsActivity"
+            android:label="@string/myLands" />
+        <activity
+            android:name=".ConnexionActivity"
+            android:label="@string/connexion_activity" />
+        <activity
+            android:name=".ForgottenPasswordActivity"
+            android:label="@string/forgotten_password_activity" />
     </application>
 
 </manifest>
