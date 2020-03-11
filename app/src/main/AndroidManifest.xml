@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gardenlink_mobile">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_gardenlink"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_gardenlink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:label="@string/signUp_activity"
+            android:theme="@style/GardenLink" />
+        <activity
+            android:name=".MyAccountActivity"
+            android:label="@string/myAccount" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/home" />
+        <activity
+            android:name=".WalletActivity"
+            android:label="@string/wallet" />
+        <activity
+            android:name=".MessagingActivity"
+            android:label="@string/messaging" />
+        <activity
+            android:name=".MyLeasingActivity"
+            android:label="@string/myLeasing" />
+        <activity
+            android:name=".MyLandsActivity"
+            android:label="@string/myLands" />
+        <activity
+            android:name=".ConnectionActivity"
+            android:label="@string/connexion_activity" />
+        <activity
+            android:name=".ForgottenPasswordActivity"
+            android:label="@string/forgotten_password_activity" />
     </application>
 
 </manifest>

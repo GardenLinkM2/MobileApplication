@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Default colors -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#448233</color>
+    <!-- Maquette colors -->
+    <color name="colorBlue_accueil_postButton">#0387B7</color>
+    <color name="colorGray_labelInput_font">#737471</color>
+    <color name="colorGray_darker">#707070</color>
+    <color name="colorGray_brighter">#A2A2A2</color>
+    <color name="colorGreen_background">#F7F7F7</color>
+    <color name="colorGreen_topBar">#135403</color>
+    <color name="colorGreen_brighter">#448233</color>
+    <color name="colorGreen_tchatNav">#007457</color>
+    <color name="colorGreen_slidebar">#008265</color>
+    <color name="colorGreen_tchatNav_item">#62A48B</color>
+    <color name="colorGreen_snackbar">#3FC54C</color>
+    <color name="colorGreen_disabledButton">#D2DDCE</color>
+    <color name="colorYellow">#EFD13C</color>
+    <color name="colorRed">#E93925</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorWhite">#FFFF</color>
+    <color name="colorWhiteTransparent">#7CFFFFFF</color>
 </resources>

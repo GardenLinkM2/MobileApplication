@@ -1,3 +1,63 @@
 <resources>
-    <string name="app_name">GardenLink-Mobile</string>
+    <string name="app_name">GardenLink</string>
+
+    <string name="connexion_activity">Connexion</string>
+    <string name="connexion_title">Bienvenue ! </string>
+    <string name="connexion_SubTitle">Merci de vous connecter</string>
+    <string name="login_hint">Login</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="forgottenPassword">Mot de passe oublié</string>
+    <string name="connectButton">SE CONNECTER</string>
+    <string name="signUpButton">S\'INSCRIRE</string>
+
+
+    <string name="forgotten_password_activity">Mot de passe oublié</string>
+    <string name="forgotten_password_title">Mot de passe oublié ? </string>
+    <string name="forgtten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
+    <string name="email_hint">Adresse E-Mail</string>
+    <string name="forgotten_password_send_request">Envoyer</string>
+
+    <string name="home">Accueil</string>
+    <string name="myAccount">Mon Compte</string>
+    <string name="wallet">Mon Porte-Monnaie</string>
+    <string name="messaging">Messagerie</string>
+    <string name="myLeasing">Mes Locations</string>
+    <string name="myLands">Mes Terrains</string>
+    <string name="signOut">Se Déconnecter</string>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="name">Nom Prénom</string>
+    <string name="signUp_name">Nom</string>
+    <string name="signUp_activity">Inscription</string>
+    <string name="signUp_firstName">Prénom</string>
+    <string name="signUp_phone">N° de téléphone</string>
+    <string name="signUp_email">Adresse e-mail</string>
+    <string name="signUp_password">Mot de passe</string>
+    <string name="signUp_passwordAgain">Confirmer mot de passe</string>
+    <string name="signUp_captcha">Je ne suis pas un robot</string>
+    <string name="mandatory">Obligatoire</string>
+    <string name="signUp_newsletter">Inscription à la newsletter de GardenLink</string>
+    <string name="signUp_signUpButton">S\'INSCRIRE</string>
+    <string name="signUp_CGU_HTML"><![CDATA[J\'accepte les <a href=\'https://i.postimg.cc/PJk6717h/cgu-eated.jpg\'>Conditions Générales d\'Utilisation</a>]]></string>
+    <string name="signUp_not_equals_password">Erreur: les mots de passe entrés ne sont pas identiques</string>
+    <string name="signUp_subTitle">Créez un compte pour accéder à toute les fonctionnalités de GardenLink !</string>
+    <string name="signUp_title">Bonjour !</string>
+    <string name="signUp_valid">Valide!</string>
+    <string name="NameField">Name</string>
+    <string name="Name">Nom</string>
+    <string name="FirstNameField">FirstName</string>
+    <string name="FirstName">Prénom</string>
+    <string name="Login">Nom d\'utilisateur</string>
+    <string name="LoginField">Login</string>
+    <string name="Password">Mot de passe</string>
+    <string name="PasswordField">Password</string>
+    <string name="Mail">Adresse E-mail</string>
+    <string name="MailField">Mail.mail@mail.fr</string>
+    <string name="Phone">Téléphone</string>
+    <string name="PhoneField">0123456789</string>
+    <string name="NewsLetter">Inscription a la NewsLetter</string>
+    <string name="Modification">Modification</string>
+    <string name="save">SAUVERGARDER</string>
+    <string name="deleteAccount">SUPPRIMER MON COMPTE</string>
+    <string name="search_hint">Rechercher</string>
 </resources>
