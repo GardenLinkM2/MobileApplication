@@ -1,8 +1,16 @@
 package com.gardenlink_mobile;
 
 import android.os.Bundle;
+import android.util.Log;
 
-public class MessagingActivity extends NavigableActivity {
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class MessagingActivity extends NavigableActivity implements IWebConnectable {
+
+    private static final String TAG = "MessagingActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -10,5 +18,25 @@ public class MessagingActivity extends NavigableActivity {
         setContentView(R.layout.messaging_activity);
 
         initMenu();
+    }
+
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 }

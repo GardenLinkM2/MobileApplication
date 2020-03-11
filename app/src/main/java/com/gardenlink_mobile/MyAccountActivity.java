@@ -20,10 +20,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_API;
+import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_AUTH;
+import com.gardenlink_mobile.wsconnecting.operations.UPDATE_USER;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,24 +37,24 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MyAccountActivity extends NavigableActivity {
+
+public class MyAccountActivity extends NavigableActivity implements IWebConnectable{
 
     boolean isPlay = true;
     private final String LOGIN_FORM = "loginForm";
     private final String PHONE_FORM = "phoneForm";
     private final String PASSWORD_FORM = "passwordForm";
 
-    private String userName;
-    private String userFirstName;
-    private String userEmail;
-    private String userPassword;
-    private String userPhone;
     private Drawable userAvatar;
     private CheckBox cbNewsLetter;
     private Button saveButton;
@@ -68,15 +74,19 @@ public class MyAccountActivity extends NavigableActivity {
     private static final String PASSWORD_ERROR = "Le mot de passe doit faire entre 5 et 30 caractères";
     public static final int readStoragePermission = 0;
 
+    private static final String TAG = "MyAccountActivity";
+
+    private User currentUser;
+    private User newUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        currentUser = Session.getInstance().getCurrentUser();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myaccount_activity);
-
         initMenu();
         initInputs();
         loadUserData();
-        generateUserLogin();
         initUploadAvatar();
     }
 
@@ -98,47 +108,61 @@ public class MyAccountActivity extends NavigableActivity {
     }
 
     private void loadUserData() {
-
-        //TODO: Update with real UserData
-        //Todo:getUserAvatar()
+        // TODO GET AVATAR
         userAvatarCircle = (CircleImageView) findViewById(R.id.user_avatar);
         userAvatarCircle.setImageDrawable(getUserAvatar());
 
-        //Todo: getUserName()
         TextInputEditText userNameField = (TextInputEditText) findViewById(R.id.nameInputField);
-        userNameField.setText(getUserName());
+        userNameField.setText(currentUser.getLastName());
         userNameField.addTextChangedListener(textWatcherInputs);
 
-        //Todo: getUserFirstName()
         TextInputEditText userFirstNameField = (TextInputEditText) findViewById(R.id.firstNameInputField);
-        userFirstNameField.setText(getUserFirstName());
+        userFirstNameField.setText(currentUser.getFirstName());
         userFirstNameField.addTextChangedListener(textWatcherInputs);
 
-        //Todo: getUserPassword()
         TextInputEditText userPasswordField = (TextInputEditText) findViewById(R.id.passwordInputField);
-        userPasswordField.setText(getUserPassword());
+        userPasswordField.setText(currentUser.getPassword());
         userPasswordField.addTextChangedListener(textWatcherInputs);
         userPasswordLayout = (TextInputLayout) findViewById(R.id.passwordField);
 
-        //Todo: getUserMail()
         TextInputEditText userMailField = (TextInputEditText) findViewById(R.id.mailInputField);
-        userMailField.setText(getUserEmail());
+        userMailField.setText(currentUser.getEmail());
         userMailField.addTextChangedListener(textWatcherInputs);
 
-        //Todo: getUserPhone()
         TextInputEditText userPhoneField = (TextInputEditText) findViewById(R.id.phoneInputField);
-        userPhoneField.setText(getUserPhone());
+        userPhoneField.setText(currentUser.getPhone());
         userPhoneField.addTextChangedListener(textWatcherInputs);
         userPhoneLayout = (TextInputLayout) findViewById(R.id.phoneField);
 
         cbNewsLetter = (CheckBox) findViewById(R.id.newsLetter);
-        cbNewsLetter.setChecked(true);
+        cbNewsLetter.setChecked(currentUser.getNewsletter());
 
     }
 
-    private void generateUserLogin() {
-        TextInputEditText userLogin = (TextInputEditText) findViewById(R.id.loginInputField);
-        userLogin.setText(getUserFirstName() + "." + getUserName().substring(0, 2));
+    private void fillNewUserData()
+    {
+        newUser = new User();
+
+        // TODO MODIFIER CETTE MERDE
+        newUser.setAvatar(currentUser.getAvatar());
+
+        TextInputEditText userFirstNameField = findViewById(R.id.firstNameInputField);
+        newUser.setFirstName(userFirstNameField.getText().toString());
+
+        TextInputEditText userPasswordField = findViewById(R.id.passwordInputField);
+        newUser.setPassword(userPasswordField.getText().toString());
+
+        TextInputEditText userMailField = findViewById(R.id.mailInputField);
+        newUser.setEmail(userMailField.getText().toString());
+
+        TextInputEditText userPhoneField = findViewById(R.id.phoneInputField);
+        newUser.setPhone(userPhoneField.getText().toString());
+
+        CheckBox newsletterField = findViewById(R.id.newsLetter);
+        newUser.setNewsletter(newsletterField.isChecked());
+
+        TextInputEditText userLastNameField = findViewById(R.id.nameInputField);
+        newUser.setLastName(userLastNameField.getText().toString());
     }
 
     @Override
@@ -184,11 +208,11 @@ public class MyAccountActivity extends NavigableActivity {
                 .setTitle("Voulez-vous confirmer les changements ?")
                 .setMessage("Les changements seront appliqués a la validation")
                 .setPositiveButton("Valider", (dialog, which) -> {
-                    editMode(isPlay);
-                    isPlay = !isPlay;
-                    lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
+                    fillNewUserData();
+                    new UPDATE_USER(newUser).perform(new WeakReference<>(this));
                 })
                 .setNegativeButton("Retour", (dialog, which) -> {
+                    loadUserData();
                 }).show();
     }
 
@@ -197,7 +221,7 @@ public class MyAccountActivity extends NavigableActivity {
                 .setTitle("Etes-vous sur de vouloir supprimer votre compte ?")
                 .setMessage("Le compte sera irrécupérable")
                 .setPositiveButton("Supprimer", (dialog, which) -> {
-                    //TODO : supprimer le compte
+                    new DELETE_SELF_API().perform(new WeakReference<>(this));
                 })
                 .setNegativeButton("Retour", (dialog, which) -> {
                 }).show();
@@ -297,31 +321,6 @@ public class MyAccountActivity extends NavigableActivity {
         }
     }
 
-    public String getUserName() {
-        userName = "Pouglou";
-        return userName;
-    }
-
-    public String getUserFirstName() {
-        userFirstName = "Denis";
-        return userFirstName;
-    }
-
-    public String getUserEmail() {
-        userEmail = "Denis.Pouglou@gardenlink.fr";
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        userPassword = "PassWord123";
-        return userPassword;
-    }
-
-    public String getUserPhone() {
-        userPhone = "0725943564";
-        return userPhone;
-    }
-
     public Drawable getUserAvatar() {
         userAvatar = getResources().getDrawable(R.drawable.sample_avatar);
         return userAvatar;
@@ -364,11 +363,9 @@ public class MyAccountActivity extends NavigableActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case readStoragePermission: {
-
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openImage();
@@ -376,6 +373,67 @@ public class MyAccountActivity extends NavigableActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        switch (operation.getName()) {
+            case "UPDATE_USER":
+                switch (responseCode){
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        currentUser = newUser;
+                        Session.getInstance().setCurrentUser(newUser);
+                        loadUserData();
+                        editMode(isPlay);
+                        isPlay = !isPlay;
+                        lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
+                        return;
+                        // TODO : Petit message de succès
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        // TODO : Gérer l'échec
+                        return;
+                }
+            case "DELETE_SELF_AUTH":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        this.doSignOut();
+                        return;
+                    default:
+                        Log.e(TAG, "Littéralement la fin du monde");
+                        return;
+                }
+            case "DELETE_SELF_API":
+                switch (responseCode) {
+                    case 204:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        new DELETE_SELF_AUTH().perform(new WeakReference<>(this));
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 }
 

@@ -2,6 +2,8 @@ package com.gardenlink_mobile;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -19,6 +21,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.CREATE_USER;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.safetynet.SafetyNet;
@@ -30,11 +34,14 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements IWebConnectable{
 
     private static final String TAG = "SIGN_UP_ACTIVITY";
     private static final String SAFETY_KEY_SITE = "6Le-rNoUAAAAANjrmAK4HbDHZLKCvA9P3btG9n7f";
@@ -408,32 +415,52 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void onClickSignUp(View v) {
-        // todo POST to back the new user
-        HashMap<String, String> criteria = new HashMap<>();
-        criteria.put("firstName", inputForms.get(FIRST_NAME_FORM).getEditText().getText().toString());
-        criteria.put("lastName", inputForms.get(NAME_FORM).getEditText().getText().toString());
-        criteria.put("phone", inputForms.get(PHONE_FORM).getEditText().getText().toString());
-        criteria.put("email", inputForms.get(PHONE_FORM).getEditText().getText().toString());
-        criteria.put("password", inputForms.get(PASSWORD_FORM).getEditText().getText().toString());
-        criteria.put("avatar", null);
-        criteria.put("newsletter", newsletterCheckBox.isChecked() ? "true": "false");
+        String firstName = inputForms.get(FIRST_NAME_FORM).getEditText().getText().toString();
+        String lastName = inputForms.get(NAME_FORM).getEditText().getText().toString();
+        String phone = inputForms.get(PHONE_FORM).getEditText().getText().toString();
+        String email = inputForms.get(EMAIL_FORM).getEditText().getText().toString();
+        String password = inputForms.get(PASSWORD_FORM).getEditText().getText().toString();
+        String avatar = null;
+        Boolean newsletter = newsletterCheckBox.isChecked();
 
-        // todo Do the real call to back and receive answer -> if ok finish() else Toast error try again
-//        Operations.Operation.CREATE_USER.perform(new WeakReference<>(this), criteria);
-//        @Override
-//        public <T> void receiveResults(int responseCode, List<T> results, Operations.Operation operation) {
-//            switch (operation) {
-//                case CREATE_USER:
-//                    if (responseCode == 201){
-//                        Toast.makeText(getApplicationContext(), SUCCESS_USER_CREATED, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(getApplicationContext(), ConnexionActivity.class);
-//                        startActivity(intent);
-//                    }
-//                    else {
-//                        Toast.makeText(getApplicationContext(), FAIL_USER_NOT_CREATED, Toast.LENGTH_SHORT).show();
-//                    }
-//            }
-//        }
-        finish();
+        new CREATE_USER(password,firstName,lastName,phone,email,avatar,newsletter).perform(new WeakReference<>(this));
+    }
+
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        switch (operation.getName()) {
+            case "CREATE_USER":
+                switch (responseCode) {
+                    case 201:
+                        Log.i(TAG,"Operation " + operation.getName() + " completed successfully with empty results.");
+                        Toast.makeText(getApplicationContext(), SUCCESS_USER_CREATED, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return;
+                    default:
+                        Log.e(TAG,"Operation " + operation.getName() + " failed with response code " + responseCode);
+                        Toast.makeText(getApplicationContext(), FAIL_USER_NOT_CREATED, Toast.LENGTH_SHORT).show();
+                        return;
+                }
+            default:
+                Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 }

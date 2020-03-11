@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -11,13 +12,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ForgottenPasswordActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.List;
+
+public class ForgottenPasswordActivity extends AppCompatActivity implements IWebConnectable{
+
+    private static final String TAG = "ForgottenPasswordActivity";
 
     Button mSendButton;
     TextInputEditText mEmail;
-    private static final String TAG = "ForgottenPasswordActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,7 @@ public class ForgottenPasswordActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(),"Requête envoyée",Toast.LENGTH_SHORT).show();
 
-        Intent lIntent = new Intent(this,ConnexionActivity.class);
+        Intent lIntent = new Intent(this, ConnectionActivity.class);
         startActivity(lIntent);
         finish();
 
@@ -83,4 +89,23 @@ public class ForgottenPasswordActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
+    }
 }
