@@ -1,8 +1,10 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.gardenlink_mobile.R;
 
 public class MainActivity extends NavigableActivity {
 

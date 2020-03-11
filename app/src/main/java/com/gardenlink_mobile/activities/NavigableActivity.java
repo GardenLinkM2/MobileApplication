@@ -1,4 +1,4 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.session.Session;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;

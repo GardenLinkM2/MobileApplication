@@ -1,4 +1,4 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.material.textfield.TextInputEditText;

@@ -1,4 +1,4 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Tokens;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.utils.Validator;
-import com.gardenlink_mobile.wsconnecting.operations.CREATE_USER;
 import com.gardenlink_mobile.wsconnecting.operations.GET_SESSION_TOKEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_TOKENS;

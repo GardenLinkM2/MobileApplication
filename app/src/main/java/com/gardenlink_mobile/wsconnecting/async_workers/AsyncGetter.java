@@ -3,7 +3,7 @@ package com.gardenlink_mobile.wsconnecting.async_workers;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.utils.CustomSSLSocketFactory;
 import com.gardenlink_mobile.utils.JSONMaster;
