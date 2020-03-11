@@ -12,39 +12,39 @@
         android:roundIcon="@drawable/icon_gardenlink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".activities.SignUpActivity"
             android:label="@string/signUp_activity"
             android:theme="@style/GardenLink" />
         <activity
-            android:name=".MyAccountActivity"
+            android:name=".activities.MyAccountActivity"
             android:label="@string/myAccount" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:label="@string/home" />
         <activity
-            android:name=".WalletActivity"
+            android:name=".activities.WalletActivity"
             android:label="@string/wallet" />
         <activity
-            android:name=".MessagingActivity"
+            android:name=".activities.MessagingActivity"
             android:label="@string/messaging" />
         <activity
-            android:name=".MyLeasingActivity"
+            android:name=".activities.MyLeasingActivity"
             android:label="@string/myLeasing" />
         <activity
-            android:name=".MyLandsActivity"
+            android:name=".activities.MyLandsActivity"
             android:label="@string/myLands" />
         <activity
-            android:name=".ConnectionActivity"
+            android:name=".activities.ConnectionActivity"
             android:label="@string/connexion_activity" />
         <activity
-            android:name=".ForgottenPasswordActivity"
+            android:name=".activities.ForgottenPasswordActivity"
             android:label="@string/forgotten_password_activity" />
     </application>
 

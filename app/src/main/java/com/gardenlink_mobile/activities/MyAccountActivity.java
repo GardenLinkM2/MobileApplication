@@ -1,4 +1,4 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -24,6 +24,7 @@ import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.utils.Validator;

@@ -1,4 +1,4 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 

@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:context=".MyAccountActivity">
+        tools:context=".activities.MyAccountActivity">
 
         <RelativeLayout
             android:layout_width="match_parent"

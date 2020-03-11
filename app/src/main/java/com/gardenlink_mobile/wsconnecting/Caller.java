@@ -1,6 +1,6 @@
 package com.gardenlink_mobile.wsconnecting;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.wsconnecting.async_workers.*;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;

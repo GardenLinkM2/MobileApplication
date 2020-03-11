@@ -1,21 +1,22 @@
-package com.gardenlink_mobile;
+package com.gardenlink_mobile.activities;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class MessagingActivity extends NavigableActivity implements IWebConnectable {
+public class WalletActivity extends NavigableActivity implements IWebConnectable {
 
-    private static final String TAG = "MessagingActivity";
+    private static final String TAG = "WalletActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.messaging_activity);
+        setContentView(R.layout.wallet_activity);
 
         initMenu();
     }

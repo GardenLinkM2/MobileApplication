@@ -1,6 +1,6 @@
 package com.gardenlink_mobile.wsconnecting.operations;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.wsconnecting.Caller;
 
