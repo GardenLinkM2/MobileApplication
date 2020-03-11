@@ -1,7 +1,5 @@
 package com.gardenlink_mobile.wsconnecting.operations;
 
-import android.util.Log;
-
 import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.session.Session;
