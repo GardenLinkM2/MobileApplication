@@ -2,10 +2,9 @@ package com.gardenlink_mobile.entities;
 
 public class Criteria {
 
-    private String id;
-    private TimeSpan locationTime;
-    private int area;
-    private double price;
+    private Long locationTime;
+    private Integer area;
+    private Double price;
     private Location location;
     private String orientation;
     private String typeOfClay;
@@ -13,35 +12,28 @@ public class Criteria {
     private Boolean waterAccess;
     private Boolean directAccess;
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public TimeSpan getLocationTime() {
+    public Long getLocationTime() {
         return locationTime;
     }
 
-    public void setLocationTime(TimeSpan locationTime) {
+    public void setLocationTime(Long locationTime) {
         this.locationTime = locationTime;
     }
 
-    public int getArea() {
+    public Integer getArea() {
         return area;
     }
 
-    public void setArea(int area) {
+    public void setArea(Integer area) {
         this.area = area;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

@@ -3,11 +3,9 @@ package com.gardenlink_mobile.entities;
 public class Payment {
 
     private String id;
-    private int sum;
-    private int state;
+    private Integer sum;
+    private String date;
     private Leasing leasing;
-    private User payer;
-    private User collector;
 
     public String getId() {
         return id;
@@ -17,20 +15,12 @@ public class Payment {
         this.id = id;
     }
 
-    public int getSum() {
+    public Integer getSum() {
         return sum;
     }
 
-    public void setSum(int sum) {
+    public void setSum(Integer sum) {
         this.sum = sum;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 
     public Leasing getLeasing() {
@@ -41,19 +31,11 @@ public class Payment {
         this.leasing = leasing;
     }
 
-    public User getPayer() {
-        return payer;
+    public String getDate() {
+        return date;
     }
 
-    public void setPayer(User payer) {
-        this.payer = payer;
-    }
-
-    public User getCollector() {
-        return collector;
-    }
-
-    public void setCollector(User collector) {
-        this.collector = collector;
+    public void setDate(String date) {
+        this.date = date;
     }
 }

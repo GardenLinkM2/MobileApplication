@@ -22,8 +22,8 @@ public class JSONMaster {
         JSONObject jsonInputString = new JSONObject();
         Iterator it = criteria.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            jsonInputString.put(pair.getKey().toString(),pair.getValue());
+            Map.Entry pair = (Map.Entry) it.next();
+            jsonInputString.put(pair.getKey().toString(), pair.getValue());
         }
         return jsonInputString.toString();
     }
@@ -41,9 +41,7 @@ public class JSONMaster {
         JSONArray jArray;
         try {
             jArray = new JSONArray(output);
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             results.add(serializer.deserialize(new JSONObject(output)));
             return results;
         }
@@ -51,7 +49,7 @@ public class JSONMaster {
             try {
                 results.add(serializer.deserialize(jArray.getJSONObject(index)));
             } catch (JSONException e) {
-                Log.e("JSON Deserialization","Error while fetching value of index "+index+" using serializer "+serializer.getClass().toString());
+                Log.e("JSON Deserialization", "Error while fetching value of index " + index + " using serializer " + serializer.getClass().toString());
             }
         });
         return results;
@@ -63,14 +61,14 @@ public class JSONMaster {
      * @return
      * @throws JSONException
      */
-    public static HashMap<String,String> processJsonOutput(String output) throws JSONException {
-        HashMap<String,String> results = new HashMap<>();
+    public static HashMap<String, String> processJsonOutput(String output) throws JSONException {
+        HashMap<String, String> results = new HashMap<>();
         JSONObject jObject = new JSONObject(output);
-        jObject.keys().forEachRemaining( key -> {
+        jObject.keys().forEachRemaining(key -> {
             try {
                 results.put(key, jObject.getString(key));
             } catch (JSONException e) {
-                Log.e("JSON Deserialization","Error while fetching value of key "+key);
+                Log.e("JSON Deserialization", "Error while fetching value of key " + key);
             }
         });
         return results;
@@ -86,16 +84,36 @@ public class JSONMaster {
      * @throws JSONException
      */
     public static <T> List<T> processJsonOutputInData(String output, ISerializer<T> serializer) throws JSONException {
-        JSONObject jObject= new JSONObject(output).getJSONObject("data");
+        JSONObject jObject = new JSONObject(output).getJSONObject("data");
         List<T> results = new ArrayList<>();
         JSONArray jArray = new JSONArray(jObject);
         IntStream.range(0, jArray.length()).forEach(index -> {
             try {
                 results.add(serializer.deserialize(jArray.getJSONObject(index)));
             } catch (JSONException e) {
-                Log.e("JSON Deserialization","Error while fetching value of index "+index+" using serializer "+serializer.getClass().toString());
+                Log.e("JSON Deserialization", "Error while fetching value of index " + index + " using serializer " + serializer.getClass().toString());
             }
         });
+        return results;
+    }
+
+    public static <T> List<T> tryDeserializeMany(ISerializer<T> serializer, String input) throws JSONException {
+        if (input != null) return null;
+
+        List<T> results = new ArrayList<>();
+        JSONArray jArray;
+        try {
+            jArray = new JSONArray(input);
+            IntStream.range(0, jArray.length()).forEach(index -> {
+                try {
+                    results.add(serializer.deserialize(jArray.getJSONObject(index)));
+                } catch (JSONException e) {
+                    Log.e("JSON Deserialization", "Error while fetching value of index " + index + " using serializer " + serializer.getClass().toString());
+                }
+            });
+        } catch (JSONException e) {
+            results.add(serializer.deserialize(new JSONObject(input)));
+        }
         return results;
     }
 }

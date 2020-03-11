@@ -3,15 +3,12 @@ package com.gardenlink_mobile.entities;
 public class Leasing {
 
     private String id;
-    private int time;
+    private Integer time;
     private String begin;
     private String end;
     private Boolean renew;
-    private float price;
-    private int state;
-    private Garden garden;
-    private User owner;
-    private User renter;
+    private Integer state;
+    private String garden;
 
     public String getId() {
         return id;
@@ -21,11 +18,11 @@ public class Leasing {
         this.id = id;
     }
 
-    public int getTime() {
+    public Integer getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(Integer time) {
         this.time = time;
     }
 
@@ -53,43 +50,19 @@ public class Leasing {
         this.renew = renew;
     }
 
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public int getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 
-    public Garden getGarden() {
+    public String getGarden() {
         return garden;
     }
 
-    public void setGarden(Garden garden) {
+    public void setGarden(String garden) {
         this.garden = garden;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public User getRenter() {
-        return renter;
-    }
-
-    public void setRenter(User renter) {
-        this.renter = renter;
     }
 }

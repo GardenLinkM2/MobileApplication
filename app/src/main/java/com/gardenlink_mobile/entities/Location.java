@@ -2,9 +2,9 @@ package com.gardenlink_mobile.entities;
 
 public class Location {
 
-    private int streetNumber;
+    private Integer streetNumber;
     private String street;
-    private int postalCode;
+    private Integer postalCode;
     private String city;
 
     public int getStreetNumber() {
