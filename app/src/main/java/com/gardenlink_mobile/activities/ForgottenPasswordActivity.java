@@ -13,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.FORGOTTEN_PASSWORD;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,15 +67,7 @@ public class ForgottenPasswordActivity extends AppCompatActivity implements IWeb
 
     public void sendRequest(View view)
     {
-
-        //TODO : send the real request
-
-        Toast.makeText(getApplicationContext(),"Requête envoyée",Toast.LENGTH_SHORT).show();
-
-        Intent lIntent = new Intent(this, ConnectionActivity.class);
-        startActivity(lIntent);
-        finish();
-
+        new FORGOTTEN_PASSWORD(mEmail.getText().toString()).perform(new WeakReference<>(this));
     }
 
     private void disableSendButton()
@@ -97,6 +91,29 @@ public class ForgottenPasswordActivity extends AppCompatActivity implements IWeb
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        switch (operation.getName()){
+            case "FORGOTTEN_PASSWORD":
+                switch (responseCode){
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Toast.makeText(getApplicationContext(),"Requête envoyée",Toast.LENGTH_SHORT).show();
+                        Intent lIntent = new Intent(this, ConnectionActivity.class);
+                        startActivity(lIntent);
+                        finish();
+                        return;
+                    case 504:
+                        Log.i(TAG, "Email server failed to answer before timeout threshold.");
+                        Toast.makeText(getApplicationContext(),"La requête au serveur d'emails a expiré, veuillez ré-essayer.",Toast.LENGTH_SHORT).show();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        Toast.makeText(getApplicationContext(),"Requête envoyée",Toast.LENGTH_SHORT).show();
+                        Intent lIntent2 = new Intent(this, ConnectionActivity.class);
+                        startActivity(lIntent2);
+                        finish();
+                        return;
+                }
+        }
         Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
     }
 

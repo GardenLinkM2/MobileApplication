@@ -12,14 +12,13 @@ import java.util.HashMap;
 
 public class GET_USER_UUID extends Operation {
 
-    private static String url = AUTHENTICATION_URL + "token/introspect";
+    private String url = AUTHENTICATION_URL + "token/introspect";
     private static ISerializer serializer = null;
 
     public GET_USER_UUID() {
         criteria = new HashMap<String,Object>() {{
             put("token", Session.getInstance().getUserToken());
         }};
-        Log.i("GET_USER_UUID : ", this.getName());
     }
 
     @Override

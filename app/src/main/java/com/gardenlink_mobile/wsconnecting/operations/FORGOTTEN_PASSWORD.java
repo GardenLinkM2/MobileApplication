@@ -2,7 +2,7 @@ package com.gardenlink_mobile.wsconnecting.operations;
 
 import android.util.Log;
 
-import com.gardenlink_mobile.activities.IWebConnectable;
+import com.gardenlink_mobile.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.serialization.UserSerializer;
 import com.gardenlink_mobile.session.Session;
@@ -10,16 +10,17 @@ import com.gardenlink_mobile.wsconnecting.Caller;
 
 import java.lang.ref.WeakReference;
 
-public class GET_USER_ME extends Operation {
+public class FORGOTTEN_PASSWORD extends Operation {
 
-    private String url = AUTHENTICATION_URL + "users/me";
-    private static ISerializer serializer = new UserSerializer();
+    private String url = AUTHENTICATION_URL + "lostpassword";
 
-    public GET_USER_ME() { }
+    public FORGOTTEN_PASSWORD(String email) {
+        url += "/" + email;
+    }
 
     @Override
     public void perform(WeakReference<IWebConnectable> sender){
         super.perform(sender);
-        Caller.get(sender, url, serializer, null,this, Session.getInstance().getUserToken());
+        Caller.get(sender, url, null, null,this, null);
     }
 }

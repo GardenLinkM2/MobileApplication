@@ -17,7 +17,7 @@ public class UserSerializer implements ISerializer<User> {
         if (input.has("password")) user.setPassword(input.getString("password"));
         if (input.has("phone")) user.setPhone(input.getString("phone"));
         if (input.has("avatar")) user.setAvatar(input.getString("avatar"));
-        if (input.has("newsletter")) user.setNewsletter(input.getBoolean("newsletter"));
+        if (input.has("newsletter")) user.setNewsletter(input.optBoolean("newsletter"));
         return user;
     }
 

@@ -8,7 +8,7 @@ import java.lang.ref.WeakReference;
 
 public class DELETE_SELF_API extends Operation {
 
-    private static String url = API_URL + "Users/me";
+    private String url = API_URL + "Users/me";
 
     public DELETE_SELF_API(){}
 
