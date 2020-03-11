@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.gardenlink_mobile.session.Session;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
@@ -50,24 +51,21 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     protected void initMenu() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
-            public void onDrawerSlide(View drawerView,float slideOffset) {
-                super.onDrawerSlide(drawerView,slideOffset);
-                ( (View)drawerLayout).bringToFront();
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                ((View) drawerLayout).bringToFront();
             }
 
             @Override
-            public void onDrawerClosed(View drawerView)
-            {
+            public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                final ViewGroup parent = ((ViewGroup)drawerView.getParent().getParent());
-                final ViewGroup lInclude = (ViewGroup)drawerView.getParent();
-                if(parent!=null)
-                {
+                final ViewGroup parent = ((ViewGroup) drawerView.getParent().getParent());
+                final ViewGroup lInclude = (ViewGroup) drawerView.getParent();
+                if (parent != null) {
                     parent.removeViewInLayout(lInclude);
-                    parent.addView(lInclude,0);
+                    parent.addView(lInclude, 0);
                 }
             }
         };
@@ -148,9 +146,9 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         return true;
     }
 
-    private void doSignOut() {
-        //TODO: process de déconnexion
-        Intent intent = new Intent(this, ConnexionActivity.class);
+    protected void doSignOut() {
+        Session.getInstance().flush();
+        Intent intent = new Intent(this, ConnectionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -180,8 +178,10 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
             Bundle currentBundle = getIntent().getExtras();
-            int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
-            navigationView.setCheckedItem(id);
+            if(currentBundle != null) {
+                int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
+                navigationView.setCheckedItem(id);
+            }
             super.onResume();
         } else {
             int size = navigationView.getMenu().size();
