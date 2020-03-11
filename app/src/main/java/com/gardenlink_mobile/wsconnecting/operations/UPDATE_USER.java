@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class UPDATE_USER extends Operation {
 
-    private static String url = AUTHENTICATION_URL + "users";
+    private String url = AUTHENTICATION_URL + "users";
 
     public UPDATE_USER(User user) {
         url += "/" + Session.getInstance().getUuid();

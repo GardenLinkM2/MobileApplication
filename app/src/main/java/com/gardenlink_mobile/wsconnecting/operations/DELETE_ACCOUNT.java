@@ -8,7 +8,7 @@ import java.lang.ref.WeakReference;
 
 public class DELETE_ACCOUNT extends Operation  {
 
-    private static String url = AUTHENTICATION_URL + "users";
+    private String url = AUTHENTICATION_URL + "users";
 
     public DELETE_ACCOUNT() {
         url += "/" + Session.getInstance().getUuid();
