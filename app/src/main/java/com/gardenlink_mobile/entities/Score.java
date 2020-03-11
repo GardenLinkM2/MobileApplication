@@ -3,10 +3,19 @@ package com.gardenlink_mobile.entities;
 public class Score {
 
     private String id;
-    private int note;
+    private Integer note;
     private String comment;
     private User rater;
     private String rated;
+    private Boolean isReported;
+
+    public Boolean getReported() {
+        return isReported;
+    }
+
+    public void setReported(Boolean reported) {
+        isReported = reported;
+    }
 
     public String getId() {
         return id;
@@ -16,11 +25,11 @@ public class Score {
         this.id = id;
     }
 
-    public int getNote() {
+    public Integer getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(Integer note) {
         this.note = note;
     }
 

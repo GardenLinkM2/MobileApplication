@@ -2,27 +2,24 @@ package com.gardenlink_mobile.serialization;
 
 import com.gardenlink_mobile.entities.Demand;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DemandSerializer implements ISerializer<Demand> {
 
     @Override
-    public Demand deserialize(JSONObject input) {
-        return null;
+    public Demand deserialize(JSONObject input) throws JSONException {
+        Demand demand = new Demand();
+        demand.setFirstMessage(input.optString("firstMessage"));
+        demand.setStatus(new StatusSerializer().deserialize(input.optJSONObject("status")));
+        return demand;
     }
 
     @Override
-    public Demand[] deserializeMany(JSONObject[] input) {
-        return new Demand[0];
-    }
-
-    @Override
-    public JSONObject serialize(Demand input) {
-        return null;
-    }
-
-    @Override
-    public JSONObject[] deserializeMany(Demand[] input) {
-        return new JSONObject[0];
+    public JSONObject serialize(Demand input) throws JSONException {
+        JSONObject output = new JSONObject();
+        output.putOpt("firstMessage", input.getFirstMessage());
+        output.putOpt("status",new StatusSerializer().serialize(input.getStatus()));
+        return output;
     }
 }

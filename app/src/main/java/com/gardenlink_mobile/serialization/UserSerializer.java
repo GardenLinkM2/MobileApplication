@@ -10,29 +10,28 @@ public class UserSerializer implements ISerializer<User> {
     @Override
     public User deserialize(JSONObject input) throws JSONException {
         User user = new User();
-        if (input.has("id")) user.setId(input.getString("id"));
-        if (input.has("email")) user.setEmail(input.getString("email"));
-        if (input.has("firstName")) user.setFirstName(input.getString("firstName"));
-        if (input.has("lastName")) user.setLastName(input.getString("lastName"));
-        if (input.has("password")) user.setPassword(input.getString("password"));
-        if (input.has("phone")) user.setPhone(input.getString("phone"));
-        if (input.has("avatar")) user.setAvatar(input.getString("avatar"));
-        if (input.has("newsletter")) user.setNewsletter(input.optBoolean("newsletter"));
+        user.setId(input.optString("id"));
+        user.setEmail(input.optString("email"));
+        user.setFirstName(input.optString("firstName"));
+        user.setLastName(input.optString("lastName"));
+        user.setPassword(input.optString("password"));
+        user.setPhone(input.optString("phone"));
+        user.setAvatar(input.optString("avatar"));
+        user.setNewsletter(input.optBoolean("newsletter"));
         return user;
     }
 
     @Override
-    public User[] deserializeMany(JSONObject[] input) {
-        return new User[0];
-    }
-
-    @Override
-    public JSONObject serialize(User input) {
-        return null;
-    }
-
-    @Override
-    public JSONObject[] deserializeMany(User[] input) {
-        return new JSONObject[0];
+    public JSONObject serialize(User input) throws JSONException {
+        JSONObject output = new JSONObject();
+        output.putOpt("lastName", input.getLastName());
+        output.putOpt("firstName", input.getFirstName());
+        output.putOpt("avatar", input.getAvatar());
+        output.putOpt("phone", input.getPhone());
+        output.putOpt("password", input.getPassword());
+        output.putOpt("id", input.getId());
+        output.putOpt("email", input.getEmail());
+        output.putOpt("newsletter", input.getNewsletter());
+        return output;
     }
 }

@@ -1,12 +1,15 @@
 package com.gardenlink_mobile.entities;
 
+import java.util.List;
+
 public class Talk {
 
     private String id;
     private String subject;
-    private Boolean archive;
+    private Boolean isArchived;
     private User sender;
     private User receiver;
+    private List<Message> messages;
 
     public String getId() {
         return id;
@@ -24,12 +27,12 @@ public class Talk {
         this.subject = subject;
     }
 
-    public Boolean getArchive() {
-        return archive;
+    public Boolean getArchived() {
+        return isArchived;
     }
 
-    public void setArchive(Boolean archive) {
-        this.archive = archive;
+    public void setArchived(Boolean archived) {
+        isArchived = archived;
     }
 
     public User getSender() {
@@ -46,5 +49,13 @@ public class Talk {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
