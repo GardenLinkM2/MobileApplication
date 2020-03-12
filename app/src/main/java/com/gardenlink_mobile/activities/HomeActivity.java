@@ -71,7 +71,8 @@ public class HomeActivity extends NavigableActivity implements IWebConnectable  
 
     public void toPost(View view)
     {
-        //TODO : make the call to post
+        Intent lItent = new Intent(this, PostAnnouncement.class);
+        startActivity(lItent);
     }
 
     public void toSearchResult(final String pInput)

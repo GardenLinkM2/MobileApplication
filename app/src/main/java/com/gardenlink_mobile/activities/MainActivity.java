@@ -15,7 +15,6 @@ public class MainActivity extends NavigableActivity {
         initMenu();
     }
 
-
     public void toConnexion(View view) {
         Intent localIntentConnexion = new Intent(this, ConnectionActivity.class);
         startActivity(localIntentConnexion);

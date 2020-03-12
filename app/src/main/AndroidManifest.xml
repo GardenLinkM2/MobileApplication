@@ -20,6 +20,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.PostAnnouncement"
+            android:label="@string/signUp_activity"
+            android:theme="@style/GardenLink" />
+        <activity
             android:name=".activities.SignUpActivity"
             android:label="@string/signUp_activity"
             android:theme="@style/GardenLink" />
