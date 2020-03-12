@@ -6,7 +6,6 @@ public class Garden {
 
     private String id;
     private String name;
-    private Integer size;
     private Boolean isReserved;
     private Integer minUse;
     private String description;
@@ -31,14 +30,6 @@ public class Garden {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
     }
 
     public Boolean getIsReserved() {
