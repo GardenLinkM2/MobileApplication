@@ -28,8 +28,8 @@ import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.HomeActivity;
+import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.SearchResultsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;

@@ -24,5 +24,4 @@ public class MainActivity extends NavigableActivity {
         Intent lIntent = new Intent(this, SearchResultsActivity.class);
         startActivity(lIntent);
     }
-
 }
