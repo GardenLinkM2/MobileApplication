@@ -44,7 +44,7 @@ public class ResultsAdapter extends ArrayAdapter<Garden> {
 
         lTitle.setText(result.getName());
         lPrice.setText(result.getCriteria().getPrice()+PRICE_POSTFIX);
-        lSize.setText(result.getSize()+SIZE_POSTFIX);
+        //lSize.setText(result.getSize()+SIZE_POSTFIX);
         lDuration.setText(result.getMinUse()+DURATION_POSTFIX);
         lLocation.setText(result.getLocation().getPostalCode() + " "+result.getLocation().getCity());
 

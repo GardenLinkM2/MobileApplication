@@ -167,7 +167,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult.setLocation(lTestLocation);
         lTestResult.setName("petit jardin aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazaeeeeeeezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         lTestResult.setCriteria(lCriteria1);
-        lTestResult.setSize(420);
+        //lTestResult.setSize(420);
         lTestResult.setMinUse(4);
 
         Garden lTestResult2 = new Garden();
@@ -180,7 +180,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult2.setLocation(lTestLocation2);
         lTestResult2.setName("grand jardin");
         lTestResult2.setCriteria(lCriteria2);
-        lTestResult2.setSize(69);
+        //lTestResult2.setSize(69);
         lTestResult2.setMinUse(10);
 
         mResults = new ArrayList<Garden>();
@@ -219,7 +219,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult.setLocation(lTestLocation);
         lTestResult.setName("La tour eiffel");
         lTestResult.setCriteria(lCriteria1);
-        lTestResult.setSize(100000);
+        //lTestResult.setSize(100000);
         lTestResult.setMinUse(25);
 
         Garden lTestResult2 = new Garden();
@@ -232,7 +232,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult2.setLocation(lTestLocation2);
         lTestResult2.setName("grand jardin");
         lTestResult2.setCriteria(lCriteria2);
-        lTestResult2.setSize(69);
+        //lTestResult2.setSize(69);
         lTestResult2.setMinUse(10);
 
         mResults = new ArrayList<Garden>();
