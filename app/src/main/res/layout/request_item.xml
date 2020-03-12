@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sender_avatar"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:src="@drawable/default_avatar"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/requestTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxEms="6"
+        android:maxLines="1"
+        android:paddingTop="10dp"
+        android:text="TEST TITREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+        android:textSize="20sp"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/requestDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5 mois"
+        android:textColor="@color/colorGray_brighter"
+        app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+        app:layout_constraintTop_toBottomOf="@id/requestTitle" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+        app:layout_constraintTop_toTopOf="@id/requestDuration">
+
+        <TextView
+            android:id="@+id/requestSender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+            app:layout_constraintTop_toBottomOf="@id/requestDuration" />
+
+        <TextView
+            android:id="@+id/requestMoment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10h30 10/03/2020"
+            android:textSize="10sp"
+            android:paddingLeft="15dp"
+            app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+            app:layout_constraintTop_toBottomOf="@id/requestDuration" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="25dp"
+        android:paddingLeft="5dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/accept_button"
+            android:paddingLeft="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/accpet_button_round"
+            android:onClick="doAccept"/>
+
+        <ImageView
+            android:id="@+id/decline_button"
+            android:paddingLeft="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/decline_button_round"
+            android:onClick="doDecline"/>
+
+        <ImageView
+            android:id="@+id/detail_button"
+            android:paddingLeft="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/detail_button_round"
+            android:onClick="doDetails"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

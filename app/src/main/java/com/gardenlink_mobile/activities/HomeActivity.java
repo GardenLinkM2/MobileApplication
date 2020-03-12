@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.activities.SearchResultsActivity;
 import com.gardenlink_mobile.utils.SearchFragment;
 
 import java.util.List;

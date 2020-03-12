@@ -4,7 +4,7 @@
     <string name="connexion_activity">Connexion</string>
     <string name="connexion_title">Bienvenue ! </string>
     <string name="connexion_SubTitle">Merci de vous connecter</string>
-    <string name="login_hint">Login</string>
+    <string name="login_hint">Adresse E-Mail</string>
     <string name="password_hint">Mot de passe</string>
     <string name="forgottenPassword">Mot de passe oublié</string>
     <string name="connectButton">SE CONNECTER</string>
