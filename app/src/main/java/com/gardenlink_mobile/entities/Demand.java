@@ -2,40 +2,22 @@ package com.gardenlink_mobile.entities;
 
 public class Demand {
 
-    private String id;
-    private String message;
-    private User sender;
-    private User receiver;
+    private String firstMessage;
+    private Status status;
 
-    public String getId() {
-        return id;
+    public String getFirstMessage() {
+        return firstMessage;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setFirstMessage(String firstMessage) {
+        this.firstMessage = firstMessage;
     }
 
-    public String getMessage() {
-        return message;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public User getSender() {
-        return sender;
-    }
-
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -25,36 +25,65 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gardenlink_mobile.activities.HomeActivity;
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.activities.IWebConnectable;
+import com.gardenlink_mobile.activities.SearchResultsActivity;
+import com.gardenlink_mobile.entities.Criteria;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
-    private static final String TAG = "SearchFragment";
-
+    public static final String SEARCH_FIELD_CONTENT ="searchName";
+    public static final String CRITERIA_CONTENT="criterias";
+    public static final String LOCATION_CONTENT="location";
+    public static final String MIN_AREA_CONTENT="minArea";
+    public static final String MAX_AREA_CONTENT="maxArea";
+    public static final String MIN_DURATION_CONTENT="minDuration";
+    public static final String MAX_DURATION_CONTENT="maxDuration";
+    public static final String MIN_PRICE_CONTENT="minPrice";
+    public static final String MAX_PRICE_CONTENT ="maxPrice";
+    private static final String TAG="SearchFragment";
     private View mView;
-
     private CriteriaFragment mCriteria;
-
     private Animation slideDown;
     private Animation slideUp;
-
     private TextInputLayout searchInputLayout;
-
     private boolean isFragmentShow = false;
-
     private LocationManager locationManager = null;
-
     public static final int GeolocPermission = 0;
-
     private RotateAnimation rotateOpen;
-
     private RotateAnimation rotateClose;
+    private Integer mCriteriaColor=null;
+    private boolean mIsOnResult =false;
+
+    public CriteriaFragment getmCriteria() {
+        return mCriteria;
+    }
+
+    public SearchFragment ()
+    {
+        super();
+        mCriteria = new CriteriaFragment();
+    }
+
+    public SearchFragment (int color,boolean pIsOnResult)
+    {
+        super();
+        mCriteriaColor=color;
+        mIsOnResult=pIsOnResult;
+        mCriteria = new CriteriaFragment();
+    }
 
 
     @Override
@@ -73,24 +102,15 @@ public class SearchFragment extends Fragment {
         view.findViewById(R.id.criteriaArrow).setOnClickListener(criteriasListener);
         view.findViewById(R.id.criteriaText).setOnClickListener(criteriasListener);
 
-        mCriteria = new CriteriaFragment();
-
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-
         ft.replace(R.id.criteriaFragment, mCriteria);
-
         ft.hide(mCriteria);
-
         ft.commit();
 
-
         View lFragment = view.findViewById(R.id.criteriaFragment);
-
         lFragment.setClipToOutline(true);
-
         slideDown = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_down);
         slideUp = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_up);
-
 
         initSearch();
 
@@ -103,13 +123,14 @@ public class SearchFragment extends Fragment {
         rotateOpen.setInterpolator(new LinearInterpolator());
         rotateOpen.setFillAfter(true);
 
-
         rotateClose = new RotateAnimation(-90, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateClose.setDuration(300);
         rotateClose.setInterpolator(new LinearInterpolator());
         rotateClose.setFillAfter(true);
 
-
+        if(mCriteriaColor !=null) {
+            ((TextView) mView.findViewById(R.id.criteriaText)).setTextColor(mCriteriaColor);
+        }
         return view;
     }
 
@@ -120,19 +141,22 @@ public class SearchFragment extends Fragment {
         searchInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO : make call to research
-
+                String lSearchName= ((TextInputEditText)mView.findViewById(R.id.searchField)).getText().toString();
+                if(mIsOnResult) {
+                    ((SearchResultsActivity)getActivity()).loadData();
+                }
+                else {
+                    ((HomeActivity)getActivity()).toSearchResult(lSearchName);
+                }
             }
         });
 
         searchInputLayout.setStartIconOnClickListener(new View.OnClickListener() {
                                                           @Override
                                                           public void onClick(View view) {
-
                                                               getGeolocation();
                                                           }
                                                       }
-
         );
 
     }
@@ -143,17 +167,11 @@ public class SearchFragment extends Fragment {
                                            String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case GeolocPermission: {
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     findLocation();
-
                 }
-
                 return;
             }
-
         }
     }
 
@@ -206,7 +224,6 @@ public class SearchFragment extends Fragment {
 
     }
 
-
     private void getGeolocation() {
 
 
@@ -222,7 +239,6 @@ public class SearchFragment extends Fragment {
 
 
     }
-
 
     private void processLocation(Location location) {
 
@@ -253,7 +269,6 @@ public class SearchFragment extends Fragment {
 
     }
 
-
     public void toggleCriterias(View view) {
         FragmentManager lF = getChildFragmentManager();
 
@@ -267,15 +282,41 @@ public class SearchFragment extends Fragment {
             mView.findViewById(R.id.criteriaFragment).startAnimation(slideDown);
             lF.beginTransaction().setCustomAnimations(android.R.anim.fade_in, R.anim.slide_up).show(mCriteria).commit();
             mView.findViewById(R.id.criteriaArrow).startAnimation(rotateOpen);
-
             isFragmentShow = true;
         }
-
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+    }
 
+    public void setSearchInput(final String pInput)
+    {
+        ((TextInputEditText)mView.findViewById(R.id.searchField)).setText(pInput);
+    }
+
+    public Criteria getCriteria()
+    {
+        Criteria lCriteria = new Criteria();
+
+        lCriteria.setDirectAccess(mCriteria.getDirectAccess());
+        lCriteria.setEquipments(mCriteria.getEquipmentProvided());
+        lCriteria.setOrientation(mCriteria.getOrientation());
+        lCriteria.setTypeOfClay(mCriteria.getSoilType());
+        lCriteria.setWaterAccess(mCriteria.getWaterProvided());
+
+        return  lCriteria;
+    }
+
+    public com.gardenlink_mobile.entities.Location getLocation(){
+        com.gardenlink_mobile.entities.Location lLocation = new com.gardenlink_mobile.entities.Location();
+
+        lLocation.setStreet(mCriteria.getStreetName());
+        lLocation.setCity(mCriteria.getCity());
+        lLocation.setPostalCode(mCriteria.getPostalCode());
+        lLocation.setStreetNumber(mCriteria.getStreetNumber());
+
+        return lLocation;
     }
 }

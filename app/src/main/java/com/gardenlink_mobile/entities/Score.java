@@ -3,7 +3,7 @@ package com.gardenlink_mobile.entities;
 public class Score {
 
     private String id;
-    private int note;
+    private Integer mark;
     private String comment;
     private User rater;
     private String rated;
@@ -16,12 +16,12 @@ public class Score {
         this.id = id;
     }
 
-    public int getNote() {
-        return note;
+    public Integer getMark() {
+        return mark;
     }
 
-    public void setNote(int note) {
-        this.note = note;
+    public void setMark(Integer mark) {
+        this.mark = mark;
     }
 
     public String getComment() {

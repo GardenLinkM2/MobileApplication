@@ -2,27 +2,25 @@ package com.gardenlink_mobile.serialization;
 
 import com.gardenlink_mobile.entities.Photo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PhotoSerializer implements ISerializer<Photo> {
 
     @Override
     public Photo deserialize(JSONObject input) {
-        return null;
+        Photo photo = new Photo();
+        photo.setFileName(input.optString("fileName"));
+        photo.setPath(input.optString("path"));
+        return photo;
     }
 
     @Override
-    public Photo[] deserializeMany(JSONObject[] input) {
-        return new Photo[0];
-    }
-
-    @Override
-    public JSONObject serialize(Photo input) {
-        return null;
-    }
-
-    @Override
-    public JSONObject[] deserializeMany(Photo[] input) {
-        return new JSONObject[0];
+    public JSONObject serialize(Photo input) throws JSONException {
+        if (input == null) return null;
+        JSONObject output = new JSONObject();
+        output.putOpt("fileName",input.getFileName());
+        output.putOpt("path",input.getPath());
+        return output;
     }
 }

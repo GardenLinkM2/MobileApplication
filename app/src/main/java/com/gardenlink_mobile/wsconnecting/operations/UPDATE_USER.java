@@ -1,6 +1,6 @@
 package com.gardenlink_mobile.wsconnecting.operations;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.wsconnecting.Caller;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class UPDATE_USER extends Operation {
 
-    private static String url = AUTHENTICATION_URL + "users";
+    private String url = AUTHENTICATION_URL + "users";
 
     public UPDATE_USER(User user) {
         url += "/" + Session.getInstance().getUuid();

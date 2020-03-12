@@ -1,17 +1,20 @@
 package com.gardenlink_mobile.entities;
 
+import java.util.List;
+
 public class Garden {
 
     private String id;
     private String name;
-    private int size;
-    private Boolean reserve;
-    private String type;
-    private int minUse;
-    private User owner;
-    private Validation validation;
+    private Boolean isReserved;
+    private Integer minUse;
+    private String description;
+    private Location location;
+    // Owner ID
+    private String owner;
+    private Status validation;
     private Criteria criteria;
-    private Photo[] photos;
+    private List<Photo> photos;
 
     public String getId() {
         return id;
@@ -29,51 +32,27 @@ public class Garden {
         this.name = name;
     }
 
-    public int getSize() {
-        return size;
+    public Boolean getIsReserved() {
+        return isReserved;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setIsReserved(Boolean isReserved) {
+        this.isReserved = isReserved;
     }
 
-    public Boolean getReserve() {
-        return reserve;
-    }
-
-    public void setReserve(Boolean reserve) {
-        this.reserve = reserve;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getMinUse() {
+    public Integer getMinUse() {
         return minUse;
     }
 
-    public void setMinUse(int minUse) {
+    public void setMinUse(Integer minUse) {
         this.minUse = minUse;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public Validation getValidation() {
+    public Status getValidation() {
         return validation;
     }
 
-    public void setValidation(Validation validation) {
+    public void setValidation(Status validation) {
         this.validation = validation;
     }
 
@@ -85,11 +64,43 @@ public class Garden {
         this.criteria = criteria;
     }
 
-    public Photo[] getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(Photo[] photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public Boolean getReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(Boolean reserved) {
+        isReserved = reserved;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

@@ -4,38 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_Activity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/home_background">
 
     <!-- If the menu isn't at the end of the document it will be displayed under the TextView-->
     <include
         layout="@layout/menu_hamburger"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Main activity"
-        android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/main_connexionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TO CONNEXION"
-        android:onClick="toConnexion"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_bias="0.3"
+        android:src="@drawable/titre2_mountain_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- If the menu isn't at the end of the document it will be displayed under the TextView-->
+    <ProgressBar
+        android:id="@+id/splashProgress"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:progressDrawable="@drawable/loadscreen"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

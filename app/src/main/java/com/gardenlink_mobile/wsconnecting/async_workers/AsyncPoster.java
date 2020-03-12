@@ -3,13 +3,12 @@ package com.gardenlink_mobile.wsconnecting.async_workers;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.utils.CustomSSLSocketFactory;
 import com.gardenlink_mobile.utils.JSONMaster;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -30,6 +29,7 @@ public class AsyncPoster<T> extends AsyncTask<String, Void, String> {
     private WeakReference<IWebConnectable> sender;
     private Operation operation;
     private HashMap criteria;
+    private Object argument;
     private int responseCode;
     private Boolean failure = false;
     private String authorization;
@@ -42,6 +42,14 @@ public class AsyncPoster<T> extends AsyncTask<String, Void, String> {
         this.authorization = authorization;
     }
 
+    public AsyncPoster(ISerializer<T> serializer, WeakReference<IWebConnectable> sender, Operation operation, Object argument, String authorization) {
+        this.serializer = serializer;
+        this.sender = sender;
+        this.operation = operation;
+        this.argument = argument;
+        this.authorization = authorization;
+    }
+
     @Override
     protected String doInBackground(String... urls) {
         String result = "";
@@ -51,7 +59,12 @@ public class AsyncPoster<T> extends AsyncTask<String, Void, String> {
 
             conn.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory());
 
-            String jsonInputString = JSONMaster.createJsonInputString(criteria);
+            String jsonInputString = null;
+
+            if (criteria != null)
+                jsonInputString = JSONMaster.createJsonInputString(criteria);
+            if (argument != null)
+                jsonInputString = serializer.serialize((T)argument).toString();
 
             if (authorization != null) conn.setRequestProperty("Authorization",authorization);
 

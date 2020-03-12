@@ -1,14 +1,16 @@
 package com.gardenlink_mobile.entities;
 
+import java.util.List;
+
 public class Message {
 
     private String id;
     private String text;
-    private String date;
-    private Boolean read;
-    private Talk conversation;
-    private User sender;
-    private Photo[] photos;
+    private String creationDate;
+    private Boolean isRead;
+    // Sender ID
+    private String sender;
+    private List<Photo> photos;
 
     public String getId() {
         return id;
@@ -26,43 +28,35 @@ public class Message {
         this.text = text;
     }
 
-    public String getDate() {
-        return date;
+    public String getCreationDate() {
+        return creationDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public Boolean getRead() {
-        return read;
-    }
-
-    public void setRead(Boolean read) {
-        this.read = read;
-    }
-
-    public Talk getConversation() {
-        return conversation;
-    }
-
-    public void setConversation(Talk conversation) {
-        this.conversation = conversation;
-    }
-
-    public User getSender() {
-        return sender;
-    }
-
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
-
-    public Photo[] getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(Photo[] photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(Boolean read) {
+        isRead = read;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 }

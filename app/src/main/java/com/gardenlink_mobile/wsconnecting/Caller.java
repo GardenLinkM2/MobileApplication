@@ -1,6 +1,6 @@
 package com.gardenlink_mobile.wsconnecting;
 
-import com.gardenlink_mobile.IWebConnectable;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.ISerializer;
 import com.gardenlink_mobile.wsconnecting.async_workers.*;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
@@ -12,6 +12,13 @@ public class Caller{
 
     public static <T> void post(WeakReference<IWebConnectable> sender, String url, ISerializer<T> serializer, HashMap criteria, Operation operation, String authorization){
         AsyncPoster worker = new AsyncPoster(serializer, sender, operation, criteria, authorization);
+        String[] params = new String[1];
+        params[0] = url;
+        worker.execute(params);
+    }
+
+    public static <T> void post(WeakReference<IWebConnectable> sender, String url, ISerializer<T> serializer, Object argument, Operation operation, String authorization){
+        AsyncPoster worker = new AsyncPoster(serializer, sender, operation, argument, authorization);
         String[] params = new String[1];
         params[0] = url;
         worker.execute(params);

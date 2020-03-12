@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.PostAnnouncement">
+
+    <include
+        layout="@layout/menu_hamburger"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/postAnnouncement_principalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <!-- Image -->
+            <ImageView
+                android:id="@+id/postAnnouncement_image"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:contentDescription="@string/postAnnouncement_image_description"
+                android:src="@drawable/image_not_found"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Announcement title -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_titleForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/postAnnouncement_title_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_titleInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--  Announcement price -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_priceForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_price_label"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/baseline_euro_black_18"
+                app:endIconContentDescription="euro icon"
+                app:endIconTint="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_titleForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_priceInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Announcement area size -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_areaSizeForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_areaSize_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_priceForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_areaSIzeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Announcement duration -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_durationForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_duration_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_areaSizeForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_durationInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/postAnnouncement_horizontalDivisor1"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_durationForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Description section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_descriptionSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_description_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_horizontalDivisor1"
+                app:layout_constraintStart_toStartOf="parent" />
+
+           <!--  Description text area -->
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:id="@+id/postAnnouncement_descriptionForm"
+               android:layout_width="0px"
+               android:layout_height="160dp"
+               android:layout_marginTop="20dp"
+               android:layout_marginStart="50dp"
+               android:layout_marginEnd="50dp"
+               android:background="@color/colorGray_brighter"
+               app:layout_constraintTop_toBottomOf="@id/postAnnouncement_descriptionSection"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintEnd_toEndOf="parent">
+
+               <EditText
+                   android:id="@+id/postAnnouncement_descriptionArea"
+                   style="@style/Widget.AppCompat.EditText"
+                   android:layout_width="0px"
+                   android:layout_height="0px"
+                   android:layout_margin="1dp"
+                   android:padding="10dp"
+                   android:inputType="text|textMultiLine"
+                   android:textColor="@android:color/black"
+                   android:gravity="top|start"
+                   android:autofillHints="description"
+                   android:background="@android:color/white"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   tools:ignore="LabelFor" />
+           </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--  Horizontal separator -->
+            <View
+                android:id="@+id/postAnnouncement_horizontalDivisor2"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_descriptionForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Localization section -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_localizationSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_localization_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_horizontalDivisor2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Localization Street number -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_localization_streetNumberForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_streetNumber_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_localizationSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_lacalization_streetNumberInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Localization Street name -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_localization_streetNameForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:hint="@string/postAnnouncement_streetName_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_localization_streetNumberForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_lacalization_streetNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Localization postal code -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_localization_postalCodeForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_postalCode_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_localization_streetNameForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_lacalization_postalCodeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Localization city -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/postAnnouncement_localization_cityForm"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/postAnnouncement_city_label"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_localization_postalCodeForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postAnnouncement_lacalization_cityInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Horizontal separator -->
+            <View
+                android:id="@+id/postAnnouncement_horizontalDivisor3"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_localization_cityForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Orientation section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_orientationSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_orientation_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_horizontalDivisor3"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Orientation choice  -->
+            <GridLayout
+                android:id="@+id/postAnnouncement_orientationChoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:columnCount="3"
+                android:rowCount="3"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_orientationSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5">
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_north"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_north" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_south"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="2"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_south" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_east"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="1"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_east"/>
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_west"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_west"/>
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_northEast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="0"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_northEast"/>
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_northWest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_northWest"/>
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_southWest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="2"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_southWest"/>
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_southEast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="2"
+                    android:layout_margin="2dp"
+                    android:text="@string/postAnnouncement_orientation_southEast"/>
+            </GridLayout>
+
+            <!--  Earth type section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_earthTypeSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_earthType_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_orientationChoice"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Earth type choice  -->
+            <GridLayout
+                android:id="@+id/postAnnouncement_earthTypeChoice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:columnCount="2"
+                android:rowCount="3"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_earthTypeSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" >
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_argileux"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:text="@string/postAnnouncement_earthType_argileux" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_sableux"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:text="@string/postAnnouncement_earthType_sableux" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_tourbeux"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    android:text="@string/postAnnouncement_earthType_tourbeux" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_humifere"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:text="@string/postAnnouncement_earthType_humifere" />
+
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_silicieuse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="2"
+                    android:text="@string/postAnnouncement_earthType_silicieuse" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_calcaire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_column="1"
+                    android:layout_row="2"
+                    android:text="@string/postAnnouncement_earthType_calcaire" />
+            </GridLayout>
+
+            <!--  Water provided section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_waterProvidedSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_waterProvided_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_earthTypeChoice"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Water provided choice  -->
+            <RadioGroup
+                android:id="@+id/postAnnouncement_waterProvidedForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/postAnnouncement_waterProvidedSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_waterYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/postAnnouncement_yes" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_waterNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/postAnnouncement_no" />
+            </RadioGroup>
+
+            <!--  Equipment provided section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_equipmentProvidedSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_equipmentProvided_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_waterProvidedForm"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Equipment provided choice  -->
+            <RadioGroup
+                android:id="@+id/postAnnouncement_equipmentProvidedForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/postAnnouncement_equipmentProvidedSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_equipmentYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/postAnnouncement_yes" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_equipmentNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/postAnnouncement_no" />
+            </RadioGroup>
+
+            <!--  Direct access section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/postAnnouncement_directAccessSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_directAccess_label"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_equipmentProvidedForm"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Direct access choice  -->
+            <RadioGroup
+                android:id="@+id/postAnnouncement_directAccessForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/postAnnouncement_directAccessSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_directAccessYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/postAnnouncement_yes" />
+
+                <RadioButton
+                    android:id="@+id/postAnnouncement_radio_directAccessNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/postAnnouncement_no" />
+            </RadioGroup>
+
+            <!--  Reset criteria button -->
+            <Button
+                android:id="@+id/postAnnouncement_resetCriteriaButton"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_reinitcriteriaButton"
+                android:backgroundTint="@color/colorWhite"
+                android:textColor="@color/colorBlack"
+                android:layout_marginTop="20dp"
+                android:onClick="onClickReinitCriteria"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_directAccessForm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" />
+
+            <!--  Horizontal separator -->
+            <View
+                android:id="@+id/postAnnouncement_horizontalDivisor4"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_resetCriteriaButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Post button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/postAnnouncement_postButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/postAnnouncement_postButton"
+                android:onClick="onClickPost"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                app:layout_constraintTop_toBottomOf="@id/postAnnouncement_horizontalDivisor4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

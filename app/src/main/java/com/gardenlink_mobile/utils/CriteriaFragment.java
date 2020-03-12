@@ -23,6 +23,16 @@ import java.util.List;
 
 public class CriteriaFragment extends Fragment {
 
+    //Constantes
+
+    private static final Double MIN_PRICE=0d;
+    private static final Double MAX_PRICE=10000d;
+    private static final Integer MIN_DURATION=0;
+    private static final Integer MAX_DURATION = 36;
+    private static final Integer MIN_SIZE=0;
+    private static final Integer MAX_SIZE=10000;
+
+
     //vue
     private View mView;
 
@@ -105,9 +115,6 @@ public class CriteriaFragment extends Fragment {
         initRadioButtons(view);
         initReinitButton(view);
 
-        /*Slider rangeSlider = view.findViewById(R.id.range_slider);
-        rangeSlider.setValues(2f, 7f);
-        rangeSlider.addOnSliderTouchListener(touchListener);*/
 
         view.setBackgroundColor(getResources().getColor(R.color.colorWhiteTransparent));
 
@@ -436,5 +443,211 @@ public class CriteriaFragment extends Fragment {
     {
         ((TextInputEditText)mView.findViewById(R.id.streetNumberField)).setText(pStreetNumber);
     }
+
+    public String getCity()
+    {
+        String lCity=((TextInputEditText)mView.findViewById(R.id.cityField)).getText().toString();
+        return lCity.isEmpty()?null:lCity;
+    }
+
+    public Integer getPostalCode()
+    {
+        String lPostalCode=((TextInputEditText)mView.findViewById(R.id.postNameField)).getText().toString();
+        return lPostalCode.isEmpty()?null:Integer.parseInt(lPostalCode);
+    }
+
+    public String getStreetName()
+    {
+        String lStreetName=((TextInputEditText)mView.findViewById(R.id.streetNameField)).getText().toString();
+        return lStreetName.isEmpty()?null:lStreetName;
+    }
+
+    public Integer getStreetNumber()
+    {
+        String lStreetNumber = ((TextInputEditText)mView.findViewById(R.id.streetNumberField)).getText().toString();
+      return lStreetNumber.isEmpty()?null:Integer.parseInt(lStreetNumber);
+    }
+
+    public Double getMinPrice()
+    {   String lMinPrice = minPriceText.getText().toString();
+        return lMinPrice.isEmpty()?MIN_PRICE:Double.parseDouble(lMinPrice);
+    }
+
+    public void setMinPrice(final String pPrice)
+    {
+        minPriceText.setText(pPrice);
+    }
+
+    public Double getMaxPrice()
+    {
+        String lMaxPrice = maxPriceText.getText().toString();
+        return lMaxPrice.isEmpty()?MAX_PRICE:Double.parseDouble(lMaxPrice);
+    }
+
+    public void setMaxPrice(final String pPrice)
+    {
+        maxPriceText.setText(pPrice);
+    }
+
+    public Integer getMinDuration()
+    {
+        String lMinDuration = minDurationText.getText().toString();
+        return lMinDuration.isEmpty()?MIN_DURATION:Integer.parseInt(lMinDuration);
+    }
+
+    public void setMinDuration(final String pDuration)
+    {
+        minDurationText.setText(pDuration);
+    }
+
+    public Integer getMaxDuration()
+    {
+        String lMaxDuration = maxDurationText.getText().toString();
+        return lMaxDuration.isEmpty()?MAX_DURATION:Integer.parseInt(lMaxDuration);
+    }
+
+    public void setMaxDuration(final String pDuration)
+    {
+        maxDurationText.setText(pDuration);
+    }
+
+    public Integer getMinSize()
+    {
+        String lMinSize = minAreaText.getText().toString();
+        return lMinSize.isEmpty()?MIN_SIZE:Integer.parseInt(lMinSize);
+    }
+
+    public void setMinSize(final String pSize)
+    {
+        minAreaText.setText(pSize);
+    }
+
+    public Integer getMaxSize()
+    {
+        String lMaxSize = maxAreaText.getText().toString();
+        return lMaxSize.isEmpty()?MAX_SIZE:Integer.parseInt(lMaxSize);
+    }
+
+    public void setMaxSize(final String pSize)
+    {
+        maxAreaText.setText(pSize);
+    }
+
+    public String getSoilType()
+    {
+        if(soilActivated != null)
+        {
+            return soilActivated.getText().toString();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public String getOrientation()
+    {
+        if(orientationActivated !=null)
+        {
+            return convertOrientation(orientationActivated.getText().toString());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    public Boolean getWaterProvided()
+    {
+        return translateButtonToBoolean(R.id.waterProvidedButtons);
+    }
+
+    public Boolean getEquipmentProvided()
+    {
+        return translateButtonToBoolean(R.id.equipmentProvidedButtons);
+    }
+
+    public Boolean getDirectAccess()
+    {
+        return  translateButtonToBoolean(R.id.directAccessButtons);
+    }
+
+
+    private Boolean translateButtonToBoolean(Integer id)
+    {
+        RadioButton lButton = findCheckedRadioButton(id);
+        if(lButton != null)
+        {
+            if(("Oui").equals(lButton.getText().toString()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+
+
+    private RadioButton findCheckedRadioButton(Integer pRadioGroup)
+    {
+        RadioGroup lGroup = ((RadioGroup) mView.findViewById(pRadioGroup));
+
+        RadioButton lButton = null;
+        if(lGroup.getCheckedRadioButtonId() != -1) {
+            lButton = mView.findViewById(lGroup.getCheckedRadioButtonId());
+        }
+
+        return lButton;
+    }
+
+
+    private String convertOrientation(String pOrientation)
+    {
+        String lFormattedOrientation;
+
+        switch (pOrientation)
+        {
+            case "Nord":
+                lFormattedOrientation = "North";
+                break;
+            case "Sud":
+                lFormattedOrientation="South";
+                break;
+            case "Est":
+                lFormattedOrientation="East";
+                break;
+            case "Ouest" :
+                lFormattedOrientation = "West";
+                break;
+            case "Nord-Est":
+                lFormattedOrientation = "NorthEast";
+                break;
+            case "Nord-Ouest":
+                lFormattedOrientation="NorthWest";
+                break;
+            case "Sud-Ouest":
+                lFormattedOrientation="SouthWest";
+                break;
+            case "Sud-Est":
+                lFormattedOrientation="SouthEast";
+                break;
+            default:
+                lFormattedOrientation=null;
+                break;
+
+        }
+
+        return lFormattedOrientation;
+    }
+
+
+
 
 }

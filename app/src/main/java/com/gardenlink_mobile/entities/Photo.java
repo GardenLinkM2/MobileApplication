@@ -2,16 +2,15 @@ package com.gardenlink_mobile.entities;
 
 public class Photo {
 
-    private String id;
+    private String path;
     private String fileName;
-    private String relatedTo;
 
-    public String getId() {
-        return id;
+    public String getPath() {
+        return path;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getFileName() {
@@ -20,13 +19,5 @@ public class Photo {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
-    }
-
-    public String getRelatedTo() {
-        return relatedTo;
-    }
-
-    public void setRelatedTo(String relatedTo) {
-        this.relatedTo = relatedTo;
     }
 }

@@ -1,11 +1,10 @@
 package com.gardenlink_mobile.wsconnecting.operations;
 
-import android.os.Build;
 import android.util.Log;
 
 import com.gardenlink_mobile.BuildConfig;
-import com.gardenlink_mobile.IWebConnectable;
-import com.gardenlink_mobile.NavigableActivity;
+import com.gardenlink_mobile.activities.IWebConnectable;
+
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
