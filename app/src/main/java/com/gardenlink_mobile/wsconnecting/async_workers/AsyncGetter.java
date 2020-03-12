@@ -111,16 +111,6 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
                 }
             }
         } catch (JSONException e) {
-            IWebConnectable realSender = sender.get();
-            if (realSender != null) {
-                if (serializer != null)
-                    // Casting is necessary to disambiguate the method call
-                    realSender.receiveResults(responseCode, (List<Object>) null, operation);
-                else
-                    // Casting is necessary to disambiguate the method call
-                    realSender.receiveResults(responseCode, (HashMap<String, String>) null, operation);
-                return;
-            }
         }
         try {
             List<T> jsonResult = new ArrayList<>();
