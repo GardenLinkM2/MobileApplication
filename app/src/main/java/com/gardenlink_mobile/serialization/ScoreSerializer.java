@@ -12,9 +12,8 @@ public class ScoreSerializer implements ISerializer<Score> {
         Score score = new Score();
         score.setComment(input.optString("comment"));
         score.setId(input.optString("id"));
-        score.setNote(input.optInt("note"));
+        score.setMark(input.optInt("mark"));
         score.setRated(input.optString("rated"));
-        score.setReported(input.optBoolean("reported"));
         score.setRater(new UserSerializer().deserialize(input.optJSONObject("rater")));
         return score;
 
@@ -25,10 +24,9 @@ public class ScoreSerializer implements ISerializer<Score> {
         JSONObject output = new JSONObject();
         output.putOpt("comment",input.getComment());
         output.putOpt("id",input.getId());
-        output.putOpt("note",input.getNote());
+        output.putOpt("mark",input.getMark());
         output.putOpt("rated",input.getRated());
         output.putOpt("rater",new UserSerializer().serialize(input.getRater()));
-        output.putOpt("reported",input.getReported());
         return output;
     }
 }

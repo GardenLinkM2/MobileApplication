@@ -21,8 +21,7 @@ public class UserSerializer implements ISerializer<User> {
         return user;
     }
 
-    @Override
-    public JSONObject serialize(User input) throws JSONException {
+    public JSONObject serializeForPersistence(User input) throws JSONException {
         JSONObject output = new JSONObject();
         output.putOpt("lastName", input.getLastName());
         output.putOpt("firstName", input.getFirstName());
@@ -32,6 +31,16 @@ public class UserSerializer implements ISerializer<User> {
         output.putOpt("id", input.getId());
         output.putOpt("email", input.getEmail());
         output.putOpt("newsletter", input.getNewsletter());
+        return output;
+    }
+
+    @Override
+    public JSONObject serialize(User input) throws JSONException {
+        JSONObject output = new JSONObject();
+        output.putOpt("lastName", input.getLastName());
+        output.putOpt("firstName", input.getFirstName());
+        output.putOpt("id", input.getId());
+        output.putOpt("email", input.getEmail());
         return output;
     }
 }

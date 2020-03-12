@@ -2,15 +2,15 @@ package com.gardenlink_mobile.entities;
 
 public class Photo {
 
-    private String id;
+    private String path;
     private String fileName;
 
-    public String getId() {
-        return id;
+    public String getPath() {
+        return path;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getFileName() {
