@@ -157,7 +157,7 @@ public class SearchFragment extends Fragment{
                 //TODO : make call to research
                 if(mIsOnResult)
                 {
-                    ((SearchResultsActivity)getActivity()).setNewSearch(lSearchName);
+                    ((SearchResultsActivity)getActivity()).loadData();
                 }
                 else
                 {

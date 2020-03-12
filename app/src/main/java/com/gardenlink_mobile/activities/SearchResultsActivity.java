@@ -60,11 +60,15 @@ public class SearchResultsActivity extends NavigableActivity {
         //TODO : replace with real call to fill the results
         loadData();
 
-        mMaximumPageOfResult = (mResults.size()/MAX_RESULTS_PER_PAGE)+1;
-        prepareArrayForPageDisplay();
-        displayList();
+        if(mResults !=null) {
+            mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
+
+            prepareArrayForPageDisplay();
+            displayList();
+
+            initFields();
+        }
         prepareNavigationButtonsForPage();
-        initFields();
         initMenu();
 
         ((ListView)findViewById(R.id.resultsLists)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,8 +115,9 @@ public class SearchResultsActivity extends NavigableActivity {
     }
 
 
-    private void loadData()
+    public void loadData()
     {
+        Toast.makeText(getApplicationContext(),"load data",Toast.LENGTH_SHORT).show();
         CriteriaFragment criteriaFragment = mSearch.getmCriteria();
 
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
@@ -122,7 +127,7 @@ public class SearchResultsActivity extends NavigableActivity {
         queryOptions.addParamPrice(criteriaFragment.getMinPrice(), criteriaFragment.getMaxPrice());
         Location location = new Location(){{
             setStreet(criteriaFragment.getStreetName());
-        }}
+        }};
         queryOptions.addParamLocation(location);
 
 
@@ -287,6 +292,7 @@ public class SearchResultsActivity extends NavigableActivity {
     {
         mSearchTitle = pSearchName;
         mCurrentPageNumber=1;
+        //TODO: to delete
         loadData2();
         mMaximumPageOfResult = (mResults.size()/MAX_RESULTS_PER_PAGE)+1;
         prepareArrayForPageDisplay();
@@ -300,6 +306,7 @@ public class SearchResultsActivity extends NavigableActivity {
         //TODO : make call
         Toast.makeText(getApplicationContext()," poster une annonce",Toast.LENGTH_SHORT).show();
     }
+
 
     //TODO : TOAST for error
     //Toast.makeText(getApplicationContext(),"Erreur lors de la recherche",Toast.LENGTH_SHORT).show();
