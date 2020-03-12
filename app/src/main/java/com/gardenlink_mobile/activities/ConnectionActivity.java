@@ -203,7 +203,7 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         setGET_USER_UUID_flag(true);
                         return;
                     default:
-                        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         return;
                 }
             default:
