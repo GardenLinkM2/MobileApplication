@@ -45,44 +45,25 @@ import java.util.List;
 public class SearchFragment extends Fragment{
 
     public static final String SEARCH_FIELD_CONTENT ="searchName";
-
     public static final String CRITERIA_CONTENT="criterias";
-
     public static final String MIN_AREA_CONTENT="minArea";
-
     public static final String MAX_AREA_CONTENT="maxArea";
-
     public static final String MIN_DURATION_CONTENT="minDuration";
-
     public static final String MAX_DURATION_CONTENT="maxDuration";
-
     public static final String MIN_PRICE_CONTENT="minPrice";
-
     public static final String MAX_PRICE_CONTENT ="maxPrice";
-
     private static final String TAG="SearchFragment";
-
     private View mView;
-
     private CriteriaFragment mCriteria;
-
     private Animation slideDown;
     private Animation slideUp;
-
     private TextInputLayout searchInputLayout;
-
     private boolean isFragmentShow = false;
-
     private LocationManager locationManager = null;
-
     public static final int GeolocPermission = 0;
-
     private RotateAnimation rotateOpen;
-
     private RotateAnimation rotateClose;
-
     private Integer mCriteriaColor=null;
-
     private boolean mIsOnResult =false;
 
     public CriteriaFragment getmCriteria() {
@@ -121,21 +102,14 @@ public class SearchFragment extends Fragment{
         view.findViewById(R.id.criteriaText).setOnClickListener(criteriasListener);
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-
         ft.replace(R.id.criteriaFragment, mCriteria);
-
         ft.hide(mCriteria);
-
         ft.commit();
 
-
         View lFragment = view.findViewById(R.id.criteriaFragment);
-
         lFragment.setClipToOutline(true);
-
         slideDown = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_down);
         slideUp = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_up);
-
 
         initSearch();
 
@@ -147,7 +121,6 @@ public class SearchFragment extends Fragment{
         rotateOpen.setDuration(300);
         rotateOpen.setInterpolator(new LinearInterpolator());
         rotateOpen.setFillAfter(true);
-
 
         rotateClose = new RotateAnimation(-90, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateClose.setDuration(300);
@@ -168,27 +141,21 @@ public class SearchFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 String lSearchName= ((TextInputEditText)mView.findViewById(R.id.searchField)).getText().toString();
-                //TODO : make call to research
-                if(mIsOnResult)
-                {
+                if(mIsOnResult) {
                     ((SearchResultsActivity)getActivity()).loadData();
                 }
-                else
-                {
+                else {
                     ((HomeActivity)getActivity()).toSearchResult(lSearchName);
                 }
-
             }
         });
 
         searchInputLayout.setStartIconOnClickListener(new View.OnClickListener() {
                                                           @Override
                                                           public void onClick(View view) {
-
                                                               getGeolocation();
                                                           }
                                                       }
-
         );
 
     }
@@ -199,17 +166,11 @@ public class SearchFragment extends Fragment{
                                            String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case GeolocPermission: {
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     findLocation();
-
                 }
-
                 return;
             }
-
         }
     }
 
@@ -262,7 +223,6 @@ public class SearchFragment extends Fragment{
 
     }
 
-
     private void getGeolocation() {
 
 
@@ -278,7 +238,6 @@ public class SearchFragment extends Fragment{
 
 
     }
-
 
     private void processLocation(Location location) {
 
@@ -309,7 +268,6 @@ public class SearchFragment extends Fragment{
 
     }
 
-
     public void toggleCriterias(View view) {
         FragmentManager lF = getChildFragmentManager();
 
@@ -323,16 +281,13 @@ public class SearchFragment extends Fragment{
             mView.findViewById(R.id.criteriaFragment).startAnimation(slideDown);
             lF.beginTransaction().setCustomAnimations(android.R.anim.fade_in, R.anim.slide_up).show(mCriteria).commit();
             mView.findViewById(R.id.criteriaArrow).startAnimation(rotateOpen);
-
             isFragmentShow = true;
         }
-
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
     }
 
     public void setSearchInput(final String pInput)
@@ -349,17 +304,12 @@ public class SearchFragment extends Fragment{
         lLocation.setCity(mCriteria.getCity());
         lLocation.setPostalCode(mCriteria.getPostalCode());
         lLocation.setStreetNumber(mCriteria.getStreetNumber());
-
         lCriteria.setLocation(lLocation);
-
         lCriteria.setDirectAccess(mCriteria.getDirectAccess());
         lCriteria.setEquipments(mCriteria.getEquipmentProvided());
         lCriteria.setOrientation(mCriteria.getOrientation());
         lCriteria.setTypeOfClay(mCriteria.getSoilType());
         lCriteria.setWaterAccess(mCriteria.getWaterProvided());
-
-
-
 
         return  lCriteria;
     }

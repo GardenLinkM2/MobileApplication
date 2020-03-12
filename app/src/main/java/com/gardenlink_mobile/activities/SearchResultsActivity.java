@@ -55,8 +55,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO : we assume that we recover the title of the search from the intent (criterias too ? )
-
         setContentView(R.layout.search_results_activity);
         mSearch = new SearchFragment(R.color.colorBlack, true);
 
@@ -110,10 +108,11 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
             if(new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
                 this.mMaxPrice = lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT);
             }
-
+            loadDataWithIntentCriteria();
         }
-
-        loadData();
+        else{
+            loadDataWithNoCriteria();
+        }
 
         if (mResults != null) {
             mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
@@ -171,7 +170,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
 
-    private void loadData() {
+    public void loadData() {
         CriteriaFragment criteriaFragment = mSearch.getmCriteria();
         if (criteriaFragment == null){
             new GET_GARDENS(null).perform(new WeakReference<>(this));
@@ -200,12 +199,31 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
-    private void loadDataWithIntentCriteria(){
+    public void loadDataWithIntentCriteria(){
+        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+        GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
+        queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
+        queryOptions.addParamArea(mMinArea, mMaxArea);
+        queryOptions.addParamPrice(mMinPrice, mMaxPrice);
+        queryOptions.addParamLocation(mCriteriaForSearch.getLocation());
+        queryOptions.addParamOrientation(mCriteriaForSearch.getOrientation());
+        queryOptions.addParamTypeOfClay(mCriteriaForSearch.getTypeOfClay());
+        queryOptions.addParamEquipments(mCriteriaForSearch.getEquipments());
+        queryOptions.addParamWaterAccess(mCriteriaForSearch.getWaterAccess());
+        queryOptions.addParamDirectAccess(mCriteriaForSearch.getDirectAccess());
+        queryOptions.addParamInDescription(mSearchTitle);
+
+        new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
+    }
+
+    public void loadDataWithNoCriteria(){
+        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+        new GET_GARDENS(null).perform(new WeakReference<>(this));
     }
 
     //TODO : test method, to delete
-    private void loadData2() {
+    public void loadData2() {
         Garden lTestResult = new Garden();
         Location lTestLocation = new Location();
 
