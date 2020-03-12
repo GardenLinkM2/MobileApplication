@@ -11,7 +11,7 @@ public class PhotoSerializer implements ISerializer<Photo> {
     public Photo deserialize(JSONObject input) {
         Photo photo = new Photo();
         photo.setFileName(input.optString("fileName"));
-        photo.setId(input.optString("id"));
+        photo.setPath(input.optString("path"));
         return photo;
     }
 
@@ -19,7 +19,7 @@ public class PhotoSerializer implements ISerializer<Photo> {
     public JSONObject serialize(Photo input) throws JSONException {
         JSONObject output = new JSONObject();
         output.putOpt("fileName",input.getFileName());
-        output.putOpt("id",input.getId());
+        output.putOpt("path",input.getPath());
         return output;
     }
 }

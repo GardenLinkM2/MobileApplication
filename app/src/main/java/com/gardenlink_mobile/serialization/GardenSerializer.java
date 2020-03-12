@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Photo;
+import com.gardenlink_mobile.entities.Status;
 import com.gardenlink_mobile.utils.JSONMaster;
 
 import org.json.JSONArray;
@@ -22,13 +23,12 @@ public class GardenSerializer implements ISerializer<Garden> {
 
         garden.setId(input.optString("id"));
         garden.setName(input.optString("name"));
-        garden.setSize(input.optInt("size"));
         garden.setIsReserved(input.optBoolean("isReserved"));
         garden.setMinUse(input.optInt("minUse"));
         garden.setDescription(input.optString("description"));
         garden.setLocation(new LocationSerializer().deserialize(input.optJSONObject("location")));
         garden.setOwner(input.optString("owner"));
-        garden.setValidation(new StatusSerializer().deserialize(input.optJSONObject("validation")));
+        garden.setValidation(new Status(input.optInt("validation")));
         garden.setCriteria(new CriteriaSerializer().deserialize(input.optJSONObject("criteria")));
 
 
@@ -45,13 +45,12 @@ public class GardenSerializer implements ISerializer<Garden> {
 
         output.putOpt("id", input.getId());
         output.putOpt("name", input.getName());
-        output.putOpt("size", input.getSize());
         output.putOpt("isReserved", input.getIsReserved());
         output.putOpt("minUse", input.getMinUse());
         output.putOpt("description", input.getDescription());
         output.putOpt("location", new LocationSerializer().serialize(input.getLocation()));
         output.putOpt("owner", input.getOwner());
-        output.putOpt("validation", new StatusSerializer().serialize(input.getValidation()));
+        output.putOpt("validation",input.getValidation().getStatus());
         output.putOpt("criteria", new CriteriaSerializer().serialize(input.getCriteria()));
         if (input.getPhotos() != null)
         {
