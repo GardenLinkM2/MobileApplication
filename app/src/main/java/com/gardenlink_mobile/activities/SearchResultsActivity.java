@@ -144,8 +144,13 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     private void toDetails(Garden pGarden) {
-        Intent localIntentConnexion = new Intent(this, ConnectionActivity.class);
-        startActivity(localIntentConnexion);
+        /*
+        Intent toDetailsIntent = new Intent(this, DetailsActivity.class);
+        Bundle newBundle = new Bundle();
+        newBundle.putString("garden_id", pGarden.getId());
+        toDetailsIntent.putExtras(newBundle);
+        startActivity(toDetailsIntent);
+         */
     }
 
     private void prepareArrayForPageDisplay() {
@@ -166,7 +171,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
 
-    public void loadData() {
+    private void loadData() {
         CriteriaFragment criteriaFragment = mSearch.getmCriteria();
         if (criteriaFragment == null){
             new GET_GARDENS(null).perform(new WeakReference<>(this));
@@ -193,6 +198,10 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamInDescription(mSearchTitle);
 
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
+    }
+
+    private void loadDataWithIntentCriteria(){
+
     }
 
     //TODO : test method, to delete
@@ -294,7 +303,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     public void toPost(View view) {
-        Intent localIntentConnexion = new Intent(this, ConnectionActivity.class);
+        Intent localIntentConnexion = new Intent(this, PostAnnouncement.class);
         startActivity(localIntentConnexion);
     }
 
@@ -314,12 +323,12 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                         mResults = new ArrayList<>(gardens);
                         return;
                     default:
-                        Log.i(TAG,"Pas cool ça marche pas");
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         Toast.makeText(getApplicationContext(),"Erreur lors de la recherche",Toast.LENGTH_SHORT).show();
                         return;
                 }
             default:
-                Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
                 return;
         }
     }
