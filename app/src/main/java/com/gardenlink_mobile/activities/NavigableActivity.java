@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -52,7 +53,8 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     protected void initMenu() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
