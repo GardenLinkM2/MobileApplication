@@ -206,7 +206,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
         queryOptions.addParamArea(mMinArea, mMaxArea);
         queryOptions.addParamPrice(mMinPrice, mMaxPrice);
-        queryOptions.addParamLocation(mCriteriaForSearch.getLocation());
         queryOptions.addParamOrientation(mCriteriaForSearch.getOrientation());
         queryOptions.addParamTypeOfClay(mCriteriaForSearch.getTypeOfClay());
         queryOptions.addParamEquipments(mCriteriaForSearch.getEquipments());
