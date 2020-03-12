@@ -15,9 +15,15 @@ public class MainActivity extends NavigableActivity {
         initMenu();
     }
 
+
     public void toConnexion(View view) {
         Intent localIntentConnexion = new Intent(this, ConnectionActivity.class);
         startActivity(localIntentConnexion);
+    }
+
+    public void toResults(View view) {
+        Intent lIntent = new Intent(this, SearchResultsActivity.class);
+        startActivity(lIntent);
     }
 
 }

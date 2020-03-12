@@ -25,9 +25,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.activities.HomeActivity;
+import com.gardenlink_mobile.activities.SearchResultsActivity;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
@@ -35,7 +39,9 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    private static final String TAG = "SearchFragment";
+    public static final String SEARCH_FIELD_CONTENT ="searchName";
+
+    private static final String TAG="SearchFragment";
 
     private View mView;
 
@@ -55,6 +61,23 @@ public class SearchFragment extends Fragment {
     private RotateAnimation rotateOpen;
 
     private RotateAnimation rotateClose;
+
+    private Integer mCriteriaColor=null;
+
+    private boolean mIsOnResult =false;
+
+    public SearchFragment ()
+    {
+        super();
+
+    }
+
+    public SearchFragment (int color,boolean pIsOnResult)
+    {
+        super();
+        mCriteriaColor=color;
+        mIsOnResult=pIsOnResult;
+    }
 
 
     @Override
@@ -109,7 +132,9 @@ public class SearchFragment extends Fragment {
         rotateClose.setInterpolator(new LinearInterpolator());
         rotateClose.setFillAfter(true);
 
-
+        if(mCriteriaColor !=null) {
+            ((TextView) mView.findViewById(R.id.criteriaText)).setTextColor(mCriteriaColor);
+        }
         return view;
     }
 
@@ -120,7 +145,16 @@ public class SearchFragment extends Fragment {
         searchInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String lSearchName= ((TextInputEditText)mView.findViewById(R.id.searchField)).getText().toString();
                 //TODO : make call to research
+                if(mIsOnResult)
+                {
+                    ((SearchResultsActivity)getActivity()).setNewSearch(lSearchName);
+                }
+                else
+                {
+                    ((HomeActivity)getActivity()).toSearchResult(lSearchName);
+                }
 
             }
         });
@@ -277,5 +311,10 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+    }
+
+    public void setSearchInput(final String pInput)
+    {
+        ((TextInputEditText)mView.findViewById(R.id.searchField)).setText(pInput);
     }
 }
