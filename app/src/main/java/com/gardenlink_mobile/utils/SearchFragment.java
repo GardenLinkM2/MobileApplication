@@ -32,6 +32,7 @@ import com.gardenlink_mobile.activities.HomeActivity;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.activities.SearchResultsActivity;
+import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -44,6 +45,20 @@ import java.util.List;
 public class SearchFragment extends Fragment{
 
     public static final String SEARCH_FIELD_CONTENT ="searchName";
+
+    public static final String CRITERIA_CONTENT="criterias";
+
+    public static final String MIN_AREA_CONTENT="minArea";
+
+    public static final String MAX_AREA_CONTENT="maxArea";
+
+    public static final String MIN_DURATION_CONTENT="minDuration";
+
+    public static final String MAX_DURATION_CONTENT="maxDuration";
+
+    public static final String MIN_PRICE_CONTENT="minPrice";
+
+    public static final String MAX_PRICE_CONTENT ="maxPrice";
 
     private static final String TAG="SearchFragment";
 
@@ -77,7 +92,7 @@ public class SearchFragment extends Fragment{
     public SearchFragment ()
     {
         super();
-
+        mCriteria = new CriteriaFragment();
     }
 
     public SearchFragment (int color,boolean pIsOnResult)
@@ -85,6 +100,7 @@ public class SearchFragment extends Fragment{
         super();
         mCriteriaColor=color;
         mIsOnResult=pIsOnResult;
+        mCriteria = new CriteriaFragment();
     }
 
 
@@ -103,8 +119,6 @@ public class SearchFragment extends Fragment{
 
         view.findViewById(R.id.criteriaArrow).setOnClickListener(criteriasListener);
         view.findViewById(R.id.criteriaText).setOnClickListener(criteriasListener);
-
-        mCriteria = new CriteriaFragment();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 
@@ -324,5 +338,29 @@ public class SearchFragment extends Fragment{
     public void setSearchInput(final String pInput)
     {
         ((TextInputEditText)mView.findViewById(R.id.searchField)).setText(pInput);
+    }
+
+    public Criteria getCriteria()
+    {
+        Criteria lCriteria = new Criteria();
+        com.gardenlink_mobile.entities.Location lLocation = new com.gardenlink_mobile.entities.Location();
+
+        lLocation.setStreet(mCriteria.getStreetName());
+        lLocation.setCity(mCriteria.getCity());
+        lLocation.setPostalCode(mCriteria.getPostalCode());
+        lLocation.setStreetNumber(mCriteria.getStreetNumber());
+
+        lCriteria.setLocation(lLocation);
+
+        lCriteria.setDirectAccess(mCriteria.getDirectAccess());
+        lCriteria.setEquipments(mCriteria.getEquipmentProvided());
+        lCriteria.setOrientation(mCriteria.getOrientation());
+        lCriteria.setTypeOfClay(mCriteria.getSoilType());
+        lCriteria.setWaterAccess(mCriteria.getWaterProvided());
+
+
+
+
+        return  lCriteria;
     }
 }

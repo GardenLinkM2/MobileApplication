@@ -16,11 +16,15 @@ import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.GardenODataQueryOptions;
 import com.gardenlink_mobile.entities.Location;
+import com.gardenlink_mobile.serialization.CriteriaSerializer;
 import com.gardenlink_mobile.utils.CriteriaFragment;
 import com.gardenlink_mobile.utils.ResultsAdapter;
 import com.gardenlink_mobile.utils.SearchFragment;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDENS;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -39,6 +43,13 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     private ArrayList<Garden> mPageResults;
     private int mCurrentPageNumber = 1;
     private int mMaximumPageOfResult;
+    private Criteria mCriteriaForSearch;
+    private Integer mMinDuration;
+    private Integer mMaxDuration;
+    private Integer mMinArea;
+    private Integer mMaxArea;
+    private Double mMinPrice;
+    private Double mMaxPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +67,50 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         ft.commit();
         Bundle lIntent = getIntent().getExtras();
 
-        if (lIntent != null && lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) != null) {
-            mSearchTitle = lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT);
+        if(lIntent!=null) {
+
+            if (lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) != null) {
+                mSearchTitle = lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT);
+            } else {
+                mSearchTitle = "";
+            }
+
+            if (lIntent.getString(SearchFragment.CRITERIA_CONTENT) != null) {
+                try {
+                    CriteriaSerializer lSerializer = new CriteriaSerializer();
+                    JSONObject lJsonCriteria = new JSONObject(lIntent.getString(SearchFragment.CRITERIA_CONTENT));
+                    this.mCriteriaForSearch = lSerializer.deserialize(lJsonCriteria);
+                } catch (JSONException loE) {
+                    Log.e(this.TAG, "error while parsing criteria");
+                }
+
+            } else {
+                this.mCriteriaForSearch = new Criteria(); }
+
+            if(new Integer(lIntent.getInt(SearchFragment.MAX_AREA_CONTENT)) != null) {
+                this.mMaxArea = lIntent.getInt(SearchFragment.MAX_AREA_CONTENT);
+            }
+
+            if(new Integer(lIntent.getInt(SearchFragment.MIN_AREA_CONTENT)) != null) {
+                this.mMinArea = lIntent.getInt(SearchFragment.MIN_AREA_CONTENT);
+            }
+
+            if(new Integer(lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT)) != null) {
+                this.mMinDuration = lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT);
+            }
+
+            if(new Integer(lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT)) != null) {
+                this.mMaxDuration = lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT);
+            }
+
+            if(new Double(lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT)) != null) {
+                this.mMinPrice = lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT);
+            }
+
+            if(new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
+                this.mMaxPrice = lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT);
+            }
+
         }
 
         loadData();

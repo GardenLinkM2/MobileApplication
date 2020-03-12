@@ -473,10 +473,20 @@ public class CriteriaFragment extends Fragment {
         return lMinPrice.isEmpty()?MIN_PRICE:Double.parseDouble(lMinPrice);
     }
 
+    public void setMinPrice(final String pPrice)
+    {
+        minPriceText.setText(pPrice);
+    }
+
     public Double getMaxPrice()
     {
         String lMaxPrice = maxPriceText.getText().toString();
         return lMaxPrice.isEmpty()?MAX_PRICE:Double.parseDouble(lMaxPrice);
+    }
+
+    public void setMaxPrice(final String pPrice)
+    {
+        maxPriceText.setText(pPrice);
     }
 
     public Integer getMinDuration()
@@ -485,10 +495,20 @@ public class CriteriaFragment extends Fragment {
         return lMinDuration.isEmpty()?MIN_DURATION:Integer.parseInt(lMinDuration);
     }
 
+    public void setMinDuration(final String pDuration)
+    {
+        minDurationText.setText(pDuration);
+    }
+
     public Integer getMaxDuration()
     {
         String lMaxDuration = maxDurationText.getText().toString();
         return lMaxDuration.isEmpty()?MAX_DURATION:Integer.parseInt(lMaxDuration);
+    }
+
+    public void setMaxDuration(final String pDuration)
+    {
+        maxDurationText.setText(pDuration);
     }
 
     public Integer getMinSize()
@@ -497,10 +517,20 @@ public class CriteriaFragment extends Fragment {
         return lMinSize.isEmpty()?MIN_SIZE:Integer.parseInt(lMinSize);
     }
 
+    public void setMinSize(final String pSize)
+    {
+        minAreaText.setText(pSize);
+    }
+
     public Integer getMaxSize()
     {
         String lMaxSize = maxAreaText.getText().toString();
         return lMaxSize.isEmpty()?MAX_SIZE:Integer.parseInt(lMaxSize);
+    }
+
+    public void setMaxSize(final String pSize)
+    {
+        maxAreaText.setText(pSize);
     }
 
     public String getSoilType()
@@ -616,5 +646,8 @@ public class CriteriaFragment extends Fragment {
 
         return lFormattedOrientation;
     }
+
+
+
 
 }
