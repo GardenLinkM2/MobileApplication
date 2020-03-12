@@ -1,6 +1,8 @@
 package com.gardenlink_mobile.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,11 +12,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Tokens;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.PreferenceUtils;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.GET_SESSION_TOKEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME;
@@ -40,19 +44,21 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
     private Boolean GET_USER_UUID_flag = false;
     private Boolean GET_USER_ME_flag = false;
 
+    public static final int writeStoragePermission = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
         setContentView(R.layout.connexion_activity);
-        mConnectButton =findViewById(R.id.connectButton);
+        mConnectButton = findViewById(R.id.connectButton);
         disableConnectButton();
         mConnectButton.setTextColor(getResources().getColor(R.color.colorWhite));
         mLogin = findViewById(R.id.loginField);
         mPassword = findViewById(R.id.passwordField);
 
-        TextWatcher lWatcher =new TextWatcher() {
+        TextWatcher lWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -60,12 +66,9 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if(Validator.emailValidator(mLogin.getText().toString()) && Validator.passwordValidator(mPassword.getText().toString()))
-                {
+                if (Validator.emailValidator(mLogin.getText().toString()) && Validator.passwordValidator(mPassword.getText().toString())) {
                     enableConnectButton();
-                }
-                else
-                {
+                } else {
                     disableConnectButton();
                 }
 
@@ -77,6 +80,20 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
         };
         mLogin.addTextChangedListener(lWatcher);
         mPassword.addTextChangedListener(lWatcher);
+
+        if (ActivityCompat.checkSelfPermission(ConnectionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ConnectionActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, writeStoragePermission);
+        } else {
+            persitenteConnection();
+        }
+    }
+
+    private void persitenteConnection() {
+        if ((PreferenceUtils.getEmail(this) != null && PreferenceUtils.getEmail(this) != "") && (PreferenceUtils.getPassword(this) != null && PreferenceUtils.getPassword(this) != "")) {
+            mLogin.setText(PreferenceUtils.getEmail(this));
+            mPassword.setText(PreferenceUtils.getPassword(this));
+            new GET_USER_TOKENS(PreferenceUtils.getEmail(this), PreferenceUtils.getPassword(this)).perform(new WeakReference<>(this));
+        }
     }
 
 
@@ -130,11 +147,15 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         new GET_SESSION_TOKEN(Session.getInstance().getAccessToken()).perform(new WeakReference<>(this));
                         new GET_USER_UUID().perform(new WeakReference<>(this));
                         new GET_USER_ME().perform(new WeakReference<>(this));
+                        if (ActivityCompat.checkSelfPermission(ConnectionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            PreferenceUtils.saveEmail(mLogin.getText().toString(), this);
+                            PreferenceUtils.savePassword(mPassword.getText().toString(), this);
+                        }
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(),"Identifiants incorrects",Toast.LENGTH_SHORT).show();
-                        ((TextInputEditText)doConnectionParent.findViewById(R.id.passwordField)).setText("");
+                        Toast.makeText(getApplicationContext(), "Identifiants incorrects", Toast.LENGTH_SHORT).show();
+                        ((TextInputEditText) doConnectionParent.findViewById(R.id.passwordField)).setText("");
                         return;
                 }
             case "GET_USER_ME":
@@ -225,8 +246,7 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
 
     public void setGET_SESSION_TOKEN_flag(Boolean GET_SESSION_TOKEN_flag) {
         this.GET_SESSION_TOKEN_flag = GET_SESSION_TOKEN_flag;
-        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag)
-        {
+        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent lItent = new Intent(this, HomeActivity.class);
             startActivity(lItent);
         }
@@ -234,8 +254,7 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
 
     public void setGET_USER_UUID_flag(Boolean GET_USER_UUID_flag) {
         this.GET_USER_UUID_flag = GET_USER_UUID_flag;
-        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag)
-        {
+        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent lItent = new Intent(this, HomeActivity.class);
             startActivity(lItent);
         }
@@ -243,10 +262,22 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
 
     public void setGET_USER_ME_flag(Boolean GET_USER_ME_flag) {
         this.GET_USER_ME_flag = GET_USER_ME_flag;
-        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag)
-        {
+        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent lItent = new Intent(this, HomeActivity.class);
             startActivity(lItent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case writeStoragePermission: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    persitenteConnection();
+                }
+                return;
+            }
         }
     }
 }

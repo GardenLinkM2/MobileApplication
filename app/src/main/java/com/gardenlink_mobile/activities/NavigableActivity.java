@@ -15,13 +15,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.PreferenceUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -151,6 +151,8 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
 
     protected void doSignOut() {
         Session.getInstance().flush();
+        PreferenceUtils.savePassword(null, this);
+        PreferenceUtils.saveEmail(null, this);
         Intent intent = new Intent(this, ConnectionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
