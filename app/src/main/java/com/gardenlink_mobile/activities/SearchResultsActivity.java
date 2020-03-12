@@ -16,7 +16,9 @@ import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.NavigableActivity;
 import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.entities.Garden;
+import com.gardenlink_mobile.entities.GardenODataQueryOptions;
 import com.gardenlink_mobile.entities.Location;
+import com.gardenlink_mobile.utils.CriteriaFragment;
 import com.gardenlink_mobile.utils.ResultsAdapter;
 import com.gardenlink_mobile.utils.SearchFragment;
 
@@ -25,76 +27,47 @@ import java.util.ArrayList;
 public class SearchResultsActivity extends NavigableActivity {
 
     private static final String RESULT_INDICATOR_PREFIX="Résultat(s) pour : ";
-
     private static final String RESULT_NUMBER_POSTFIX=" résultats";
-
     private ArrayList<Garden> mResults;
-
     private static final int MAX_RESULTS_PER_PAGE =10;
-
     private SearchFragment mSearch;
-
     private String mSearchTitle;
-
     private ArrayList<Garden> mPageResults;
-
     private int mCurrentPageNumber = 1;
-
     private int mMaximumPageOfResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         //TODO : we assume that we recover the title of the search from the intent (criterias too ? )
         mSearchTitle = "Petit Jardin";
 
-
-
-
         setContentView(R.layout.search_results_activity);
-
         mSearch = new SearchFragment(R.color.colorBlack,true);
 
-
-
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
         ft.replace(R.id.ResultsSearchFragment, mSearch);
-
         ft.show(mSearch);
 
         ft.commit();
         Bundle lIntent = getIntent().getExtras();
 
-        if(lIntent != null && lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) !=null)
-        {
+        if(lIntent != null && lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) !=null) {
             mSearchTitle=lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT);
-
-
         }
 
         //TODO : replace with real call to fill the results
         loadData();
 
         mMaximumPageOfResult = (mResults.size()/MAX_RESULTS_PER_PAGE)+1;
-
         prepareArrayForPageDisplay();
-
         displayList();
-
         prepareNavigationButtonsForPage();
-
         initFields();
-
         initMenu();
 
-
         ((ListView)findViewById(R.id.resultsLists)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 toPostDetail(mPageResults.get(i));
@@ -108,13 +81,8 @@ public class SearchResultsActivity extends NavigableActivity {
     {
         TextView lResultIndicator = ((TextView)findViewById(R.id.resultsIndicator));
         TextView lResultNumber =  ((TextView)findViewById(R.id.resultsNumber));
-
         lResultIndicator.setText(RESULT_INDICATOR_PREFIX+mSearchTitle);
-
-
         lResultNumber.setText(mResults.size()+RESULT_NUMBER_POSTFIX);
-
-
     }
 
     private void toPostDetail(Garden pGarden)
@@ -130,27 +98,35 @@ public class SearchResultsActivity extends NavigableActivity {
 
         int lCurrentIndex = (mCurrentPageNumber-1)*MAX_RESULTS_PER_PAGE;
 
-        if((mResults.size()-1)-lCurrentIndex<MAX_RESULTS_PER_PAGE)
-        {
+        if((mResults.size()-1)-lCurrentIndex<MAX_RESULTS_PER_PAGE) {
             lElementsToRecover = (mResults.size())-lCurrentIndex;
         }
-        else
-        {
+        else {
             lElementsToRecover =MAX_RESULTS_PER_PAGE;
         }
 
-        for(int i=0;i<lElementsToRecover;i++)
-        {
+        for(int i=0;i<lElementsToRecover;i++) {
             mPageResults.add(mResults.get(lCurrentIndex+i));
         }
-
-
-
     }
 
 
     private void loadData()
     {
+        CriteriaFragment criteriaFragment = mSearch.getmCriteria();
+
+        GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
+
+        queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
+        queryOptions.addParamArea(criteriaFragment.getMinSize(),criteriaFragment.getMaxSize());
+        queryOptions.addParamPrice(criteriaFragment.getMinPrice(), criteriaFragment.getMaxPrice());
+        Location location = new Location(){{
+            setStreet(criteriaFragment.getStreetName());
+        }}
+        queryOptions.addParamLocation(location);
+
+
+
         Garden lTestResult = new Garden();
         Location lTestLocation = new Location();
 
@@ -167,7 +143,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult.setLocation(lTestLocation);
         lTestResult.setName("petit jardin aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaazaeeeeeeezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         lTestResult.setCriteria(lCriteria1);
-        lTestResult.setSize(420);
+        //lTestResult.setSize(420);
         lTestResult.setMinUse(4);
 
         Garden lTestResult2 = new Garden();
@@ -180,7 +156,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult2.setLocation(lTestLocation2);
         lTestResult2.setName("grand jardin");
         lTestResult2.setCriteria(lCriteria2);
-        lTestResult2.setSize(69);
+        //lTestResult2.setSize(69);
         lTestResult2.setMinUse(10);
 
         mResults = new ArrayList<Garden>();
@@ -219,7 +195,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult.setLocation(lTestLocation);
         lTestResult.setName("La tour eiffel");
         lTestResult.setCriteria(lCriteria1);
-        lTestResult.setSize(100000);
+        //lTestResult.setSize(100000);
         lTestResult.setMinUse(25);
 
         Garden lTestResult2 = new Garden();
@@ -232,7 +208,7 @@ public class SearchResultsActivity extends NavigableActivity {
         lTestResult2.setLocation(lTestLocation2);
         lTestResult2.setName("grand jardin");
         lTestResult2.setCriteria(lCriteria2);
-        lTestResult2.setSize(69);
+        //lTestResult2.setSize(69);
         lTestResult2.setMinUse(10);
 
         mResults = new ArrayList<Garden>();
@@ -268,32 +244,23 @@ public class SearchResultsActivity extends NavigableActivity {
     private void displayList()
     {
         ResultsAdapter lAdapter = new ResultsAdapter(this,mPageResults);
-
         ListView lList = findViewById(R.id.resultsLists);
-
         lList.setAdapter(lAdapter);
-
-
-
     }
 
     private void prepareNavigationButtonsForPage()
     {
-        if(mCurrentPageNumber==1)
-        {
+        if(mCurrentPageNumber==1) {
             findViewById(R.id.previousPage).setVisibility(View.INVISIBLE);
         }
-        else
-        {
+        else {
             findViewById(R.id.previousPage).setVisibility(View.VISIBLE);
         }
 
-        if(mCurrentPageNumber < mMaximumPageOfResult)
-        {
+        if(mCurrentPageNumber < mMaximumPageOfResult) {
             findViewById(R.id.nextPage).setVisibility(View.VISIBLE);
         }
-        else
-        {
+        else {
             findViewById(R.id.nextPage).setVisibility(View.INVISIBLE);
         }
 
@@ -306,7 +273,6 @@ public class SearchResultsActivity extends NavigableActivity {
         prepareArrayForPageDisplay();
         displayList();
         prepareNavigationButtonsForPage();
-
     }
 
     public void previousPage(View view)
@@ -315,42 +281,26 @@ public class SearchResultsActivity extends NavigableActivity {
         prepareArrayForPageDisplay();
         displayList();
         prepareNavigationButtonsForPage();
-
     }
 
     public void setNewSearch(final String pSearchName)
     {
         mSearchTitle = pSearchName;
-
         mCurrentPageNumber=1;
-
         loadData2();
-
         mMaximumPageOfResult = (mResults.size()/MAX_RESULTS_PER_PAGE)+1;
-
         prepareArrayForPageDisplay();
-
         displayList();
-
         prepareNavigationButtonsForPage();
-
         initFields();
-
-
     }
 
     public void toPost(View view)
     {
         //TODO : make call
-
         Toast.makeText(getApplicationContext()," poster une annonce",Toast.LENGTH_SHORT).show();
-
     }
 
     //TODO : TOAST for error
     //Toast.makeText(getApplicationContext(),"Erreur lors de la recherche",Toast.LENGTH_SHORT).show();
-
-
-
-
 }

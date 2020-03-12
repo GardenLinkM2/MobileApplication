@@ -30,14 +30,18 @@ import android.widget.Toast;
 
 import com.gardenlink_mobile.activities.HomeActivity;
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.activities.SearchResultsActivity;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment{
 
     public static final String SEARCH_FIELD_CONTENT ="searchName";
 
@@ -65,6 +69,10 @@ public class SearchFragment extends Fragment {
     private Integer mCriteriaColor=null;
 
     private boolean mIsOnResult =false;
+
+    public CriteriaFragment getmCriteria() {
+        return mCriteria;
+    }
 
     public SearchFragment ()
     {
