@@ -22,6 +22,7 @@ public class UserSerializer implements ISerializer<User> {
     }
 
     public JSONObject serializeForPersistence(User input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("lastName", input.getLastName());
         output.putOpt("firstName", input.getFirstName());
@@ -36,6 +37,7 @@ public class UserSerializer implements ISerializer<User> {
 
     @Override
     public JSONObject serialize(User input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("lastName", input.getLastName());
         output.putOpt("firstName", input.getFirstName());

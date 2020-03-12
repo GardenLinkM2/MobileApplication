@@ -27,8 +27,8 @@ public class LeasingSerializer implements ISerializer<Leasing> {
 
 
     @Override
-    public JSONObject serialize(Leasing input) throws JSONException
-    {
+    public JSONObject serialize(Leasing input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
 
         output.putOpt("id",input.getId());
@@ -37,7 +37,10 @@ public class LeasingSerializer implements ISerializer<Leasing> {
         output.putOpt("begin",input.getBegin());
         output.putOpt("end",input.getEnd());
         output.putOpt("renew",input.getRenew());
-        output.putOpt("state",input.getState().getLeasingStatus());
+        LeasingStatus status = input.getState();
+        if (status != null){
+            output.putOpt("state",input.getState().getLeasingStatus());
+        }
         output.putOpt("garden",input.getGarden());
         output.putOpt("renter",input.getRenter());
         output.putOpt("owner",input.getOwner());

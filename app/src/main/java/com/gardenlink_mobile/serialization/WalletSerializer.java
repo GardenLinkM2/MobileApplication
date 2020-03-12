@@ -16,6 +16,7 @@ public class WalletSerializer implements ISerializer<Wallet> {
 
     @Override
     public JSONObject serialize(Wallet input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("wallet",input.getBalance());
         return output;

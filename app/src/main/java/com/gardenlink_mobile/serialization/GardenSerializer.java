@@ -1,7 +1,5 @@
 package com.gardenlink_mobile.serialization;
 
-import android.util.Log;
-
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Photo;
 import com.gardenlink_mobile.entities.Status;
@@ -11,9 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class GardenSerializer implements ISerializer<Garden> {
 
@@ -41,6 +37,7 @@ public class GardenSerializer implements ISerializer<Garden> {
 
     @Override
     public JSONObject serialize(Garden input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
 
         output.putOpt("id", input.getId());
@@ -50,7 +47,10 @@ public class GardenSerializer implements ISerializer<Garden> {
         output.putOpt("description", input.getDescription());
         output.putOpt("location", new LocationSerializer().serialize(input.getLocation()));
         output.putOpt("owner", input.getOwner());
-        output.putOpt("validation",input.getValidation().getStatus());
+        Status validation = input.getValidation();
+        if (validation != null){
+            output.putOpt("validation",input.getValidation().getStatus());
+        }
         output.putOpt("criteria", new CriteriaSerializer().serialize(input.getCriteria()));
         if (input.getPhotos() != null)
         {

@@ -46,6 +46,7 @@ public class SearchFragment extends Fragment{
 
     public static final String SEARCH_FIELD_CONTENT ="searchName";
     public static final String CRITERIA_CONTENT="criterias";
+    public static final String LOCATION_CONTENT="location";
     public static final String MIN_AREA_CONTENT="minArea";
     public static final String MAX_AREA_CONTENT="maxArea";
     public static final String MIN_DURATION_CONTENT="minDuration";
@@ -298,13 +299,7 @@ public class SearchFragment extends Fragment{
     public Criteria getCriteria()
     {
         Criteria lCriteria = new Criteria();
-        com.gardenlink_mobile.entities.Location lLocation = new com.gardenlink_mobile.entities.Location();
 
-        lLocation.setStreet(mCriteria.getStreetName());
-        lLocation.setCity(mCriteria.getCity());
-        lLocation.setPostalCode(mCriteria.getPostalCode());
-        lLocation.setStreetNumber(mCriteria.getStreetNumber());
-        lCriteria.setLocation(lLocation);
         lCriteria.setDirectAccess(mCriteria.getDirectAccess());
         lCriteria.setEquipments(mCriteria.getEquipmentProvided());
         lCriteria.setOrientation(mCriteria.getOrientation());
@@ -312,5 +307,16 @@ public class SearchFragment extends Fragment{
         lCriteria.setWaterAccess(mCriteria.getWaterProvided());
 
         return  lCriteria;
+    }
+
+    public com.gardenlink_mobile.entities.Location getLocation(){
+        com.gardenlink_mobile.entities.Location lLocation = new com.gardenlink_mobile.entities.Location();
+
+        lLocation.setStreet(mCriteria.getStreetName());
+        lLocation.setCity(mCriteria.getCity());
+        lLocation.setPostalCode(mCriteria.getPostalCode());
+        lLocation.setStreetNumber(mCriteria.getStreetNumber());
+
+        return lLocation;
     }
 }

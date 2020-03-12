@@ -17,6 +17,7 @@ public class PhotoSerializer implements ISerializer<Photo> {
 
     @Override
     public JSONObject serialize(Photo input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("fileName",input.getFileName());
         output.putOpt("path",input.getPath());

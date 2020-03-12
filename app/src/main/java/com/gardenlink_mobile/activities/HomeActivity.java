@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.SearchResultsActivity;
+import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.serialization.CriteriaSerializer;
+import com.gardenlink_mobile.serialization.ISerializer;
+import com.gardenlink_mobile.serialization.LocationSerializer;
 import com.gardenlink_mobile.utils.SearchFragment;
 
 import java.util.List;
@@ -82,10 +85,13 @@ public class HomeActivity extends NavigableActivity implements IWebConnectable  
 
     public void toSearchResult(final String pInput)
     {
-        CriteriaSerializer lSerializer = new CriteriaSerializer();
-        JSONObject lCriterias= new JSONObject();
+        CriteriaSerializer criteriaSerializer = new CriteriaSerializer();
+        LocationSerializer locationSerializer = new LocationSerializer();
+        JSONObject lCriterias = new JSONObject();
+        JSONObject lLocation = new JSONObject();
         try {
-            lCriterias = lSerializer.serialize(mSearch.getCriteria());
+            lCriterias = criteriaSerializer.serialize(mSearch.getCriteria());
+            lLocation = locationSerializer.serialize(mSearch.getLocation());
         }catch (JSONException loE)
         {
             Log.e(this.TAG,"Error while parsing criterias in JSON");
@@ -93,6 +99,7 @@ public class HomeActivity extends NavigableActivity implements IWebConnectable  
         Intent lIntent = new Intent(this,SearchResultsActivity.class);
         lIntent.putExtra(SearchFragment.SEARCH_FIELD_CONTENT,pInput);
         lIntent.putExtra(SearchFragment.CRITERIA_CONTENT,lCriterias.toString());
+        lIntent.putExtra(SearchFragment.LOCATION_CONTENT,lLocation.toString());
         lIntent.putExtra(SearchFragment.MAX_AREA_CONTENT,mSearch.getmCriteria().getMaxSize());
         lIntent.putExtra(SearchFragment.MIN_AREA_CONTENT,mSearch.getmCriteria().getMinSize());
         lIntent.putExtra(SearchFragment.MAX_DURATION_CONTENT,mSearch.getmCriteria().getMaxDuration());

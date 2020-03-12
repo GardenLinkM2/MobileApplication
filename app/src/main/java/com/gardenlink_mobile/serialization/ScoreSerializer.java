@@ -21,6 +21,7 @@ public class ScoreSerializer implements ISerializer<Score> {
 
     @Override
     public JSONObject serialize(Score input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("comment",input.getComment());
         output.putOpt("id",input.getId());

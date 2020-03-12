@@ -29,6 +29,7 @@ public class TalkSerializer implements ISerializer<Talk> {
 
     @Override
     public JSONObject serialize(Talk input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("isArchived",input.getArchived());
         output.putOpt("id",input.getId());

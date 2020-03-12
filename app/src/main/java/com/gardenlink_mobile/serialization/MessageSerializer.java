@@ -28,6 +28,7 @@ public class MessageSerializer implements ISerializer<Message> {
 
     @Override
     public JSONObject serialize(Message input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("creationDate",input.getCreationDate());
         output.putOpt("id",input.getId());

@@ -20,6 +20,7 @@ public class LocationSerializer implements ISerializer<Location> {
 
     @Override
     public JSONObject serialize(Location input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("city",input.getCity());
         output.putOpt("postalCode",input.getPostalCode());

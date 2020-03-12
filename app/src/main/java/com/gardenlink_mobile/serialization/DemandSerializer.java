@@ -18,9 +18,13 @@ public class DemandSerializer implements ISerializer<Demand> {
 
     @Override
     public JSONObject serialize(Demand input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("firstMessage", input.getFirstMessage());
-        output.putOpt("status",input.getStatus().getStatus());
+        Status status = input.getStatus();
+        if (status != null) {
+            output.putOpt("status",input.getStatus().getStatus());
+        }
         return output;
     }
 }

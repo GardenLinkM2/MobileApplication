@@ -5,7 +5,6 @@ public class Criteria {
     private Long locationTime;
     private Integer area;
     private Double price;
-    private Location location;
     private String orientation;
     private String typeOfClay;
     private Boolean equipments;
@@ -35,14 +34,6 @@ public class Criteria {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public String getOrientation() {
