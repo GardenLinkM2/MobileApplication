@@ -13,7 +13,6 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
         criteria.setArea(input.optInt("area"));
         criteria.setDirectAccess(input.optBoolean("directAccess"));
         criteria.setEquipments(input.optBoolean("equipments"));
-        criteria.setLocation(new LocationSerializer().deserialize(input.optJSONObject("location")));
         criteria.setOrientation(input.optString("orientation"));
         criteria.setPrice(input.optDouble("price"));
         criteria.setTypeOfClay(input.optString("typeOfClay"));
@@ -23,11 +22,11 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
 
     @Override
     public JSONObject serialize(Criteria input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("area", input.getArea());
         output.putOpt("directAccess",input.getDirectAccess());
         output.putOpt("equipments",input.getEquipments());
-        output.putOpt("location", new LocationSerializer().serialize(input.getLocation()));
         output.putOpt("locationTime",input.getLocationTime());
         output.putOpt("orientation",input.getOrientation());
         output.putOpt("price",input.getPrice());

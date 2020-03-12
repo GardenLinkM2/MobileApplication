@@ -19,6 +19,7 @@ public class PaymentSerializer implements ISerializer<Payment> {
 
     @Override
     public JSONObject serialize(Payment input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("date", input.getDate());
         output.putOpt("id", input.getId());

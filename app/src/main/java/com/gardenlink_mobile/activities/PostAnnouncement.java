@@ -26,26 +26,33 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.entities.Criteria;
+import com.gardenlink_mobile.entities.Garden;
+import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.gardenlink_mobile.wsconnecting.operations.POST_GARDEN;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 // TODO WARNING !!!! Don't forget to transfert plaintext in layout to res/string !
 
-public class PostAnnouncement extends NavigableActivity {
+public class PostAnnouncement extends NavigableActivity implements IWebConnectable{
 
     private static final String TAG = "POST_ANNOUNCEMENT_ACTIVITY";
 
     private static final String ERROR_SELECT_IMAGE = "Erreur! Le fichier sélectionné n'est pas une image!";
-    private static final String ERROR_POST = "Erreur! Impossible de poster l'annonce, veuillez vérifier les champs.";
+    private static final String ERROR_POST = "Erreur! Impossible de poster l'annonce, veuillez réessayer.";
     private static final String TITLE_FORM = "titleForm";
     private static final String PRICE_FORM = "priceForm";
     private static final String AREA_SIZE_FORM = "areaSizeForm";
@@ -467,11 +474,9 @@ public class PostAnnouncement extends NavigableActivity {
     }
 
     public void onClickPost(View v) {
-        String orientationValue = "";
-        String earthTypeValue = "";
-        String waterProvided = "";
-        String equipmentProvidedValue = "";
-        String directAccessValue = "";
+        Garden garden = new Garden();
+        Criteria criteria = new Criteria();
+        Location location = new Location();
 
         // todo: Extract image from ImageView to upload it
         BitmapDrawable bitmapDrawable = (BitmapDrawable) imageAnnouncement.getDrawable();
@@ -485,139 +490,156 @@ public class PostAnnouncement extends NavigableActivity {
 
 
         // todo: get informations from inputs and radioButton
-        inputForms.get(TITLE_FORM).getEditText().getText().toString();
-        inputForms.get(PRICE_FORM).getEditText().getText().toString();
-        inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString();
-        inputForms.get(DURATION_FORM).getEditText().getText().toString();
-        descritpionTextArea.getText().toString(); // peut etre null
-        inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString();
-        inputForms.get(STREET_NAME_FORM).getEditText().getText().toString();
-        inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString();
-        inputForms.get(CITY_FORM).getEditText().getText().toString();
-        switch (orientationRadioActivated.getId()) {
-            case R.id.postAnnouncement_radio_north:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_northEast:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_east:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_southEast:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_south:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_southWest:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_west:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            case R.id.postAnnouncement_radio_northWest:
-                // todo put the value waited by the back
-                // orientationValue = "";
-                break;
-            default:
-                orientationValue = "";
-                break;
+        garden.setName(inputForms.get(TITLE_FORM).getEditText().getText().toString());
+        criteria.setPrice(Double.parseDouble(inputForms.get(PRICE_FORM).getEditText().getText().toString()));
+        criteria.setArea(Integer.parseInt(inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString()));
+        criteria.setLocationTime(Long.parseLong(inputForms.get(DURATION_FORM).getEditText().getText().toString()));
+        garden.setDescription(descritpionTextArea.getText().toString()); // peut etre null
+        location.setStreetNumber(Integer.parseInt(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString()));
+        location.setStreet(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString());
+        location.setPostalCode(Integer.parseInt(inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString()));
+        location.setCity(inputForms.get(CITY_FORM).getEditText().getText().toString());
+        if (orientationRadioActivated != null) {
+            switch (orientationRadioActivated.getId()) {
+                case R.id.postAnnouncement_radio_north:
+                    criteria.setOrientation("North");
+                    break;
+                case R.id.postAnnouncement_radio_northEast:
+                    criteria.setOrientation("NorthEast");
+                    break;
+                case R.id.postAnnouncement_radio_east:
+                    criteria.setOrientation("East");
+                    break;
+                case R.id.postAnnouncement_radio_southEast:
+                    criteria.setOrientation("SouthEast");
+                    break;
+                case R.id.postAnnouncement_radio_south:
+                    criteria.setOrientation("North");
+                    break;
+                case R.id.postAnnouncement_radio_southWest:
+                    criteria.setOrientation("SouthWest");
+                    break;
+                case R.id.postAnnouncement_radio_west:
+                    criteria.setOrientation("West");
+                    break;
+                case R.id.postAnnouncement_radio_northWest:
+                    criteria.setOrientation("NorthWest");
+                    break;
+                default:
+                    criteria.setOrientation("Unset");
+                    break;
+            }
         }
-        switch (earthRadioActivated.getId()) {
-            case R.id.postAnnouncement_radio_argileux:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            case R.id.postAnnouncement_radio_sableux:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            case R.id.postAnnouncement_radio_tourbeux:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            case R.id.postAnnouncement_radio_humifere:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            case R.id.postAnnouncement_radio_silicieuse:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            case R.id.postAnnouncement_radio_calcaire:
-                // todo put the value waited by the back
-                 earthTypeValue = "";
-                break;
-            default:
-                earthTypeValue = "";
-                break;
+        if (earthRadioActivated != null ) {
+            switch (earthRadioActivated.getId()) {
+                case R.id.postAnnouncement_radio_argileux:
+                    criteria.setTypeOfClay("Argileux");
+                    break;
+                case R.id.postAnnouncement_radio_sableux:
+                    criteria.setTypeOfClay("Sableux");
+                    break;
+                case R.id.postAnnouncement_radio_tourbeux:
+                    criteria.setTypeOfClay("Tourbeux");
+                    break;
+                case R.id.postAnnouncement_radio_humifere:
+                    criteria.setTypeOfClay("Humifère");
+                    break;
+                case R.id.postAnnouncement_radio_silicieuse:
+                    criteria.setTypeOfClay("Silicieux");
+                    break;
+                case R.id.postAnnouncement_radio_calcaire:
+                    criteria.setTypeOfClay("Calcaire");
+                    break;
+                default:
+                    break;
+            }
         }
         switch (((RadioGroup) findViewById(R.id.postAnnouncement_waterProvidedForm)).getCheckedRadioButtonId()) {
             case R.id.postAnnouncement_radio_waterYes:
-                // todo put the value waited by the back
-                waterProvided = "";
+                criteria.setWaterAccess(true);
                 break;
             case R.id.postAnnouncement_radio_waterNo:
-                // todo put the value waited by the back
-                waterProvided = "";
+                criteria.setWaterAccess(false);
                 break;
             default:
-                waterProvided = "";
+                criteria.setWaterAccess(false);
                 break;
         }
         switch (((RadioGroup) findViewById(R.id.postAnnouncement_equipmentProvidedForm)).getCheckedRadioButtonId()) {
             case R.id.postAnnouncement_radio_equipmentYes:
-                // todo put the value waited by the back
-                equipmentProvidedValue = "";
+                criteria.setEquipments(true);
                 break;
             case R.id.postAnnouncement_radio_equipmentNo:
-                // todo put the value waited by the back
-                equipmentProvidedValue = "";
+                criteria.setEquipments(false);
                 break;
             default:
-                equipmentProvidedValue = "";
+                criteria.setEquipments(false);
                 break;
         }
         switch (((RadioGroup) findViewById(R.id.postAnnouncement_directAccessForm)).getCheckedRadioButtonId()) {
             case R.id.postAnnouncement_radio_directAccessYes:
-                // todo put the value waited by the back
-                directAccessValue = "";
+                criteria.setDirectAccess(true);
                 break;
             case R.id.postAnnouncement_radio_directAccessNo:
-                // todo put the value waited by the back
-                directAccessValue = "";
+                criteria.setDirectAccess(false);
                 break;
             default:
-                directAccessValue = "";
+                criteria.setDirectAccess(false);
                 break;
         }
 
+        garden.setLocation(location);
+        garden.setCriteria(criteria);
 
-        // todo if post announcement is ok then open alert dialog and when press ok redirect to detail of this announcement and finish() this activity
-        AlertDialog dialog = new AlertDialog . Builder ( this )
-                .setTitle ("Confirmation de la demande")
-                .setMessage ("Votre annonce a bien été pris en compte. Elle sera vérifiée par nos services sous peu.")
-                .setPositiveButton ("OK", new
-                        DialogInterface.OnClickListener() {
-                            @ Override
-                            public void onClick (DialogInterface dialog, int which) {
-                                //todo redirect to detail
-                                finish();
-                            }
-                        })
-                .create () ;
-        dialog.show () ;
+        new POST_GARDEN(garden).perform(new WeakReference<>(this));
+    }
 
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        switch (operation.getName()) {
+            case "POST_GARDEN":
+                switch (responseCode) {
+                    case 201:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        AlertDialog dialog = new AlertDialog . Builder ( this )
+                                .setTitle ("Confirmation de la demande")
+                                .setMessage ("Votre annonce a bien été pris en compte. Elle sera vérifiée par nos services sous peu.")
+                                .setPositiveButton ("OK", new
+                                        DialogInterface.OnClickListener() {
+                                            @ Override
+                                            public void onClick (DialogInterface dialog, int which) {
+                                                //todo redirect to detail
+                                                finish();
+                                            }
+                                        })
+                                .create () ;
+                        dialog.show () ;
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        Toast.makeText(this, ERROR_POST, Toast.LENGTH_LONG).show();
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
+    }
 
-        //todo if post announcement is not ok
-        Toast.makeText(this, ERROR_POST, Toast.LENGTH_LONG).show();
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        return;
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        return;
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 }

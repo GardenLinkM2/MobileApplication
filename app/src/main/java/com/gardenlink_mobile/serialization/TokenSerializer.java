@@ -16,6 +16,7 @@ public class TokenSerializer implements ISerializer<Token> {
 
     @Override
     public JSONObject serialize(Token input) throws JSONException {
+        if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("token", input.getToken());
         return output;

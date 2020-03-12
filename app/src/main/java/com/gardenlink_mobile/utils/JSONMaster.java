@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 public class JSONMaster {
@@ -38,20 +39,26 @@ public class JSONMaster {
      */
     public static <T> List<T> processJsonOutput(String output, ISerializer<T> serializer) throws JSONException {
         List<T> results = new ArrayList<>();
+        JSONObject trueResult = new JSONObject(output);
         JSONArray jArray;
         try {
-            jArray = new JSONArray(output);
+            jArray = new JSONArray(trueResult.getJSONArray("data"));
+            IntStream.range(0, jArray.length()).forEach(index -> {
+                try {
+                    results.add(serializer.deserialize(jArray.getJSONObject(index)));
+                } catch (JSONException e) {
+                    Log.e("JSON Deserialization", "Error while fetching value of index " + index + " using serializer " + serializer.getClass().toString());
+                }
+            });
         } catch (JSONException e) {
-            results.add(serializer.deserialize(new JSONObject(output)));
-            return results;
-        }
-        IntStream.range(0, jArray.length()).forEach(index -> {
             try {
-                results.add(serializer.deserialize(jArray.getJSONObject(index)));
-            } catch (JSONException e) {
-                Log.e("JSON Deserialization", "Error while fetching value of index " + index + " using serializer " + serializer.getClass().toString());
+                results.add(serializer.deserialize(trueResult));
             }
-        });
+            catch (Exception e1) {
+                results.add(serializer.deserialize(trueResult.getJSONObject("data")));
+                return results;
+            }
+        }
         return results;
     }
 
