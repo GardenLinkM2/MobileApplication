@@ -1,5 +1,6 @@
 package com.gardenlink_mobile.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,4 +73,12 @@ public class HomeActivity extends NavigableActivity implements IWebConnectable  
     {
         //TODO : make the call to post
     }
+
+    public void toSearchResult(final String pInput)
+    {
+        Intent lIntent = new Intent(this,SearchResultsActivity.class);
+        lIntent.putExtra(SearchFragment.SEARCH_FIELD_CONTENT,pInput);
+        startActivity(lIntent);
+    }
+
 }

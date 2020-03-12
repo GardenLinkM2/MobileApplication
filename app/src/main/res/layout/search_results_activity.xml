@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/resultPage"
+    tools:context=".activities.SearchResultsActivity">
+
+    <include
+        layout="@layout/menu_hamburger"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/ResultsSearchFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+
+                />
+
+            <TextView
+                android:id="@+id/resultsIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/ResultsSearchFragment"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="Résultat(s) pour : "
+                android:textSize="15sp"
+                />
+
+            <View
+                android:id="@+id/separatorLine"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@+id/resultsIndicator"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/resultsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/separatorLine"
+                app:layout_constraintStart_toStartOf="@+id/separatorLine"
+                android:text=" Résultats"
+                android:textSize="10sp"
+                />
+
+            <com.gardenlink_mobile.utils.CustomListView
+                android:id="@+id/resultsLists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/resultsNumber"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:clickable="false"
+                />
+            
+            
+            <TextView
+                android:id="@+id/previousPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/resultsLists"
+                app:layout_constraintRight_toLeftOf="@+id/pageNumber"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="@string/previousPageResults"
+                android:textColor="@color/colorGreen_brighter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="30dp"
+                android:clickable="true"
+                android:onClick="previousPage"
+                android:layout_marginLeft="34dp"
+                />
+
+            <TextView
+                android:id="@+id/pageNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toLeftOf="@+id/nextPage"
+                app:layout_constraintLeft_toRightOf="@+id/previousPage"
+                app:layout_constraintTop_toBottomOf="@+id/resultsLists"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="30dp"
+                android:text="1"
+                />
+
+            <TextView
+                android:id="@+id/nextPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/resultsLists"
+                app:layout_constraintLeft_toRightOf="@+id/pageNumber"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="@string/nextPageResults"
+                android:textColor="@color/colorGreen_brighter"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="30dp"
+                android:clickable="true"
+                android:onClick="nextPage"
+                android:layout_marginRight="34dp"
+                />
+
+
+
+
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        app:srcCompat="@drawable/ic_add_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:backgroundTint="@color/colorGreen_brighter"
+
+
+        android:onClick="toPost"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

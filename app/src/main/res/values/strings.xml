@@ -60,4 +60,8 @@
     <string name="save">SAUVERGARDER</string>
     <string name="deleteAccount">SUPPRIMER MON COMPTE</string>
     <string name="search_hint">Rechercher</string>
+    <string name="searchResultActivity">Résultats de recherche</string>
+
+    <string name="nextPageResults"><u>Suivant</u></string>
+    <string name="previousPageResults"><u>Précédent</u></string>
 </resources>

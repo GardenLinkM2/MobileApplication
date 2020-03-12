@@ -34,6 +34,16 @@
         app:layout_constraintHorizontal_bias="0.5"
         />
 
+    <Button
+        android:id="@+id/main_resultsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To research result"
+        android:onClick="toResults"
+        app:layout_constraintTop_toBottomOf="@+id/main_connexionButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
     <!-- If the menu isn't at the end of the document it will be displayed under the TextView-->
 
