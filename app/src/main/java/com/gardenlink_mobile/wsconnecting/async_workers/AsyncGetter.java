@@ -10,6 +10,7 @@ import com.gardenlink_mobile.utils.JSONMaster;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -96,7 +97,20 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        if (result.isEmpty() || failure) {
+        try {
+            if (result.isEmpty() || failure || new JSONObject(result).getInt("count") == 0) {
+                IWebConnectable realSender = sender.get();
+                if (realSender != null) {
+                    if (serializer != null)
+                        // Casting is necessary to disambiguate the method call
+                        realSender.receiveResults(responseCode, (List<Object>) null, operation);
+                    else
+                        // Casting is necessary to disambiguate the method call
+                        realSender.receiveResults(responseCode, (HashMap<String, String>) null, operation);
+                    return;
+                }
+            }
+        } catch (JSONException e) {
             IWebConnectable realSender = sender.get();
             if (realSender != null) {
                 if (serializer != null)

@@ -44,6 +44,7 @@ public class GardenODataQueryOptions extends ODataQueryOptions {
     }
 
     public void addParamInDescription(String value){
-        addContainsParam("description",value);
+        if (value != null && !value.isEmpty())
+            addContainsParam("description",value);
     }
 }

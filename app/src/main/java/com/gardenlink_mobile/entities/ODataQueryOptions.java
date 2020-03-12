@@ -2,7 +2,7 @@ package com.gardenlink_mobile.entities;
 
 abstract class ODataQueryOptions {
 
-    private String urlParams = "$filter=";
+    private String urlParams = "?$filter=";
     private Boolean firstParam = true;
 
     public String getUrlParams() {
@@ -15,17 +15,18 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " eq '" + value + "'";
+            urlParams += " and criteria/" + param + " eq '" + value + "'";
         }
         return;
     }
 
     public void addEqualsParam(String param, Boolean value) {
+        if (value == null) return;
         if (firstParam) {
             urlParams += "criteria/" + param + " eq " + value;
             firstParam = false;
         } else {
-            urlParams += "and " + param + " eq " + value;
+            urlParams += " and criteria/" + param + " eq " + value;
         }
         return;
     }
@@ -36,7 +37,7 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " eq " + value;
+            urlParams += " and criteria/" + param + " eq " + value;
         }
         return;
     }
@@ -47,7 +48,7 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " le '" + value;
+            urlParams += " and criteria/" + param + " le " + value;
         }
         return;
     }
@@ -58,7 +59,7 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " ge '" + value;
+            urlParams += " and criteria/" + param + " ge " + value;
         }
         return;
     }
@@ -69,7 +70,7 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " le '" + value;
+            urlParams += " and criteria/" + param + " le " + value;
         }
         return;
     }
@@ -80,7 +81,7 @@ abstract class ODataQueryOptions {
             firstParam = false;
         }
         else{
-            urlParams += "and " + param + " ge '" + value;
+            urlParams += " and criteria/" + param + " ge " + value;
         }
         return;
     }
@@ -99,11 +100,11 @@ abstract class ODataQueryOptions {
 
     public void addContainsParam(String param, String value){
         if (firstParam) {
-            urlParams += "contains(" + param + ",'" + value + "')";
+            urlParams += "contains(criteria/" + param + ",'" + value + "')";
             firstParam = false;
         }
         else{
-            urlParams += "and contains(" + param + ",'" + value + "')";
+            urlParams += " and contains(criteria/" + param + ",'" + value + "')";
         }
         return;
     }
