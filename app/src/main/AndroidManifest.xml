@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".activities.PostAnnouncement"
-            android:label="@string/signUp_activity"
+            android:label="@string/postAnnouncement_activity"
             android:theme="@style/GardenLink" />
         <activity
             android:name=".activities.SignUpActivity"

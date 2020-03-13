@@ -144,7 +144,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     {
         newUser = new User();
 
-        // TODO MODIFIER CETTE MERDE
         newUser.setAvatar(currentUser.getAvatar());
 
         TextInputEditText userFirstNameField = findViewById(R.id.firstNameInputField);

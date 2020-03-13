@@ -168,7 +168,6 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         User user = (User) results.get(0);
                         Session.getInstance().setCurrentUser(user);
-                        // J'ai pas vuuu
                         Session.getInstance().getCurrentUser().setPassword(mPassword.getText().toString());
                         setGET_USER_ME_flag(true);
                         return;
