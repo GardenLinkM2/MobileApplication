@@ -97,4 +97,5 @@
     <string name="postAnnouncement_directAccess_label">Accès direct au terrain:</string>
     <string name="postAnnouncement_reinitcriteriaButton">Réinitialiser les critères</string>
     <string name="postAnnouncement_postButton">POSTER</string>
+    <string name="postAnnouncement_activity">Poster une annonce</string>
 </resources>
