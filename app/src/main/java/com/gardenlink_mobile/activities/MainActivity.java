@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         User user = (User) results.get(0);
                         Session.getInstance().setCurrentUser(user);
-                        // J'ai pas vuuu
                         Session.getInstance().getCurrentUser().setPassword(PreferenceUtils.getPassword(this));
                         setGET_USER_ME_flag(true);
                         return;
