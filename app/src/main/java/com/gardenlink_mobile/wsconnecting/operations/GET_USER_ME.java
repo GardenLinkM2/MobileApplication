@@ -13,7 +13,7 @@ public class GET_USER_ME extends Operation {
     private String url = AUTHENTICATION_URL + "users/me";
     private static ISerializer serializer = new UserSerializer();
 
-    public GET_USER_ME() { }
+    public GET_USER_ME(){}
 
     @Override
     public void perform(WeakReference<IWebConnectable> sender){

@@ -14,8 +14,8 @@ public class FORGOTTEN_PASSWORD extends Operation {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.get(sender, url, null, null,this, null);
+        Caller.get(sender, url, null, null, this, null);
     }
 }

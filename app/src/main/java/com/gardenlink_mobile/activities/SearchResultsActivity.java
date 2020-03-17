@@ -17,9 +17,9 @@ import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.GardenODataQueryOptions;
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.serialization.CriteriaSerializer;
-import com.gardenlink_mobile.utils.CriteriaFragment;
-import com.gardenlink_mobile.utils.ResultsAdapter;
-import com.gardenlink_mobile.utils.SearchFragment;
+import com.gardenlink_mobile.fragments.CriteriaFragment;
+import com.gardenlink_mobile.adapters.ResultsAdapter;
+import com.gardenlink_mobile.fragments.SearchFragment;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDENS;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
@@ -59,20 +59,15 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         mSearch = new SearchFragment(R.color.colorBlack, true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.ResultsSearchFragment, mSearch);
-        ft.show(mSearch);
-
-        ft.commit();
+        ft.replace(R.id.ResultsSearchFragment, mSearch).show(mSearch).commit();
         Bundle lIntent = getIntent().getExtras();
 
-        if(lIntent!=null) {
-
+        if (lIntent != null) {
             if (lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) != null) {
                 mSearchTitle = lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT);
             } else {
                 mSearchTitle = "";
             }
-
             if (lIntent.getString(SearchFragment.CRITERIA_CONTENT) != null) {
                 try {
                     CriteriaSerializer lSerializer = new CriteriaSerializer();
@@ -81,59 +76,44 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                 } catch (JSONException loE) {
                     Log.e(this.TAG, "error while parsing criteria");
                 }
-
             } else {
-                this.mCriteriaForSearch = new Criteria(); }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MAX_AREA_CONTENT)) != null) {
+                this.mCriteriaForSearch = new Criteria();
+            }
+            if (new Integer(lIntent.getInt(SearchFragment.MAX_AREA_CONTENT)) != null) {
                 this.mMaxArea = lIntent.getInt(SearchFragment.MAX_AREA_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MIN_AREA_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MIN_AREA_CONTENT)) != null) {
                 this.mMinArea = lIntent.getInt(SearchFragment.MIN_AREA_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT)) != null) {
                 this.mMinDuration = lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT)) != null) {
                 this.mMaxDuration = lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT);
             }
-
-            if(new Double(lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT)) != null) {
+            if (new Double(lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT)) != null) {
                 this.mMinPrice = lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT);
             }
-
-            if(new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
+            if (new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
                 this.mMaxPrice = lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT);
             }
             loadDataWithIntentCriteria();
-        }
-        else{
+        } else {
             loadDataWithNoCriteria();
         }
 
         if (mResults != null) {
             mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
-
             prepareArrayForPageDisplay();
             displayList();
-
             initFields();
         }
         prepareNavigationButtonsForPage();
         initMenu();
 
-        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                toDetails(mPageResults.get(i));
-            }
-        });
+        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
 
     }
-
 
     private void initFields() {
         TextView lResultIndicator = ((TextView) findViewById(R.id.resultsIndicator));
@@ -157,26 +137,23 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         mPageResults = new ArrayList<Garden>();
 
         int lCurrentIndex = (mCurrentPageNumber - 1) * MAX_RESULTS_PER_PAGE;
-
         if ((mResults.size() - 1) - lCurrentIndex < MAX_RESULTS_PER_PAGE) {
             lElementsToRecover = (mResults.size()) - lCurrentIndex;
         } else {
             lElementsToRecover = MAX_RESULTS_PER_PAGE;
         }
-
         for (int i = 0; i < lElementsToRecover; i++) {
             mPageResults.add(mResults.get(lCurrentIndex + i));
         }
     }
 
-    
     public void loadData() {
         CriteriaFragment criteriaFragment = mSearch.getmCriteria();
-        if (criteriaFragment == null){
+        if (criteriaFragment == null) {
             new GET_GARDENS(null).perform(new WeakReference<>(this));
             return;
         }
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
@@ -199,8 +176,8 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
-    public void loadDataWithIntentCriteria(){
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+    public void loadDataWithIntentCriteria() {
+        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
@@ -216,8 +193,8 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
-    public void loadDataWithNoCriteria(){
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+    public void loadDataWithNoCriteria() {
+        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
         new GET_GARDENS(null).perform(new WeakReference<>(this));
     }
 
@@ -239,7 +216,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         lTestResult.setLocation(lTestLocation);
         lTestResult.setName("La tour eiffel");
         lTestResult.setCriteria(lCriteria1);
-        //lTestResult.setSize(100000);
         lTestResult.setMinUse(25);
 
         Garden lTestResult2 = new Garden();
@@ -252,7 +228,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         lTestResult2.setLocation(lTestLocation2);
         lTestResult2.setName("grand jardin");
         lTestResult2.setCriteria(lCriteria2);
-        //lTestResult2.setSize(69);
         lTestResult2.setMinUse(10);
 
         mResults = new ArrayList<Garden>();
@@ -281,7 +256,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         mResults.add(lTestResult);
         mResults.add(lTestResult);
     }
-
 
     private void displayList() {
         ResultsAdapter lAdapter = new ResultsAdapter(this, mPageResults);
@@ -332,16 +306,16 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                     case 200:
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(getApplicationContext(),"Aucun résultat. Veuillez réessayer avec des critères moins restrictifs.",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.no_result, Toast.LENGTH_SHORT).show();
                             return;
                         }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        List<Garden> gardens = (List<Garden>)results;
+                        List<Garden> gardens = (List<Garden>) results;
                         mResults = new ArrayList<>(gardens);
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(),"Erreur lors de la recherche",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.search_error, Toast.LENGTH_SHORT).show();
                         return;
                 }
             default:

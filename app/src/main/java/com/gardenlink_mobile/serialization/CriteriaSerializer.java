@@ -25,13 +25,13 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
         if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("area", input.getArea());
-        output.putOpt("directAccess",input.getDirectAccess());
-        output.putOpt("equipments",input.getEquipments());
-        output.putOpt("locationTime",input.getLocationTime());
-        output.putOpt("orientation",input.getOrientation());
-        output.putOpt("price",input.getPrice());
-        output.putOpt("typeOfClay",input.getTypeOfClay());
-        output.putOpt("waterAccess",input.getWaterAccess());
+        output.putOpt("directAccess", input.getDirectAccess());
+        output.putOpt("equipments", input.getEquipments());
+        output.putOpt("locationTime", input.getLocationTime());
+        output.putOpt("orientation", input.getOrientation());
+        output.putOpt("price", input.getPrice());
+        output.putOpt("typeOfClay", input.getTypeOfClay());
+        output.putOpt("waterAccess", input.getWaterAccess());
         return output;
     }
 }

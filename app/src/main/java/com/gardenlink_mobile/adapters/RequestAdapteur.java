@@ -1,4 +1,4 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.adapters;
 
 import android.content.Context;
 import android.icu.text.SimpleDateFormat;
@@ -43,7 +43,6 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> {
         }
 
         setItemClickListenerOnRequest(convertView, result);
-
         TextView requestTitle = convertView.findViewById(R.id.requestTitle);
         TextView requestSender = convertView.findViewById(R.id.requestSender);
         CircleImageView requestSenderAvatar = convertView.findViewById(R.id.sender_avatar);
@@ -64,14 +63,12 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> {
         garden.setLocation(location);
 
         requestTitle.setText(garden.getName());
-
         requestSender.setText(renter.getLastName() + " " + renter.getFirstName());
         requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
         Random random = new Random();
         int randomNumber = random.nextInt(10 - 1 + 1) + 1;
         requestDuration.setText(Integer.toString(randomNumber) + WEEKS);
         requestMoment.setText(new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date()));
-
         return convertView;
     }
 
@@ -80,22 +77,19 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> {
         ImageView declineButton = convertView.findViewById(R.id.decline_button);
         ImageView detailsButton = convertView.findViewById(R.id.detail_button);
 
-
         acceptButton.setOnClickListener(v -> {
             //TODO : make real call with id in the intent to retrieve the details of the garden
-            Toast.makeText(getContext(), "Vous avez accepté la demande de" + renter.getLastName() + " " + renter.getFirstName() + " sur votre Jardin : " + garden.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.accept_request + renter.getLastName() + " " + renter.getFirstName() + R.string.on_land + garden.getName(), Toast.LENGTH_SHORT).show();
             remove(result);
         });
 
         declineButton.setOnClickListener(v -> {
             //TODO : make real call with id in the intent to retrieve the details of the garden
-            Toast.makeText(getContext(), "Vous avez refusé la demande de" + renter.getLastName() + " " + renter.getFirstName() + " sur votre Jardin : " + garden.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.decline_request + renter.getLastName() + " " + renter.getFirstName() + R.string.on_land + garden.getName(), Toast.LENGTH_SHORT).show();
             remove(result);
         });
 
         //TODO : make real call with id in the intent to retrieve the details of the garden
-        detailsButton.setOnClickListener(v -> Toast.makeText(getContext(), "Vous voulez voir les détails de  l'annonce : " + garden.getName(), Toast.LENGTH_SHORT).show());
+        detailsButton.setOnClickListener(v -> Toast.makeText(getContext(), R.string.show_details + garden.getName(), Toast.LENGTH_SHORT).show());
     }
-
-
 }

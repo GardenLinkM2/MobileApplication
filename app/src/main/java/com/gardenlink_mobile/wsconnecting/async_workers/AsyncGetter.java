@@ -52,13 +52,10 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
             conn.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory());
 
             String jsonInputString = JSONMaster.createJsonInputString(criteria);
-
-            if (authorization != null) conn.setRequestProperty("Authorization",authorization);
-
+            if (authorization != null) conn.setRequestProperty("Authorization", authorization);
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoInput(true);
-
             if (jsonInputString != null) {
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
@@ -69,11 +66,8 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
                 osw.flush();
                 osw.close();
             }
-
             responseCode = conn.getResponseCode();
-
             StringBuilder response = new StringBuilder();
-
             BufferedReader br;
             if (200 <= responseCode && responseCode <= 299)
                 br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -114,7 +108,7 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
         }
         try {
             List<T> jsonResult = new ArrayList<>();
-            HashMap<String,String> mapJsonResult = new HashMap<>();
+            HashMap<String, String> mapJsonResult = new HashMap<>();
             if (serializer != null)
                 jsonResult = JSONMaster.processJsonOutput(result, serializer);
             else
@@ -127,7 +121,7 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
                     realSender.receiveResults(responseCode, mapJsonResult, operation);
             }
         } catch (JSONException e) {
-            Log.e("AsyncGetter",e.getMessage());
+            Log.e("AsyncGetter", e.getMessage());
         }
     }
 }

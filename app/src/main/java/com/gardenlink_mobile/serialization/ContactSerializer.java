@@ -22,10 +22,10 @@ public class ContactSerializer implements ISerializer<Contact> {
     public JSONObject serialize(Contact input) throws JSONException {
         if (input == null) return null;
         JSONObject output = new JSONObject();
-        output.putOpt("id",input.getId());
-        output.putOpt("contact",new UserSerializer().serialize(input.getContact()));
-        output.putOpt("status",input.getStatus().getStatus());
-        output.putOpt("firstMessage",input.getFirstMessage());
+        output.putOpt("id", input.getId());
+        output.putOpt("contact", new UserSerializer().serialize(input.getContact()));
+        output.putOpt("status", input.getStatus().getStatus());
+        output.putOpt("firstMessage", input.getFirstMessage());
         return output;
     }
 }

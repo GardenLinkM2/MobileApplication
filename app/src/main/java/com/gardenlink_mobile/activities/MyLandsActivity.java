@@ -3,7 +3,7 @@ package com.gardenlink_mobile.activities;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.gardenlink_mobile.utils.PageAdapter;
+import com.gardenlink_mobile.adapters.PageAdapter;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import androidx.viewpager.widget.ViewPager;
@@ -48,7 +48,7 @@ public class MyLandsActivity extends NavigableActivity implements IWebConnectabl
 
     private void configureViewPagerAndTabs() {
         ViewPager pager = (ViewPager) findViewById(R.id.tabPager);
-        pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), getApplicationContext()));
         TabLayout tabs = (TabLayout) findViewById(R.id.tabLayout);
         tabs.setupWithViewPager(pager);
         tabs.setTabMode(TabLayout.MODE_FIXED);

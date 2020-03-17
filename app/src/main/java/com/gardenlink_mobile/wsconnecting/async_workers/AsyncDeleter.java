@@ -40,11 +40,8 @@ public class AsyncDeleter<T> extends AsyncTask<String, Void, String> {
             conn.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory());
 
             String jsonInputString = JSONMaster.createJsonInputString(criteria);
-
-            if (authorization != null) conn.setRequestProperty("Authorization",authorization);
-
+            if (authorization != null) conn.setRequestProperty("Authorization", authorization);
             conn.setRequestMethod("DELETE");
-
             if (jsonInputString != null) {
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
@@ -55,9 +52,7 @@ public class AsyncDeleter<T> extends AsyncTask<String, Void, String> {
                 osw.flush();
                 osw.close();
             }
-
             responseCode = conn.getResponseCode();
-
             conn.disconnect();
         } catch (Exception e) {
             Log.e("Error", e.getMessage());

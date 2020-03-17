@@ -14,14 +14,14 @@ public class GET_USER_UUID extends Operation {
     private static ISerializer serializer = null;
 
     public GET_USER_UUID() {
-        criteria = new HashMap<String,Object>() {{
+        criteria = new HashMap<String, Object>() {{
             put("token", Session.getInstance().getUserToken());
         }};
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.post(sender, url, serializer, criteria,this, null);
+        Caller.post(sender, url, serializer, criteria, this, null);
     }
 }

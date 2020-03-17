@@ -16,18 +16,17 @@ public class ScoreSerializer implements ISerializer<Score> {
         score.setRated(input.optString("rated"));
         score.setRater(new UserSerializer().deserialize(input.optJSONObject("rater")));
         return score;
-
     }
 
     @Override
     public JSONObject serialize(Score input) throws JSONException {
         if (input == null) return null;
         JSONObject output = new JSONObject();
-        output.putOpt("comment",input.getComment());
-        output.putOpt("id",input.getId());
-        output.putOpt("mark",input.getMark());
-        output.putOpt("rated",input.getRated());
-        output.putOpt("rater",new UserSerializer().serialize(input.getRater()));
+        output.putOpt("comment", input.getComment());
+        output.putOpt("id", input.getId());
+        output.putOpt("mark", input.getMark());
+        output.putOpt("rated", input.getRated());
+        output.putOpt("rater", new UserSerializer().serialize(input.getRater()));
         return output;
     }
 }

@@ -13,8 +13,7 @@ abstract class ODataQueryOptions {
         if (firstParam) {
             urlParams += "criteria/" + param + " eq '" + value + "'";
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " eq '" + value + "'";
         }
         return;
@@ -35,75 +34,69 @@ abstract class ODataQueryOptions {
         if (firstParam) {
             urlParams += "criteria/" + param + " eq " + value;
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " eq " + value;
         }
         return;
     }
 
-    public void addLessThanParam(String param, Double value){
+    public void addLessThanParam(String param, Double value) {
         if (firstParam) {
             urlParams += "criteria/" + param + " le " + value;
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " le " + value;
         }
         return;
     }
 
-    public void addGreaterThanParam(String param, Double value){
+    public void addGreaterThanParam(String param, Double value) {
         if (firstParam) {
             urlParams += "criteria/" + param + " ge " + value;
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " ge " + value;
         }
         return;
     }
 
-    public void addLessThanParam(String param, Integer value){
+    public void addLessThanParam(String param, Integer value) {
         if (firstParam) {
             urlParams += "criteria/" + param + " le " + value;
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " le " + value;
         }
         return;
     }
 
-    public void addGreaterThanParam(String param, Integer value){
+    public void addGreaterThanParam(String param, Integer value) {
         if (firstParam) {
             urlParams += "criteria/" + param + " ge " + value;
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and criteria/" + param + " ge " + value;
         }
         return;
     }
 
-    public void addScopeParam(String param, Double min, Double max){
+    public void addScopeParam(String param, Double min, Double max) {
         addGreaterThanParam(param, min);
         addLessThanParam(param, max);
         return;
     }
 
-    public void addScopeParam(String param, Integer min, Integer max){
+    public void addScopeParam(String param, Integer min, Integer max) {
         addGreaterThanParam(param, min);
         addLessThanParam(param, max);
         return;
     }
 
-    public void addContainsParam(String param, String value){
+    public void addContainsParam(String param, String value) {
         if (firstParam) {
             urlParams += "contains(criteria/" + param + ",'" + value + "')";
             firstParam = false;
-        }
-        else{
+        } else {
             urlParams += " and contains(criteria/" + param + ",'" + value + "')";
         }
         return;
