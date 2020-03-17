@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-
 public class PreferenceUtils {
 
     private static String KEY_EMAIL = "Email";
     private static String KEY_PASSWORD = "Password";
 
-    public PreferenceUtils(){
-
-    }
+    public PreferenceUtils(){}
 
     public static boolean saveEmail(String email, Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

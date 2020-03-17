@@ -23,7 +23,6 @@ public class TalkSerializer implements ISerializer<Talk> {
 
         List<Message> messages = JSONMaster.tryDeserializeMany(new MessageSerializer(), input.optString("messages"));
         if (messages != null) talk.setMessages(messages);
-
         return talk;
     }
 
@@ -31,18 +30,17 @@ public class TalkSerializer implements ISerializer<Talk> {
     public JSONObject serialize(Talk input) throws JSONException {
         if (input == null) return null;
         JSONObject output = new JSONObject();
-        output.putOpt("isArchived",input.getArchived());
-        output.putOpt("id",input.getId());
-        output.putOpt("subject",input.getSubject());
-        output.putOpt("sender",new UserSerializer().serialize((input.getSender())));
-        output.putOpt("receiver",new UserSerializer().serialize((input.getReceiver())));
-        if (input.getMessages() != null)
-        {
+        output.putOpt("isArchived", input.getArchived());
+        output.putOpt("id", input.getId());
+        output.putOpt("subject", input.getSubject());
+        output.putOpt("sender", new UserSerializer().serialize((input.getSender())));
+        output.putOpt("receiver", new UserSerializer().serialize((input.getReceiver())));
+        if (input.getMessages() != null) {
             JSONArray jMessages = new JSONArray();
-            for(Message message : input.getMessages()){
+            for (Message message : input.getMessages()) {
                 jMessages.put(new MessageSerializer().serialize(message));
             }
-            output.put("messages",jMessages);
+            output.put("messages", jMessages);
         }
         return output;
     }

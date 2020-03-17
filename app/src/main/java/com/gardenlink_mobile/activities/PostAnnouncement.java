@@ -2,7 +2,6 @@ package com.gardenlink_mobile.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,8 +45,7 @@ import java.util.Map;
 import java.util.Objects;
 
 // TODO WARNING !!!! Don't forget to transfert plaintext in layout to res/string !
-
-public class PostAnnouncement extends NavigableActivity implements IWebConnectable{
+public class PostAnnouncement extends NavigableActivity implements IWebConnectable {
 
     private static final String TAG = "POST_ANNOUNCEMENT_ACTIVITY";
 
@@ -99,44 +97,39 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     }
 
     private void initListenerOnRadioButtons(ViewGroup viewGroup) {
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (((View) view.getParent()).getId()) {
-                    case R.id.postAnnouncement_orientationChoice:
-                        if (orientationRadioActivated != null && view.getId() != orientationRadioActivated.getId()) {
-                            orientationRadioActivated.setChecked(false);
-                        }
-                        orientationRadioActivated = (RadioButton) view;
-                        break;
-                    case R.id.postAnnouncement_earthTypeChoice:
-                        if (earthRadioActivated != null && view.getId() != earthRadioActivated.getId()) {
-                            earthRadioActivated.setChecked(false);
-                        }
-                        earthRadioActivated = (RadioButton) view;
-                        break;
-                    default:
-                        break;
-                }
+        View.OnClickListener clickListener = view -> {
+            switch (((View) view.getParent()).getId()) {
+                case R.id.postAnnouncement_orientationChoice:
+                    if (orientationRadioActivated != null && view.getId() != orientationRadioActivated.getId()) {
+                        orientationRadioActivated.setChecked(false);
+                    }
+                    orientationRadioActivated = (RadioButton) view;
+                    break;
+                case R.id.postAnnouncement_earthTypeChoice:
+                    if (earthRadioActivated != null && view.getId() != earthRadioActivated.getId()) {
+                        earthRadioActivated.setChecked(false);
+                    }
+                    earthRadioActivated = (RadioButton) view;
+                    break;
+                default:
+                    break;
             }
         };
-
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             viewGroup.getChildAt(i).setOnClickListener(clickListener);
         }
     }
 
     public void reinitRadioButton() {
-        if (orientationRadioActivated !=  null) {
+        if (orientationRadioActivated != null) {
             orientationRadioActivated.setChecked(false);
             orientationRadioActivated = null;
         }
 
-        if (earthRadioActivated !=  null) {
+        if (earthRadioActivated != null) {
             earthRadioActivated.setChecked(false);
             earthRadioActivated = null;
         }
-
         ((RadioGroup) findViewById(R.id.postAnnouncement_waterProvidedForm)).clearCheck();
         ((RadioGroup) findViewById(R.id.postAnnouncement_equipmentProvidedForm)).clearCheck();
         ((RadioGroup) findViewById(R.id.postAnnouncement_directAccessForm)).clearCheck();
@@ -184,10 +177,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             return true;
         });
 
-        // create the general text watcher for this activity
         TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -195,10 +188,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         };
 
-        // apply the text watcher on all edit text
         inputForms.values().forEach(layout -> Objects.requireNonNull(layout.getEditText()).addTextChangedListener(textWatcher));
     }
 
@@ -244,11 +237,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     }
 
     private void setHelperTextError(TextInputLayout target) {
-        target.setHelperText("Erreur! " + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
+        target.setHelperText(R.string.error + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
         target.setHelperTextColor(getResources().getColorStateList(R.color.colorRed));
     }
 
-    // define what the text watcher need to do
     private void enablePostButtonControl() {
         boolean okTitle = titleIsOk(inputForms.get(TITLE_FORM).getEditText().getText().toString());
         boolean okPrice = priceIsOk(inputForms.get(PRICE_FORM).getEditText().getText().toString());
@@ -264,12 +256,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (inputForms.get(TITLE_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(TITLE_FORM)));
             }
-        }
-        else {
-            if(inputForms.get(TITLE_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(TITLE_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(TITLE_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(TITLE_FORM)));
             }
         }
@@ -278,12 +268,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (inputForms.get(PRICE_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(PRICE_FORM)));
             }
-        }
-        else {
-            if(inputForms.get(PRICE_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(PRICE_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(PRICE_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(PRICE_FORM)));
             }
         }
@@ -292,12 +280,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (inputForms.get(AREA_SIZE_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(AREA_SIZE_FORM)));
             }
-        }
-        else {
-            if(inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(AREA_SIZE_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(AREA_SIZE_FORM)));
             }
         }
@@ -306,12 +292,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (inputForms.get(DURATION_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(DURATION_FORM)));
             }
-        }
-        else {
-            if(inputForms.get(DURATION_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(DURATION_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(DURATION_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(DURATION_FORM)));
             }
         }
@@ -320,9 +304,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (descriptionForm.getBackgroundTintList() != getResources().getColorStateList(R.color.colorGray_brighter)) {
                 descriptionForm.setBackgroundColor(getResources().getColor(R.color.colorGray_brighter));
             }
-        }
-        else {
-            if(!descritpionTextArea.getText().toString().isEmpty()) {
+        } else {
+            if (!descritpionTextArea.getText().toString().isEmpty()) {
                 descriptionForm.setBackgroundColor(getResources().getColor(R.color.colorRed));
             }
         }
@@ -331,9 +314,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             if (inputForms.get(STREET_NUMBER_FORM).isHelperTextEnabled()) {
                 inputForms.get(STREET_NUMBER_FORM).setHelperTextEnabled(false);
             }
-        }
-        else {
-            if(!inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (!inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString().isEmpty()) {
                 inputForms.get(STREET_NUMBER_FORM).setHelperTextEnabled(true);
                 setHelperTextError(Objects.requireNonNull(inputForms.get(STREET_NUMBER_FORM)));
             }
@@ -344,12 +326,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(STREET_NAME_FORM)));
 
             }
-        }
-        else {
-            if(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(STREET_NAME_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(STREET_NAME_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(STREET_NAME_FORM)));
             }
         }
@@ -359,12 +339,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(POSTAL_CODE_FORM)));
 
             }
-        }
-        else {
-            if(inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(POSTAL_CODE_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(POSTAL_CODE_FORM)));
             }
         }
@@ -374,20 +352,17 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 setHelperTextValide(Objects.requireNonNull(inputForms.get(CITY_FORM)));
 
             }
-        }
-        else {
-            if(inputForms.get(CITY_FORM).getEditText().getText().toString().isEmpty()) {
+        } else {
+            if (inputForms.get(CITY_FORM).getEditText().getText().toString().isEmpty()) {
                 setHelperTextMandatory(inputForms.get(CITY_FORM));
-            }
-            else {
+            } else {
                 setHelperTextError(Objects.requireNonNull(inputForms.get(CITY_FORM)));
             }
         }
 
         if (okTitle && okPrice && okAreaSize && okDuration && okDescription && okStreetNumber && okStreetName && okPostalCode && okCity) {
             enablePostButton();
-        }
-        else {
+        } else {
             disablePostButton();
         }
     }
@@ -409,17 +384,14 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
 
     private void initUploadAvatar() {
         imageAnnouncement = (ImageView) findViewById(R.id.postAnnouncement_image);
-        imageAnnouncement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(PostAnnouncement.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(
-                            PostAnnouncement.this,
-                            new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE },
-                            readStoragePermission);
-                } else {
-                    openImageExplorer();
-                }
+        imageAnnouncement.setOnClickListener(view -> {
+            if (ActivityCompat.checkSelfPermission(PostAnnouncement.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        PostAnnouncement.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        readStoragePermission);
+            } else {
+                openImageExplorer();
             }
         });
     }
@@ -436,10 +408,9 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         imageAnnouncement.setImageDrawable(getImageAnnouncement());
     }
 
-    // Is triggered when ActivityCompat.requestPermissions is called
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(requestCode == readStoragePermission && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == readStoragePermission && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             openImageExplorer();
         }
     }
@@ -449,7 +420,6 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         return imageAnnouncement.getDrawable();
     }
 
-    // Trigger l'Intent produced in openImageExplorer() and extract the image data to be use
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -463,7 +433,7 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     imageAnnouncement.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "Erreur !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Log.e(TAG, "onActivityResult: ", e);
                 }
@@ -507,30 +477,30 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 case R.id.postAnnouncement_radio_northEast:
                     criteria.setOrientation("NorthEast");
                     break;
-                case R.id.postAnnouncement_radio_east:
-                    criteria.setOrientation("East");
+                case R.id.postAnnouncement_radio_northWest:
+                    criteria.setOrientation("NorthWest");
+                    break;
+                case R.id.postAnnouncement_radio_south:
+                    criteria.setOrientation("South");
                     break;
                 case R.id.postAnnouncement_radio_southEast:
                     criteria.setOrientation("SouthEast");
                     break;
-                case R.id.postAnnouncement_radio_south:
-                    criteria.setOrientation("North");
-                    break;
                 case R.id.postAnnouncement_radio_southWest:
                     criteria.setOrientation("SouthWest");
                     break;
+                case R.id.postAnnouncement_radio_east:
+                    criteria.setOrientation("East");
+                    break;
                 case R.id.postAnnouncement_radio_west:
                     criteria.setOrientation("West");
-                    break;
-                case R.id.postAnnouncement_radio_northWest:
-                    criteria.setOrientation("NorthWest");
                     break;
                 default:
                     criteria.setOrientation("Unset");
                     break;
             }
         }
-        if (earthRadioActivated != null ) {
+        if (earthRadioActivated != null) {
             switch (earthRadioActivated.getId()) {
                 case R.id.postAnnouncement_radio_argileux:
                     criteria.setTypeOfClay("Argileux");
@@ -587,7 +557,6 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 criteria.setDirectAccess(false);
                 break;
         }
-
         garden.setLocation(location);
         garden.setCriteria(criteria);
 
@@ -601,19 +570,15 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 switch (responseCode) {
                     case 201:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        AlertDialog dialog = new AlertDialog . Builder ( this )
-                                .setTitle ("Confirmation de la demande")
-                                .setMessage ("Votre annonce a bien été pris en compte. Elle sera vérifiée par nos services sous peu.")
-                                .setPositiveButton ("OK", new
-                                        DialogInterface.OnClickListener() {
-                                            @ Override
-                                            public void onClick (DialogInterface dialog, int which) {
-                                                //todo redirect to detail
-                                                finish();
-                                            }
-                                        })
-                                .create () ;
-                        dialog.show () ;
+                        AlertDialog dialog = new AlertDialog.Builder(this)
+                                .setTitle(R.string.confirm_demand)
+                                .setMessage(R.string.demand_pending_validation)
+                                .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                                    //todo redirect to detail
+                                    finish();
+                                })
+                                .create();
+                        dialog.show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);

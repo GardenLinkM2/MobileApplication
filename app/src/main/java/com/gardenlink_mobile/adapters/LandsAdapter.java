@@ -1,4 +1,4 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -66,7 +66,6 @@ public class LandsAdapter extends ArrayAdapter<Leasing> {
             landDuration.setTextColor(Color.BLACK);
         }
 
-
         landLocation.setText(garden.getLocation().getPostalCode() + " " + garden.getLocation().getCity());
         landImage.setImageResource(R.drawable.image_not_found);
 
@@ -91,6 +90,4 @@ public class LandsAdapter extends ArrayAdapter<Leasing> {
         String today = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date());
         return stringToDate(today, DATE_FORMAT);
     }
-
-
 }

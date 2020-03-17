@@ -6,7 +6,7 @@ import com.gardenlink_mobile.wsconnecting.Caller;
 
 import java.lang.ref.WeakReference;
 
-public class DELETE_ACCOUNT extends Operation  {
+public class DELETE_ACCOUNT extends Operation {
 
     private String url = AUTHENTICATION_URL + "users";
 
@@ -15,8 +15,8 @@ public class DELETE_ACCOUNT extends Operation  {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.delete(sender, url, null,this, null);
+        Caller.delete(sender, url, null, this, null);
     }
 }

@@ -23,7 +23,7 @@ public class DemandSerializer implements ISerializer<Demand> {
         output.putOpt("firstMessage", input.getFirstMessage());
         Status status = input.getStatus();
         if (status != null) {
-            output.putOpt("status",input.getStatus().getStatus());
+            output.putOpt("status", input.getStatus().getStatus());
         }
         return output;
     }

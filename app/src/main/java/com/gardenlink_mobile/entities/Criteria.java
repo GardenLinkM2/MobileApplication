@@ -11,7 +11,6 @@ public class Criteria {
     private Boolean waterAccess;
     private Boolean directAccess;
 
-
     public Long getLocationTime() {
         return locationTime;
     }

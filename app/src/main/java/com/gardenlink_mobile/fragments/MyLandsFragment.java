@@ -1,4 +1,4 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Leasing;
+import com.gardenlink_mobile.adapters.LandsAdapter;
 
 import java.util.ArrayList;
 
@@ -38,18 +39,16 @@ public class MyLandsFragment extends Fragment {
         listViewLandsAvailable = view.findViewById(R.id.myAvailableLandsList);
         LandsAdapter landsAdapterAvailable = new LandsAdapter(this.getContext(), landsListAvailable);
         listViewLandsAvailable.setAdapter(landsAdapterAvailable);
-
         setItemClickListenerOnLeasing();
-
         return view;
     }
 
     public void setItemClickListenerOnLeasing() {
         ((ListView) listViewLandsAvailable.findViewById(R.id.myAvailableLandsList)).setOnItemClickListener((adapterView, view, i, l) -> toPostDetail(landsListAvailable.get(i)));
-
         ((ListView) listViewLandsReserved.findViewById(R.id.myLandsList)).setOnItemClickListener((adapterView, view, i, l) -> toPostDetail(landsListReserved.get(i)));
     }
 
+    //TODO : delete mock
     private void loadDataAvailable() {
         Leasing leasing1 = new Leasing();
         Leasing leasing2 = new Leasing();
@@ -66,6 +65,7 @@ public class MyLandsFragment extends Fragment {
         landsListAvailable.add(leasing2);
     }
 
+    //TODO : delete mock
     private void loadDataReserved() {
         Leasing leasing1 = new Leasing();
         Leasing leasing2 = new Leasing();
@@ -95,5 +95,4 @@ public class MyLandsFragment extends Fragment {
         //TODO : make real call with id in the intent to retrieve the details of the garden
         Toast.makeText(getContext(), "Vous avez cliqué sur l'annonce", Toast.LENGTH_SHORT).show();
     }
-
 }

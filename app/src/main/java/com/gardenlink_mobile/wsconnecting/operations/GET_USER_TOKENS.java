@@ -13,7 +13,7 @@ public class GET_USER_TOKENS extends Operation {
     private static TokensSerializer serializer = new TokensSerializer();
 
     public GET_USER_TOKENS(String email, String password) {
-        criteria = new HashMap<String,Object>() {{
+        criteria = new HashMap<String, Object>() {{
             put("clientId", "gardenlink");
             put("email", email);
             put("password", password);
@@ -21,8 +21,8 @@ public class GET_USER_TOKENS extends Operation {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.post(sender, url, serializer, criteria,this, null);
+        Caller.post(sender, url, serializer, criteria, this, null);
     }
 }

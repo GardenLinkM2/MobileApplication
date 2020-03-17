@@ -25,24 +25,13 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/*
-Every Activities need to extends NavigableActivity
-Every Layouts need to include @layout/menu_hamburger
-    <include
-      layout="@layout/menu_hamburger"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent"/>
-Need to call initMenu() in onCreate methode */
 public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String CURRENT_ACTIVITY_ID = "CurrentActivityID";
 
-    //Menu
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-
-    //User Data
     private View headerView;
 
     @Override
@@ -53,8 +42,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     protected void initMenu() {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -135,9 +123,9 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
                 break;
             case R.id.signOut:
                 new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                        .setTitle("Voulez-vous vraiment vous déconnecter ?")
-                        .setPositiveButton("Valider", (dialog, which) -> doSignOut())
-                        .setNegativeButton("Retour", (dialog, which) -> {
+                        .setTitle(R.string.signout_dialog)
+                        .setPositiveButton(R.string.confirm, (dialog, which) -> doSignOut())
+                        .setNegativeButton(R.string.cancel, (dialog, which) -> {
                         }).show();
                 return true;
         }
@@ -155,7 +143,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         PreferenceUtils.saveEmail(null, this);
         Intent intent = new Intent(this, ConnectionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }
@@ -165,7 +153,6 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         newBundle.putInt(CURRENT_ACTIVITY_ID, id);
         intent.putExtras(newBundle);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -183,7 +170,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
             Bundle currentBundle = getIntent().getExtras();
-            if(currentBundle != null) {
+            if (currentBundle != null) {
                 int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
                 navigationView.setCheckedItem(id);
             }

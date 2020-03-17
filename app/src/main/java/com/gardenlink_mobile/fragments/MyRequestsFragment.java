@@ -1,4 +1,4 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Leasing;
+import com.gardenlink_mobile.adapters.RequestAdapteur;
 
 import java.util.ArrayList;
 
@@ -25,12 +26,10 @@ public class MyRequestsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myrequests_fragment, container, false);
-
         loadData();
         listViewDemand = view.findViewById(R.id.myRequestList);
         RequestAdapteur requestAdapter = new RequestAdapteur(this.getContext(), demandList);
         listViewDemand.setAdapter(requestAdapter);
-
         return view;
     }
 
