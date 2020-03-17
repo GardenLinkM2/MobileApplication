@@ -2,6 +2,7 @@ package com.gardenlink_mobile.session;
 
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.entities.Wallet;
 
 public class Session {
 
@@ -24,6 +25,7 @@ public class Session {
     private Location location;
     private String uuid;
     private User currentUser;
+    private Wallet currentUserWallet;
 
     public String getUserName() {
         return userName;
@@ -79,6 +81,14 @@ public class Session {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public Wallet getCurrentUserWallet() {
+        return currentUserWallet;
+    }
+
+    public void setCurrentUserWallet(Wallet currentUserWallet) {
+        this.currentUserWallet = currentUserWallet;
     }
 
     public void flush()

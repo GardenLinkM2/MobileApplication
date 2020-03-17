@@ -52,10 +52,10 @@ public class JSONMaster {
             });
         } catch (JSONException e) {
             try {
-                results.add(serializer.deserialize(trueResult));
+                results.add(serializer.deserialize(trueResult.getJSONObject("data")));
             }
             catch (Exception e1) {
-                results.add(serializer.deserialize(trueResult.getJSONObject("data")));
+                results.add(serializer.deserialize(trueResult));
                 return results;
             }
         }
