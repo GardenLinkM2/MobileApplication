@@ -13,7 +13,7 @@ public class ContactSerializer implements ISerializer<Contact> {
         Contact contact = new Contact();
         contact.setId(input.optString("id"));
         contact.setContact(new UserSerializer().deserialize(input.optJSONObject("contact")));
-        contact.setStatus(new Status(input.optInt("status")));
+        contact.setStatus(new Status(input.optString("status")));
         contact.setFirstMessage(input.optString("firstMessage"));
         return contact;
     }

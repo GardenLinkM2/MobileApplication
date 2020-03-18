@@ -12,7 +12,7 @@ public class DemandSerializer implements ISerializer<Demand> {
     public Demand deserialize(JSONObject input) throws JSONException {
         Demand demand = new Demand();
         demand.setFirstMessage(input.optString("firstMessage"));
-        demand.setStatus(new Status(input.optInt("status")));
+        demand.setStatus(new Status(input.optString("status")));
         return demand;
     }
 

@@ -8,7 +8,7 @@ public class User {
     private String lastName;
     private String password;
     private String phone;
-    private String avatar;
+    private String photo;
     private Boolean newsletter;
 
     public Boolean getNewsletter() {
@@ -67,11 +67,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

@@ -15,6 +15,7 @@ public class Garden {
     private Status validation;
     private Criteria criteria;
     private List<Photo> photos;
+    private List<Report> reports;
 
     public String getId() {
         return id;
@@ -102,5 +103,13 @@ public class Garden {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 }

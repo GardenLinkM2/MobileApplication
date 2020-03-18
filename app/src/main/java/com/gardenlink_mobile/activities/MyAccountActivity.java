@@ -141,7 +141,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     private void fillNewUserData() {
         newUser = new User();
 
-        newUser.setAvatar(currentUser.getAvatar());
+        newUser.setPhoto(currentUser.getPhoto());
 
         TextInputEditText userFirstNameField = findViewById(R.id.firstNameInputField);
         newUser.setFirstName(userFirstNameField.getText().toString());
