@@ -489,13 +489,15 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
 //        ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
 
 
-        garden.setName(inputForms.get(TITLE_FORM).getEditText().getText().toString());
+        if (inputForms.get(TITLE_FORM).getEditText().getText() != null && !inputForms.get(TITLE_FORM).getEditText().getText().toString().isEmpty())
+            garden.setName(inputForms.get(TITLE_FORM).getEditText().getText().toString());
         criteria.setPrice(Double.parseDouble(inputForms.get(PRICE_FORM).getEditText().getText().toString()));
         criteria.setArea(Integer.parseInt(inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString()));
         garden.setMinUse(Integer.parseInt(inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString()));
         criteria.setLocationTime(Long.parseLong(inputForms.get(MAX_DURATION_FORM).getEditText().getText().toString()));
         garden.setDescription(descritpionTextArea.getText().toString()); // peut etre null
-        location.setStreetNumber(Integer.parseInt(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString()));
+        if (inputForms.get(STREET_NUMBER_FORM).getEditText().getText() != null && !inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString().isEmpty())
+            location.setStreetNumber(Integer.parseInt(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString()));
         location.setStreet(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString());
         location.setPostalCode(Integer.parseInt(inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString()));
         location.setCity(inputForms.get(CITY_FORM).getEditText().getText().toString());
