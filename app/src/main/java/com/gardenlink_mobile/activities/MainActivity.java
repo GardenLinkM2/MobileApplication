@@ -30,11 +30,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements IWebConnectable {
 
     private static final String TAG = "MainActivity";
-
-    private ProgressBar splashProgress;
-    private TextInputEditText mPassword;
     private static final int writeStoragePermission = 0;
 
+    private ProgressBar splashProgress;
     private Boolean GET_SESSION_TOKEN_flag = false;
     private Boolean GET_USER_UUID_flag = false;
     private Boolean GET_USER_ME_flag = false;
@@ -54,14 +52,12 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
             new GET_USER_TOKENS(PreferenceUtils.getEmail(this), PreferenceUtils.getPassword(this)).perform(new WeakReference<>(this));
         } else {
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    Intent intent = new Intent(MainActivity.this, ConnectionActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                            | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    finish();
-                }
+            handler.postDelayed(() -> {
+                Intent intent = new Intent(MainActivity.this, ConnectionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
             }, 3000);
 
         }
@@ -200,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
         if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         }
@@ -211,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
         if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         }
@@ -222,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
         if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag) {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         }

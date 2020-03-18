@@ -13,14 +13,14 @@ public class GET_SESSION_TOKEN extends Operation {
     private static ISerializer<Object> serializer = null;
 
     public GET_SESSION_TOKEN(String accessToken) {
-        criteria = new HashMap<String,Object>() {{
+        criteria = new HashMap<String, Object>() {{
             put("token", accessToken);
         }};
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.post(sender, url, serializer, criteria,this, null);
+        Caller.post(sender, url, serializer, criteria, this, null);
     }
 }

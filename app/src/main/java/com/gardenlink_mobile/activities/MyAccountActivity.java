@@ -49,7 +49,7 @@ import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MyAccountActivity extends NavigableActivity implements IWebConnectable{
+public class MyAccountActivity extends NavigableActivity implements IWebConnectable {
 
     boolean isPlay = true;
     private final String LOGIN_FORM = "loginForm";
@@ -76,6 +76,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     public static final int readStoragePermission = 0;
 
     private static final String TAG = "MyAccountActivity";
+    private static final String ERROR_SELECT_IMAGE = "Erreur! Le fichier sélectionné n'est pas une image!";
 
     private User currentUser;
     private User newUser;
@@ -94,16 +95,13 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     private void initUploadAvatar() {
         editAvatarButton = (FloatingActionButton) findViewById(R.id.editAvatarButton);
 
-        editAvatarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MyAccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MyAccountActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            readStoragePermission);
-                } else {
-                    openImage();
-                }
+        editAvatarButton.setOnClickListener(view -> {
+            if (ActivityCompat.checkSelfPermission(MyAccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MyAccountActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        readStoragePermission);
+            } else {
+                openImage();
             }
         });
     }
@@ -140,8 +138,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     }
 
-    private void fillNewUserData()
-    {
+    private void fillNewUserData() {
         newUser = new User();
 
         newUser.setAvatar(currentUser.getAvatar());
@@ -205,25 +202,20 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     public void doSave(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle("Voulez-vous confirmer les changements ?")
-                .setMessage("Les changements seront appliqués a la validation")
-                .setPositiveButton("Valider", (dialog, which) -> {
+                .setTitle(getResources().getString(R.string.confirm_changes))
+                .setMessage(getResources().getString(R.string.changes))
+                .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> {
                     fillNewUserData();
                     new UPDATE_USER(newUser).perform(new WeakReference<>(this));
                 })
-                .setNegativeButton("Retour", (dialog, which) -> {
-                    loadUserData();
-                }).show();
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> CloseModification()).show();
     }
 
     public void doDeleteAccount(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle("Etes-vous sur de vouloir supprimer votre compte ?")
-                .setMessage("Le compte sera irrécupérable")
-                .setPositiveButton("Supprimer", (dialog, which) -> {
-                    new DELETE_SELF_API().perform(new WeakReference<>(this));
-                })
-                .setNegativeButton("Retour", (dialog, which) -> {
+                .setTitle(getResources().getString(R.string.delete_account_dialog))
+                .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> new DELETE_SELF_API().perform(new WeakReference<>(this)))
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                 }).show();
     }
 
@@ -239,7 +231,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         inputValidatorMessages = new HashMap<>();
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(PHONE_FORM)).getId(), Validator.PHONE_REGEX_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(PASSWORD_FORM)).getId(), PASSWORD_ERROR);
-
 
         inputForms.values().forEach(layout -> layout.setEnabled(false));
 
@@ -261,7 +252,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
             public void afterTextChanged(Editable editable) {
             }
         };
-
         inputForms.values().forEach(layout -> Objects.requireNonNull(layout.getEditText()).addTextChangedListener(textWatcherInputs));
     }
 
@@ -272,12 +262,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         if (okPhone) {
             userPhoneLayout.setError(null);
         } else {
-            userPhoneLayout.setError("Erreur ! " + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
+            userPhoneLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
         }
         if (okPassword) {
             userPasswordLayout.setError(null);
         } else {
-            userPasswordLayout.setError("Erreur ! " + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
+            userPasswordLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
         }
         if (okPhone && okPassword) {
             enableSaveButton();
@@ -289,15 +279,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     private void enableSaveButton() {
         saveButton.setEnabled(true);
         saveButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_brighter));
-
     }
 
     private void disableSaveButton() {
         saveButton.setEnabled(false);
         saveButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_disabledButton));
-
     }
-
 
     private boolean passwordIsOk(final String password) {
         return !password.isEmpty() && Validator.passwordValidator(password);
@@ -354,10 +341,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     userAvatarCircle.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, "Erreur !", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Error while loading picture, code : " + requestCode);
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(this, "Ce n'est pas une image !", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Loading something else than picture !");
+                Toast.makeText(this, ERROR_SELECT_IMAGE, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -377,32 +366,39 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
-        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
     }
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
     }
 
     @Override
     public void receiveResults(int responseCode, Operation operation) {
         switch (operation.getName()) {
             case "UPDATE_USER":
-                switch (responseCode){
+                switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         currentUser = newUser;
                         Session.getInstance().setCurrentUser(newUser);
                         loadUserData();
-                        editMode(isPlay);
-                        isPlay = !isPlay;
-                        lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
+                        CloseModification();
+                        Toast.makeText(this, getResources().getString(R.string.changes_succed), Toast.LENGTH_LONG).show();
                         return;
-                        // TODO : Petit message de succès
+                    case 504:
+                        Log.i(TAG, "Back server failed to answer before timeout threshold.");
+                        Intent intent = new Intent(this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                        this.finish();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.update_request_timeout), Toast.LENGTH_SHORT).show();
+                        return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        // TODO : Gérer l'échec
+                        CloseModification();
+                        // TODO : Gérer l'échec (timeout)
                         return;
                 }
             case "DELETE_SELF_AUTH":
@@ -429,6 +425,23 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                 Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
                 return;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isPlay) {
+            CloseModification();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void CloseModification() {
+        loadUserData();
+        editMode(isPlay);
+        isPlay = !isPlay;
+        userPasswordLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
     }
 
     @Override

@@ -53,7 +53,6 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.connexion_activity);
         mConnectButton = findViewById(R.id.connectButton);
         disableConnectButton();
@@ -68,7 +67,6 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 if (Validator.emailValidator(mLogin.getText().toString()) && Validator.passwordValidator(mPassword.getText().toString())) {
                     enableConnectButton();
                 } else {
@@ -99,26 +97,21 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
         }
     }
 
-
     private void disableConnectButton() {
         mConnectButton.setEnabled(false);
         mConnectButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_disabledButton));
-
     }
 
     private void enableConnectButton() {
         mConnectButton.setEnabled(true);
         mConnectButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_brighter));
-
     }
 
     public void doConnection(View view) {
         doConnectionParent = (View) view.getParent();
 
         String lLogin = ((TextInputEditText) doConnectionParent.findViewById(R.id.loginField)).getText().toString();
-
         String lPassword = ((TextInputEditText) doConnectionParent.findViewById(R.id.passwordField)).getText().toString();
-
         new GET_USER_TOKENS(lLogin, lPassword).perform(new WeakReference<>(this));
     }
 
@@ -131,7 +124,6 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
         Intent lIntent = new Intent(this, ForgottenPasswordActivity.class);
         startActivity(lIntent);
     }
-
 
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">GardenLink</string>
-
     <string name="connexion_activity">Connexion</string>
     <string name="connexion_title">Bienvenue ! </string>
     <string name="connexion_SubTitle">Merci de vous connecter</string>
@@ -9,14 +8,11 @@
     <string name="forgottenPassword">Mot de passe oublié</string>
     <string name="connectButton">SE CONNECTER</string>
     <string name="signUpButton">S\'INSCRIRE</string>
-
-
     <string name="forgotten_password_activity">Mot de passe oublié</string>
     <string name="forgotten_password_title">Mot de passe oublié ? </string>
-    <string name="forgtten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
+    <string name="forgotten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
     <string name="email_hint">Adresse E-Mail</string>
     <string name="forgotten_password_send_request">Envoyer</string>
-
     <string name="home">Accueil</string>
     <string name="myAccount">Mon Compte</string>
     <string name="wallet">Mon Porte-Monnaie</string>
@@ -43,18 +39,13 @@
     <string name="signUp_subTitle">Créez un compte pour accéder à toute les fonctionnalités de GardenLink !</string>
     <string name="signUp_title">Bonjour !</string>
     <string name="signUp_valid">Valide!</string>
-    <string name="NameField">Name</string>
     <string name="Name">Nom</string>
-    <string name="FirstNameField">FirstName</string>
     <string name="FirstName">Prénom</string>
     <string name="Login">Nom d\'utilisateur</string>
-    <string name="LoginField">Login</string>
     <string name="Password">Mot de passe</string>
     <string name="PasswordField">Password</string>
     <string name="Mail">Adresse E-mail</string>
-    <string name="MailField">Mail.mail@mail.fr</string>
     <string name="Phone">Téléphone</string>
-    <string name="PhoneField">0123456789</string>
     <string name="NewsLetter">Inscription a la NewsLetter</string>
     <string name="Modification">Modification</string>
     <string name="save">SAUVERGARDER</string>
@@ -67,7 +58,7 @@
     <string name="postAnnouncement_title_label">Titre de l\'annonce</string>
     <string name="postAnnouncement_price_label">Prix / mois</string>
     <string name="postAnnouncement_areaSize_label">Superficie</string>
-    <string name="postAnnouncement_duration_label">Durée de la location (en mois)</string>
+    <string name="postAnnouncement_min_duration_label">Durée minimal de la location (en mois)</string>
     <string name="postAnnouncement_description_label">Desription:</string>
     <string name="postAnnouncement_localization_label">Localisation:</string>
     <string name="postAnnouncement_streetNumber_label">Numéro de rue</string>
@@ -98,4 +89,35 @@
     <string name="postAnnouncement_reinitcriteriaButton">Réinitialiser les critères</string>
     <string name="postAnnouncement_postButton">POSTER</string>
     <string name="postAnnouncement_activity">Poster une annonce</string>
+    <string name="request_send">Requête envoyée.</string>
+    <string name="mail_request_timeout">La requête au serveur d\'emails a expiré, veuillez ré-essayer.</string>
+    <string name="update_request_timeout">La requête au serveur a expiré. Les modifications n\'ont pas été sauvergardées.</string>
+    <string name="confirm_changes">Voulez-vous confirmer les changements ?</string>
+    <string name="changes">Les changements seront appliqués à la validation.</string>
+    <string name="confirm">Valider</string>
+    <string name="cancel">Retour</string>
+    <string name="delete_account_dialog">Etes-vous sur de vouloir supprimer votre compte ?</string>
+    <string name="delete">Supprimer</string>
+    <string name="error">Erreur !</string>
+    <string name="changes_succed">La modification s\'est déroulée sans encombre.</string>
+    <string name="signout_dialog">Voulez-vous vraiment vous déconnecter ?</string>
+    <string name="confirm_demand">Confirmation de la demande.</string>
+    <string name="demand_pending_validation">Votre annonce a bien été pris en compte. Elle sera vérifiée par nos services sous peu.</string>
+    <string name="ok">OK</string>
+    <string name="searching">Recherche en cours...</string>
+    <string name="no_result">Aucun résultat. Veuillez réessayer avec des critères moins restrictifs.</string>
+    <string name="search_error">Erreur lors de la recherche.</string>
+    <string name="json_error">Erreur Json :</string>
+    <string name="myDemand">Mes Demandes</string>
+    <string name="accept_request">Vous avez accepté la demande de</string>
+    <string name="on_land">sur votre Jardin :</string>
+    <string name="decline_request">Vous avez refusé la demande de</string>
+    <string name="show_details">Vous voulez voir les détails de  l\'annonce :</string>
+    <string name="location_in_progress">Localisation en cours...</string>
+    <string name="gps_off">GPS désactivé.</string>
+    <string name="gps_off_message">Votre GPS semble être désactivé, veuillez l\'activer pour bénéficier des services de localisation.</string>
+    <string name="location_failed">Erreur : Aucune Localisation trouvée.</string>
+    <string name="location_succed">Localisation terminée !</string>
+    <string name="unavailable">Localisation indisponible.</string>
+    <string name="postAnnouncement_max_duration_label">Durée maximal de la location (en mois)</string>
 </resources>

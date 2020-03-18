@@ -8,12 +8,9 @@ public class Session {
 
     private static Session instance = null;
 
-    private Session()
-    {
-    }
+    private Session(){}
 
-    public static Session getInstance()
-    {
+    public static Session getInstance() {
         if (instance == null) instance = new Session();
         return instance;
     }

@@ -14,11 +14,11 @@ public class UPDATE_USER extends Operation {
 
     public UPDATE_USER(User user) {
         url += "/" + Session.getInstance().getUuid();
-        criteria = new HashMap<String,Object>() {{
+        criteria = new HashMap<String, Object>() {{
             put("password", user.getPassword());
-            put("id",Session.getInstance().getUuid());
-            put("firstName",user.getFirstName());
-            put("lastName",user.getLastName());
+            put("id", Session.getInstance().getUuid());
+            put("firstName", user.getFirstName());
+            put("lastName", user.getLastName());
             put("email", user.getEmail());
             put("avatar", user.getAvatar());
             put("phone", user.getPhone());
@@ -27,8 +27,8 @@ public class UPDATE_USER extends Operation {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.put(sender, url, criteria,this, Session.getInstance().getUserToken());
+        Caller.put(sender, url, criteria, this, Session.getInstance().getUserToken());
     }
 }
