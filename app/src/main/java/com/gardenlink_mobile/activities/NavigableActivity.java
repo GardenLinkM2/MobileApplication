@@ -14,6 +14,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.entities.Wallet;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.utils.PreferenceUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -72,22 +74,27 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     }
 
     private void createHeader(View headerView) {
-        //TODO: Update with real UserData
-        //Todo:getUserAvatar()
+        User user = Session.getInstance().getCurrentUser();
+        Wallet wallet = Session.getInstance().getCurrentUserWallet();
         CircleImageView userAvatar = headerView.findViewById(R.id.user_avatar);
-        userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.sample_avatar));
-
-        //Todo: getUserName()
         TextView userName = headerView.findViewById(R.id.user_name);
-        userName.setText("Pouglou Denis");
-
-        //TODO: Currency ?
-        //Todo:getWalletAmount()
         TextView userWallet = headerView.findViewById(R.id.user_wallet);
-        String amount = NumberFormat.getInstance().format(346546.5);
-        Locale locale = getResources().getConfiguration().locale;
-        Currency currency = Currency.getInstance(locale);
-        userWallet.setText(amount + currency.getSymbol());
+        if (user != null) {
+            //TODO: Update with real UserData
+            //Todo:getUserAvatar()
+            userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.sample_avatar));
+            userName.setText(user.getFirstName() + " " + user.getLastName());
+        } else{
+            userName.setText("");
+        }
+        if (wallet != null){
+            String amount = NumberFormat.getInstance().format(wallet.getBalance());
+            Locale locale = getResources().getConfiguration().locale;
+            Currency currency = Currency.getInstance(locale);
+            userWallet.setText(amount + currency.getSymbol());
+        } else{
+            userWallet.setText("");
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
