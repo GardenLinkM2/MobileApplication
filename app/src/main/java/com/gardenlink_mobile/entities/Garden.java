@@ -73,14 +73,6 @@ public class Garden {
         this.photos = photos;
     }
 
-    public Boolean getReserved() {
-        return isReserved;
-    }
-
-    public void setReserved(Boolean reserved) {
-        isReserved = reserved;
-    }
-
     public String getDescription() {
         return description;
     }
