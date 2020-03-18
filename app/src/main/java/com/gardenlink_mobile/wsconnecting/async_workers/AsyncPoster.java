@@ -103,6 +103,7 @@ public class AsyncPoster<T> extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        if (failure) Log.e("HTTP Error",result);
         if (result.isEmpty() || failure) {
             IWebConnectable realSender = sender.get();
             if (realSender != null) {
