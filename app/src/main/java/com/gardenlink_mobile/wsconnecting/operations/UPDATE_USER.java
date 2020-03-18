@@ -20,7 +20,7 @@ public class UPDATE_USER extends Operation {
             put("firstName", user.getFirstName());
             put("lastName", user.getLastName());
             put("email", user.getEmail());
-            put("avatar", user.getAvatar());
+            put("avatar", user.getPhoto());
             put("phone", user.getPhone());
             put("newsletter", user.getNewsletter());
         }};

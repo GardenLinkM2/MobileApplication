@@ -8,12 +8,13 @@ import org.json.JSONObject;
 public class LocationSerializer implements ISerializer<Location> {
 
     @Override
-    public Location deserialize(JSONObject input) {
+    public Location deserialize(JSONObject input) throws JSONException {
         Location location = new Location();
         location.setCity(input.optString("city"));
         location.setPostalCode(input.optInt("postalCode"));
         location.setStreet(input.optString("street"));
         location.setStreetNumber(input.optInt("streetNumber"));
+        location.setLongitudeAndLatitude(new CoordinatesSerializer().deserialize(input.optJSONObject("longitudeAndLatitude")));
         return location;
     }
 
@@ -25,6 +26,7 @@ public class LocationSerializer implements ISerializer<Location> {
         output.putOpt("postalCode", input.getPostalCode());
         output.putOpt("street", input.getStreet());
         output.putOpt("streetNumber", input.getStreetNumber());
+        output.putOpt("longitudeAndLatitude", new CoordinatesSerializer().serialize(input.getLongitudeAndLatitude()));
         return output;
     }
 }

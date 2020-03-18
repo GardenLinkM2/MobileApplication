@@ -15,6 +15,7 @@ public class Garden {
     private Status validation;
     private Criteria criteria;
     private List<Photo> photos;
+    private List<Report> reports;
 
     public String getId() {
         return id;
@@ -72,14 +73,6 @@ public class Garden {
         this.photos = photos;
     }
 
-    public Boolean getReserved() {
-        return isReserved;
-    }
-
-    public void setReserved(Boolean reserved) {
-        isReserved = reserved;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -102,5 +95,13 @@ public class Garden {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 }

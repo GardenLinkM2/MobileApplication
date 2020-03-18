@@ -2,26 +2,23 @@ package com.gardenlink_mobile.entities;
 
 public class Status {
 
-    /*
-    0 : Pending
-    1 : Accepted
-    2 : Refused
+    /* Valeurs possibles:
+    Pending
+    Accepted
+    Refused
      */
-    private Integer status;
+    private String status;
 
-    public Status(Integer status) {
+    public Status(String status) {
         this.status = status;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
-        if (status == 1 ||
-            status == 2 ||
-            status == 3){
-            this.status = status;
-        }
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
+
