@@ -202,20 +202,20 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     public void doSave(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle(R.string.confirm_changes)
-                .setMessage(R.string.changes)
-                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                .setTitle(getResources().getString(R.string.confirm_changes))
+                .setMessage(getResources().getString(R.string.changes))
+                .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> {
                     fillNewUserData();
                     new UPDATE_USER(newUser).perform(new WeakReference<>(this));
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> CloseModification()).show();
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> CloseModification()).show();
     }
 
     public void doDeleteAccount(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle(R.string.delete_account_dialog)
-                .setPositiveButton(R.string.delete, (dialog, which) -> new DELETE_SELF_API().perform(new WeakReference<>(this)))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                .setTitle(getResources().getString(R.string.delete_account_dialog))
+                .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> new DELETE_SELF_API().perform(new WeakReference<>(this)))
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                 }).show();
     }
 
@@ -262,12 +262,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         if (okPhone) {
             userPhoneLayout.setError(null);
         } else {
-            userPhoneLayout.setError(R.string.error + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
+            userPhoneLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
         }
         if (okPassword) {
             userPasswordLayout.setError(null);
         } else {
-            userPasswordLayout.setError(R.string.error + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
+            userPasswordLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
         }
         if (okPhone && okPassword) {
             enableSaveButton();
@@ -342,7 +342,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Error while loading picture, code : " + requestCode);
-                    Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             } else {
                 Log.e(TAG, "Loading something else than picture !");
@@ -385,7 +385,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         Session.getInstance().setCurrentUser(newUser);
                         loadUserData();
                         CloseModification();
-                        Toast.makeText(this, R.string.changes_succed, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getResources().getString(R.string.changes_succed), Toast.LENGTH_LONG).show();
                         return;
                     case 504:
                         Log.i(TAG, "Back server failed to answer before timeout threshold.");
@@ -393,7 +393,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         this.finish();
-                        Toast.makeText(getApplicationContext(), R.string.update_request_timeout, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.update_request_timeout), Toast.LENGTH_SHORT).show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);

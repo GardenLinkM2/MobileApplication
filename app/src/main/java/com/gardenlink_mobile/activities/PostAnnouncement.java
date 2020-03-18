@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO WARNING !!!! Don't forget to transfert plaintext in layout to res/string !
 public class PostAnnouncement extends NavigableActivity implements IWebConnectable {
 
     private static final String TAG = "POST_ANNOUNCEMENT_ACTIVITY";
@@ -54,7 +53,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     private static final String TITLE_FORM = "titleForm";
     private static final String PRICE_FORM = "priceForm";
     private static final String AREA_SIZE_FORM = "areaSizeForm";
-    private static final String DURATION_FORM = "durationForm";
+    private static final String MIN_DURATION_FORM = "minDurationForm";
+    private static final String MAX_DURATION_FORM = "maxDurationForm";
     private static final String STREET_NUMBER_FORM = "streetNumberForm";
     private static final String STREET_NAME_FORM = "streetNameForm";
     private static final String POSTAL_CODE_FORM = "postalCodeForm";
@@ -144,7 +144,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         inputForms.put(TITLE_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_titleForm));
         inputForms.put(PRICE_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_priceForm));
         inputForms.put(AREA_SIZE_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_areaSizeForm));
-        inputForms.put(DURATION_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_durationForm));
+        inputForms.put(MIN_DURATION_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_minDurationForm));
+        inputForms.put(MAX_DURATION_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_maxDurationForm));
         inputForms.put(STREET_NUMBER_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_localization_streetNumberForm));
         inputForms.put(STREET_NAME_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_localization_streetNameForm));
         inputForms.put(POSTAL_CODE_FORM, (TextInputLayout) findViewById(R.id.postAnnouncement_localization_postalCodeForm));
@@ -154,7 +155,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(TITLE_FORM)).getId(), Validator.POST_TITLE_REGEX_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(PRICE_FORM)).getId(), Validator.PRICE_REGEX_DECIMAL_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(AREA_SIZE_FORM)).getId(), Validator.INTEGER_REGEX_MAX_MESSAGE);
-        inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(DURATION_FORM)).getId(), Validator.DURATION_REGEX_MAX_MESSAGE);
+        inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(MIN_DURATION_FORM)).getId(), Validator.DURATION_REGEX_MAX_MESSAGE);
+        inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(MAX_DURATION_FORM)).getId(), Validator.DURATION_REGEX_MAX_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(STREET_NUMBER_FORM)).getId(), Validator.STREET_NUMBER_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(STREET_NAME_FORM)).getId(), Validator.STREET_NAME_REGEX_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(POSTAL_CODE_FORM)).getId(), Validator.POST_CODE_REGEX_MESSAGE);
@@ -164,7 +166,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(TITLE_FORM)).getId());
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(PRICE_FORM)).getId());
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(AREA_SIZE_FORM)).getId());
-        mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(DURATION_FORM)).getId());
+        mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(MIN_DURATION_FORM)).getId());
+        mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(MAX_DURATION_FORM)).getId());
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(STREET_NAME_FORM)).getId());
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(POSTAL_CODE_FORM)).getId());
         mandatoriesInputs.add(Objects.requireNonNull(inputForms.get(CITY_FORM)).getId());
@@ -203,8 +206,22 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         return !price.isEmpty() && Validator.priceValidator(price);
     }
 
-    private boolean durationIsOk(final String duration) {
+    private boolean minDurationIsOk(final String duration) {
         return !duration.isEmpty() && Validator.durationValidator(duration);
+    }
+
+    private boolean maxDurationIsOk(final String duration) {
+        Boolean durationIsOk = !duration.isEmpty() && Validator.durationValidator(duration);
+        Integer minDuration;
+        Integer maxDuration;
+        if (inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString().isEmpty()) {
+            minDuration = 0;
+        }
+        else {
+            minDuration = Integer.parseInt(inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString());
+        }
+        maxDuration = (!duration.isEmpty()) ? Integer.parseInt(duration) : 0;
+        return durationIsOk && (minDuration <= maxDuration);
     }
 
     private boolean areaSizeIsOk(final String areaSize) {
@@ -237,7 +254,7 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     }
 
     private void setHelperTextError(TextInputLayout target) {
-        target.setHelperText(R.string.error + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
+        target.setHelperText(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
         target.setHelperTextColor(getResources().getColorStateList(R.color.colorRed));
     }
 
@@ -245,7 +262,8 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         boolean okTitle = titleIsOk(inputForms.get(TITLE_FORM).getEditText().getText().toString());
         boolean okPrice = priceIsOk(inputForms.get(PRICE_FORM).getEditText().getText().toString());
         boolean okAreaSize = areaSizeIsOk(inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString());
-        boolean okDuration = durationIsOk(inputForms.get(DURATION_FORM).getEditText().getText().toString());
+        boolean okMinDuration = minDurationIsOk(inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString());
+        boolean okMaxDuration = maxDurationIsOk(inputForms.get(MAX_DURATION_FORM).getEditText().getText().toString());
         boolean okDescription = descriptionIsOk(descritpionTextArea.getText().toString());
         boolean okStreetNumber = streetNumberIsOk(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString());
         boolean okStreetName = streetNameIsOk(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString());
@@ -288,15 +306,27 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             }
         }
 
-        if (okDuration) {
-            if (inputForms.get(DURATION_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
-                setHelperTextValide(Objects.requireNonNull(inputForms.get(DURATION_FORM)));
+        if (okMinDuration) {
+            if (inputForms.get(MIN_DURATION_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
+                setHelperTextValide(Objects.requireNonNull(inputForms.get(MIN_DURATION_FORM)));
             }
         } else {
-            if (inputForms.get(DURATION_FORM).getEditText().getText().toString().isEmpty()) {
-                setHelperTextMandatory(inputForms.get(DURATION_FORM));
+            if (inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString().isEmpty()) {
+                setHelperTextMandatory(inputForms.get(MIN_DURATION_FORM));
             } else {
-                setHelperTextError(Objects.requireNonNull(inputForms.get(DURATION_FORM)));
+                setHelperTextError(Objects.requireNonNull(inputForms.get(MIN_DURATION_FORM)));
+            }
+        }
+
+        if (okMaxDuration) {
+            if (inputForms.get(MAX_DURATION_FORM).getHelperTextCurrentTextColor() != getResources().getColor(R.color.colorGreen_snackbar)) {
+                setHelperTextValide(Objects.requireNonNull(inputForms.get(MAX_DURATION_FORM)));
+            }
+        } else {
+            if (inputForms.get(MAX_DURATION_FORM).getEditText().getText().toString().isEmpty()) {
+                setHelperTextMandatory(inputForms.get(MAX_DURATION_FORM));
+            } else {
+                setHelperTextError(Objects.requireNonNull(inputForms.get(MAX_DURATION_FORM)));
             }
         }
 
@@ -360,7 +390,7 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             }
         }
 
-        if (okTitle && okPrice && okAreaSize && okDuration && okDescription && okStreetNumber && okStreetName && okPostalCode && okCity) {
+        if (okTitle && okPrice && okAreaSize && okMinDuration && okMaxDuration && okDescription && okStreetNumber && okStreetName && okPostalCode && okCity) {
             enablePostButton();
         } else {
             disablePostButton();
@@ -433,7 +463,7 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     imageAnnouncement.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     Log.e(TAG, "onActivityResult: ", e);
                 }
@@ -459,11 +489,11 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
 //        ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
 
 
-        // todo: get informations from inputs and radioButton
         garden.setName(inputForms.get(TITLE_FORM).getEditText().getText().toString());
         criteria.setPrice(Double.parseDouble(inputForms.get(PRICE_FORM).getEditText().getText().toString()));
         criteria.setArea(Integer.parseInt(inputForms.get(AREA_SIZE_FORM).getEditText().getText().toString()));
-        criteria.setLocationTime(Long.parseLong(inputForms.get(DURATION_FORM).getEditText().getText().toString()));
+        garden.setMinUse(Integer.parseInt(inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString()));
+        criteria.setLocationTime(Long.parseLong(inputForms.get(MAX_DURATION_FORM).getEditText().getText().toString()));
         garden.setDescription(descritpionTextArea.getText().toString()); // peut etre null
         location.setStreetNumber(Integer.parseInt(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString()));
         location.setStreet(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString());
@@ -571,9 +601,9 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     case 201:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         AlertDialog dialog = new AlertDialog.Builder(this)
-                                .setTitle(R.string.confirm_demand)
-                                .setMessage(R.string.demand_pending_validation)
-                                .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                                .setTitle(getResources().getString(R.string.confirm_demand))
+                                .setMessage(getResources().getString(R.string.demand_pending_validation))
+                                .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
                                     //todo redirect to detail
                                     finish();
                                 })

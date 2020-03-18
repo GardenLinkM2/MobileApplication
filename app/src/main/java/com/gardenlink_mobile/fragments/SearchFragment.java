@@ -175,13 +175,13 @@ public class SearchFragment extends Fragment {
         }
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(getActivity().getApplicationContext(), R.string.location_in_progress, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_in_progress), Toast.LENGTH_SHORT).show();
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } else {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(R.string.gps_off)
-                    .setMessage(R.string.gps_off_message)
-                    .setPositiveButton(R.string.ok, null);
+            builder.setTitle(getResources().getString(R.string.gps_off))
+                    .setMessage(getResources().getString(R.string.gps_off_message))
+                    .setPositiveButton(getResources().getString(R.string.ok), null);
 
             final AlertDialog alert = builder.create();
             alert.show();
@@ -208,17 +208,17 @@ public class SearchFragment extends Fragment {
                 Log.e(TAG, "Error trying to get location");
             }
             if (addreses == null) {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.location_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_failed), Toast.LENGTH_SHORT).show();
             } else {
                 mCriteria.setCityField(addreses.get(0).getLocality());
                 mCriteria.setPostCodeField(addreses.get(0).getPostalCode());
                 mCriteria.setStreetNameField(addreses.get(0).getThoroughfare());
                 mCriteria.setStreetNumberField(addreses.get(0).getSubThoroughfare());
                 //TODO:add location detail to session
-                Toast.makeText(getActivity().getApplicationContext(), R.string.location_succed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_succed), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), R.string.unavailable, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.unavailable), Toast.LENGTH_SHORT).show();
         }
     }
 

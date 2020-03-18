@@ -238,7 +238,7 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
     }
 
     private void setHelperTextError(TextInputLayout target) {
-        target.setHelperText(R.string.error + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
+        target.setHelperText(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(target.getId())));
         target.setHelperTextColor(getResources().getColorStateList(R.color.colorRed));
     }
 
@@ -347,7 +347,7 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
                             captchaCheckBox.setChecked(false);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), R.string.json_error + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.json_error) + e.getMessage(), Toast.LENGTH_LONG).show();
                         Log.e(TAG, "verifyTokenOnServer(): " + e.getMessage());
                     }
                 }, error -> Log.e(TAG, "Error: " + error.getMessage())) {

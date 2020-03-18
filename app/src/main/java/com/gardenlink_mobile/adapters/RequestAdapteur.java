@@ -79,6 +79,7 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> {
 
         acceptButton.setOnClickListener(v -> {
             //TODO : make real call with id in the intent to retrieve the details of the garden
+            // TODO : mix String and Id from R.String.* is not good .... signed NK
             Toast.makeText(getContext(), R.string.accept_request + renter.getLastName() + " " + renter.getFirstName() + R.string.on_land + garden.getName(), Toast.LENGTH_SHORT).show();
             remove(result);
         });

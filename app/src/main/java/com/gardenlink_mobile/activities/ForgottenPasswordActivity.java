@@ -85,18 +85,18 @@ public class ForgottenPasswordActivity extends AppCompatActivity implements IWeb
                 switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Toast.makeText(getApplicationContext(), R.string.request_send, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.request_send), Toast.LENGTH_SHORT).show();
                         Intent lIntent = new Intent(this, ConnectionActivity.class);
                         startActivity(lIntent);
                         finish();
                         return;
                     case 504:
                         Log.i(TAG, "Email server failed to answer before timeout threshold.");
-                        Toast.makeText(getApplicationContext(), R.string.mail_request_timeout, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.mail_request_timeout), Toast.LENGTH_SHORT).show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), R.string.request_send, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.request_send), Toast.LENGTH_SHORT).show();
                         Intent lIntent2 = new Intent(this, ConnectionActivity.class);
                         startActivity(lIntent2);
                         finish();
