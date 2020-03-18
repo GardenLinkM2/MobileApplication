@@ -10,7 +10,7 @@
     <string name="signUpButton">S\'INSCRIRE</string>
     <string name="forgotten_password_activity">Mot de passe oublié</string>
     <string name="forgotten_password_title">Mot de passe oublié ? </string>
-    <string name="forgtten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
+    <string name="forgotten_password_SubTitle">Entrez l\'adresse E-Mail de votre compte pour récupérer votre mot de passe</string>
     <string name="email_hint">Adresse E-Mail</string>
     <string name="forgotten_password_send_request">Envoyer</string>
     <string name="home">Accueil</string>
@@ -58,7 +58,7 @@
     <string name="postAnnouncement_title_label">Titre de l\'annonce</string>
     <string name="postAnnouncement_price_label">Prix / mois</string>
     <string name="postAnnouncement_areaSize_label">Superficie</string>
-    <string name="postAnnouncement_duration_label">Durée de la location (en mois)</string>
+    <string name="postAnnouncement_min_duration_label">Durée minimal de la location (en mois)</string>
     <string name="postAnnouncement_description_label">Desription:</string>
     <string name="postAnnouncement_localization_label">Localisation:</string>
     <string name="postAnnouncement_streetNumber_label">Numéro de rue</string>
@@ -119,4 +119,5 @@
     <string name="location_failed">Erreur : Aucune Localisation trouvée.</string>
     <string name="location_succed">Localisation terminée !</string>
     <string name="unavailable">Localisation indisponible.</string>
+    <string name="postAnnouncement_max_duration_label">Durée maximal de la location (en mois)</string>
 </resources>

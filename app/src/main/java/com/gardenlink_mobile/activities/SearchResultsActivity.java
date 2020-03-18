@@ -153,7 +153,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
             new GET_GARDENS(null).perform(new WeakReference<>(this));
             return;
         }
-        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
@@ -177,7 +177,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     public void loadDataWithIntentCriteria() {
-        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
@@ -194,7 +194,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     public void loadDataWithNoCriteria() {
-        Toast.makeText(getApplicationContext(), R.string.searching, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         new GET_GARDENS(null).perform(new WeakReference<>(this));
     }
 
@@ -306,7 +306,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                     case 200:
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(getApplicationContext(), R.string.no_result, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
@@ -315,7 +315,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), R.string.search_error, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.search_error), Toast.LENGTH_SHORT).show();
                         return;
                 }
             default:

@@ -123,9 +123,9 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
                 break;
             case R.id.signOut:
                 new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                        .setTitle(R.string.signout_dialog)
-                        .setPositiveButton(R.string.confirm, (dialog, which) -> doSignOut())
-                        .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        .setTitle(getResources().getString(R.string.signout_dialog))
+                        .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> doSignOut())
+                        .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                         }).show();
                 return true;
         }
