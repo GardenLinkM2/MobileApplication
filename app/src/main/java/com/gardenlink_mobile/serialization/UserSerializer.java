@@ -14,7 +14,11 @@ public class UserSerializer implements ISerializer<User> {
         user.setEmail(input.optString("email"));
         user.setFirstName(input.optString("firstName"));
         user.setLastName(input.optString("lastName"));
+        // Il est possible qu'on reçoive des User de l'authent (avatar) et de l'API (photo)s
         user.setPhoto(input.optString("photo"));
+        user.setPhoto(input.optString("avatar"));
+        user.setNewsletter(input.optBoolean("newsletter"));
+        user.setPhone(input.optString("phone"));
         return user;
     }
 
@@ -26,7 +30,10 @@ public class UserSerializer implements ISerializer<User> {
         output.putOpt("firstName", input.getFirstName());
         output.putOpt("id", input.getId());
         output.putOpt("email", input.getEmail());
-        output.putOpt("photo", input.getPhoto());
+        // Mais on envoie toujours des User à l'authent (avatar)
+        output.putOpt("avatar", input.getPhoto());
+        output.putOpt("newsletter", input.getNewsletter());
+        output.putOpt("phone",input.getPhone());
         return output;
     }
 }
