@@ -20,7 +20,12 @@ public class GardenSerializer implements ISerializer<Garden> {
 
         garden.setId(input.optString("id"));
         garden.setName(input.optString("name"));
-        garden.setIsReserved(input.optBoolean("isReserved"));
+        try {
+            garden.setIsReserved(input.getBoolean("isReserved"));
+        }
+        catch (Exception e){
+            garden.setIsReserved(null);
+        }
         garden.setMinUse(input.optInt("minUse"));
         garden.setDescription(input.optString("description"));
         garden.setLocation(new LocationSerializer().deserialize(input.optJSONObject("location")));

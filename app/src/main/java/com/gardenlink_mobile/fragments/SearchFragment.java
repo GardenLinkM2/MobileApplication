@@ -122,6 +122,7 @@ public class SearchFragment extends Fragment {
         searchInputLayout.setEndIconOnClickListener(view -> {
             String lSearchName = ((TextInputEditText) mView.findViewById(R.id.searchField)).getText().toString();
             if (mIsOnResult) {
+                ((SearchResultsActivity) getActivity()).setmSearchTitle(lSearchName);
                 ((SearchResultsActivity) getActivity()).loadData();
             } else {
                 ((HomeActivity) getActivity()).toSearchResult(lSearchName);

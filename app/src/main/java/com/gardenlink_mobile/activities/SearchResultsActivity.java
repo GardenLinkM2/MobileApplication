@@ -51,6 +51,14 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     private Double mMinPrice;
     private Double mMaxPrice;
 
+    public String getmSearchTitle() {
+        return mSearchTitle;
+    }
+
+    public void setmSearchTitle(String mSearchTitle) {
+        this.mSearchTitle = mSearchTitle;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,18 +109,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         } else {
             loadDataWithNoCriteria();
         }
-
-        if (mResults != null) {
-            mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
-            prepareArrayForPageDisplay();
-            displayList();
-            initFields();
-        }
-        prepareNavigationButtonsForPage();
-        initMenu();
-
-        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
-
     }
 
     private void initFields() {
@@ -153,7 +149,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
             new GET_GARDENS(null).perform(new WeakReference<>(this));
             return;
         }
-        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
@@ -171,13 +166,12 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamEquipments(criteriaFragment.getEquipmentProvided());
         queryOptions.addParamWaterAccess(criteriaFragment.getWaterProvided());
         queryOptions.addParamDirectAccess(criteriaFragment.getDirectAccess());
-        queryOptions.addParamInDescription(mSearchTitle);
+        queryOptions.addParamInNameOrDescription(mSearchTitle);
 
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
     public void loadDataWithIntentCriteria() {
-        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
@@ -188,73 +182,13 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamEquipments(mCriteriaForSearch.getEquipments());
         queryOptions.addParamWaterAccess(mCriteriaForSearch.getWaterAccess());
         queryOptions.addParamDirectAccess(mCriteriaForSearch.getDirectAccess());
-        queryOptions.addParamInDescription(mSearchTitle);
+        queryOptions.addParamInNameOrDescription(mSearchTitle);
 
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
     public void loadDataWithNoCriteria() {
-        Toast.makeText(getApplicationContext(), getResources().getString(R.string.searching), Toast.LENGTH_SHORT).show();
         new GET_GARDENS(null).perform(new WeakReference<>(this));
-    }
-
-    //TODO : test method, to delete
-    public void loadData2() {
-        Garden lTestResult = new Garden();
-        Location lTestLocation = new Location();
-
-        lTestLocation.setPostalCode(63000);
-        lTestLocation.setCity("paris");
-
-        Criteria lCriteria1 = new Criteria();
-        Criteria lCriteria2 = new Criteria();
-        lCriteria1.setPrice(12000.0d);
-        lCriteria2.setPrice(10000.0d);
-
-
-        lTestResult.setId("123");
-        lTestResult.setLocation(lTestLocation);
-        lTestResult.setName("La tour eiffel");
-        lTestResult.setCriteria(lCriteria1);
-        lTestResult.setMinUse(25);
-
-        Garden lTestResult2 = new Garden();
-        Location lTestLocation2 = new Location();
-
-        lTestLocation2.setPostalCode(63170);
-        lTestLocation2.setCity("Aubière");
-
-        lTestResult2.setId("1234");
-        lTestResult2.setLocation(lTestLocation2);
-        lTestResult2.setName("grand jardin");
-        lTestResult2.setCriteria(lCriteria2);
-        lTestResult2.setMinUse(10);
-
-        mResults = new ArrayList<Garden>();
-
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
     }
 
     private void displayList() {
@@ -307,15 +241,27 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
-                            return;
+                            mResults = new ArrayList<>();
                         }
-                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        List<Garden> gardens = (List<Garden>) results;
-                        mResults = new ArrayList<>(gardens);
+                        else{
+                            Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                            List<Garden> gardens = (List<Garden>) results;
+                            mResults = new ArrayList<>(gardens);
+                        }
+                        mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
+                        prepareArrayForPageDisplay();
+                        displayList();
+                        initFields();
+                        prepareNavigationButtonsForPage();
+                        initMenu();
+                        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.search_error), Toast.LENGTH_SHORT).show();
+                        prepareNavigationButtonsForPage();
+                        initMenu();
+                        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
                         return;
                 }
             default:

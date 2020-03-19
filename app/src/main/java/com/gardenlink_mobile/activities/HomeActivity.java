@@ -86,7 +86,7 @@ public class HomeActivity extends NavigableActivity implements IWebConnectable {
         lIntent.putExtra(SearchFragment.MAX_DURATION_CONTENT, mSearch.getmCriteria().getMaxDuration());
         lIntent.putExtra(SearchFragment.MIN_DURATION_CONTENT, mSearch.getmCriteria().getMinDuration());
         lIntent.putExtra(SearchFragment.MAX_PRICE_CONTENT, mSearch.getmCriteria().getMaxPrice());
-        lIntent.putExtra(SearchFragment.MIN_PRICE_CONTENT, mSearch.getmCriteria().getMaxPrice());
+        lIntent.putExtra(SearchFragment.MIN_PRICE_CONTENT, mSearch.getmCriteria().getMinPrice());
 
         startActivity(lIntent);
     }

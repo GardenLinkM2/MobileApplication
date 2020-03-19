@@ -92,12 +92,12 @@ abstract class ODataQueryOptions {
         return;
     }
 
-    public void addContainsParam(String param, String value) {
+    public void addContainsParam(String param1, String param2, String value) {
         if (firstParam) {
-            urlParams += "contains(criteria/" + param + ",'" + value + "')";
+            urlParams += "(contains(" + param1 + ",'" + value + "') or contains(" + param2 + ",'" + value + "'))";
             firstParam = false;
         } else {
-            urlParams += " and contains(criteria/" + param + ",'" + value + "')";
+            urlParams += " and (contains(" + param1 + ",'" + value + "') or contains(" + param2 + ",'" + value + "'))";
         }
         return;
     }

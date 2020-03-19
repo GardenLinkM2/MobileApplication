@@ -16,7 +16,12 @@ public class LeasingSerializer implements ISerializer<Leasing> {
         leasing.setTime(input.optInt("time"));
         leasing.setBegin(input.optString("begin"));
         leasing.setEnd(input.optString("end"));
-        leasing.setRenew(input.optBoolean("renew"));
+        try {
+            leasing.setRenew(input.getBoolean("renew"));
+        }
+        catch (Exception e){
+            leasing.setRenew(null);
+        }
         leasing.setState(new LeasingStatus(input.optString("state")));
         leasing.setGarden(input.optString("garden"));
         leasing.setRenter(input.optString("renter"));

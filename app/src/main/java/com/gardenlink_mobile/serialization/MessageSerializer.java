@@ -17,7 +17,12 @@ public class MessageSerializer implements ISerializer<Message> {
         Message message = new Message();
         message.setCreationDate(input.optString("creationDate"));
         message.setId(input.optString("id"));
-        message.setRead(input.optBoolean("isRead"));
+        try {
+            message.setRead(input.getBoolean("isRead"));
+        }
+        catch (Exception e) {
+            message.setRead(null);
+        }
         message.setSender(input.optString("sender"));
         message.setText(input.optString("texts"));
         List<Photo> photos = JSONMaster.tryDeserializeMany(new PhotoSerializer(), input.optString("photos"));
