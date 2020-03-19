@@ -43,8 +43,8 @@ public class GardenODataQueryOptions extends ODataQueryOptions {
         addEqualsParam("directAccess",directAccess);
     }
 
-    public void addParamInDescription(String value){
+    public void addParamInNameOrDescription(String value){
         if (value != null && !value.isEmpty())
-            addContainsParam("description",value);
+            addContainsParam("description","name",value);
     }
 }

@@ -11,12 +11,28 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
     public Criteria deserialize(JSONObject input) throws JSONException {
         Criteria criteria = new Criteria();
         criteria.setArea(input.optInt("area"));
-        criteria.setDirectAccess(input.optBoolean("directAccess"));
-        criteria.setEquipments(input.optBoolean("equipments"));
+        // The only way to retrieve null if the key doesn't exist is to surround a required get() with try/catch
+        try {
+            criteria.setDirectAccess(input.getBoolean("directAccess"));
+        }
+        catch(Exception e){
+            criteria.setDirectAccess(null);
+        }
+        try {
+            criteria.setEquipments(input.getBoolean("equipments"));
+        }
+        catch(Exception e){
+            criteria.setDirectAccess(null);
+        }
         criteria.setOrientation(input.optString("orientation"));
         criteria.setPrice(input.optDouble("price"));
         criteria.setTypeOfClay(input.optString("typeOfClay"));
-        criteria.setWaterAccess(input.optBoolean("waterAccess"));
+        try {
+            criteria.setWaterAccess(input.getBoolean("waterAccess"));
+        }
+        catch (Exception e){
+            criteria.setWaterAccess(null);
+        }
         return criteria;
     }
 

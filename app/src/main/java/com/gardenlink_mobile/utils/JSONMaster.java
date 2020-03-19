@@ -41,7 +41,7 @@ public class JSONMaster {
         JSONObject trueResult = new JSONObject(output);
         JSONArray jArray;
         try {
-            jArray = new JSONArray(trueResult.getJSONArray("data"));
+            jArray = trueResult.getJSONArray("data");
             IntStream.range(0, jArray.length()).forEach(index -> {
                 try {
                     results.add(serializer.deserialize(jArray.getJSONObject(index)));
