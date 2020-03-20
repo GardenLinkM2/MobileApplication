@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/commentPicture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        />
+
+    <TextView
+        android:id="@+id/commentUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/commentPicture"
+        app:layout_constraintTop_toTopOf="@+id/commentPicture"
+        android:textSize="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/colorBlack"
+        />
+
+    <TextView
+        android:id="@+id/commentMesssage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/commentUserName"
+        app:layout_constraintLeft_toRightOf="@+id/commentPicture"
+        android:textSize="12dp"
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/colorGray_darker"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorGray_darker"
+        android:textSize="10dp"
+        android:text="Répondre"
+        android:onClick="answerComment"
+        app:layout_constraintTop_toBottomOf="@id/commentMesssage"
+        app:layout_constraintRight_toRightOf="parent"
+
+        />
+
+
+    <ImageView
+        android:id="@+id/flagCommentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/commentUserName"
+        app:layout_constraintRight_toRightOf="parent"
+        android:clickable="true"
+        android:onClick="flagComment"
+        android:src="@drawable/ic_flag_red_24dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

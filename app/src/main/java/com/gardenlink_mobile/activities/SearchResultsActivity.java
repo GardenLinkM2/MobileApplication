@@ -119,13 +119,9 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     private void toDetails(Garden pGarden) {
-        /*
-        Intent toDetailsIntent = new Intent(this, DetailsActivity.class);
-        Bundle newBundle = new Bundle();
-        newBundle.putString("garden_id", pGarden.getId());
-        toDetailsIntent.putExtras(newBundle);
+        Intent toDetailsIntent = new Intent(SearchResultsActivity.this, DetailAnnouncement.class);
+        toDetailsIntent.putExtra(DetailAnnouncement.EXTRA_MESSAGE, pGarden.getId());
         startActivity(toDetailsIntent);
-         */
     }
 
     private void prepareArrayForPageDisplay() {

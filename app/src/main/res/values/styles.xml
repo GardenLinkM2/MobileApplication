@@ -27,10 +27,15 @@
     <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.Colored">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:backgroundTint">@color/colorRed</item>
-        <item name="android:layout_marginEnd">100dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:backgroundTint">@color/colorGreen_topBar</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
 
 

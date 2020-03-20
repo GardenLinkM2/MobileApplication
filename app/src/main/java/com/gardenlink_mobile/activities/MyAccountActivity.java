@@ -27,8 +27,8 @@ import androidx.core.app.ActivityCompat;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.Escaper;
 import com.gardenlink_mobile.utils.ImageMaster;
-import com.gardenlink_mobile.utils.Stripper;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_API;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_AUTH;
@@ -433,7 +433,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                             return;
                         }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        fillNewUserData(Stripper.stripPhotoURL(results.get("photo")));
+                        fillNewUserData(Escaper.escapePhotoURL(results.get("photo")));
                         new UPDATE_USER(newUser).perform(new WeakReference<>(this));
                         return;
                     default:

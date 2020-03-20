@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.DetailAnnouncement">
+
+    <include
+        layout="@layout/menu_hamburger"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detailAnnouncement_principalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <!-- Image -->
+            <ImageView
+                android:id="@+id/detailAnnouncement_image"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                android:contentDescription="@string/postAnnouncement_image_description"
+                android:src="@drawable/image_not_found"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Announcement title -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="60dp"
+                android:text="Titre de l'annonce"
+                android:maxLines="2"
+                android:maxEms="7"
+                android:ellipsize="end"
+                android:textSize="36sp"
+                android:textColor="@android:color/black"
+                android:gravity="start"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_image"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Report flag -->
+            <ImageView
+                android:id="@+id/report_flag"
+                android:paddingEnd="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_flag_red_24dp"
+                app:layout_constraintBottom_toBottomOf="@id/detailAnnouncement_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="doReport"/>
+
+            <!--  Announcement price -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_price"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="NA € /semaine"
+                android:textColor="@color/colorGreen_topBar"
+                android:gravity="start"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!--  Announcement area size -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_areaSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="NA m²"
+                android:gravity="start"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_price"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Announcement min duration -->
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/detailAnnouncement_minDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="NA mois minimum"
+                android:gravity="start"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_areaSize"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Announcement max duration -->
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/detailAnnouncement_maxDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:text="NA mois maximum"
+                android:gravity="start"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_minDuration"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/detailAnnouncement_horizontalDivisor1"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_maxDuration"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Criteria section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_criteriaSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Critères:"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor1"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Orientation criteria -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailAnnouncement_orientationCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="25dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_criteriaSection"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <!--  Orientation Label -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_orientationLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Orientation"
+                    android:textColor="@color/colorGray_darker"
+                    android:textSize="24dp"
+                    android:gravity="start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!--  Orientation value -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_orientationValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorGray_labelInput_font"
+                    app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_orientationLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--  EarthType criteria -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailAnnouncement_earthTypeCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="25dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_criteriaSection"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!--  EarthType Label -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_earthTypeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Type de terre"
+                    android:textColor="@color/colorGray_darker"
+                    android:textSize="24dp"
+                    android:gravity="start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!--  Orientation value -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_earthTypeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorGray_labelInput_font"
+                    app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_earthTypeLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            -->
+<!--            -->
+            <!--  WaterProvided criteria -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailAnnouncement_waterProvidedCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="25dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_orientationCriteria"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <!--  waterProvided Label -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_waterProvidedLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eau fournie"
+                    android:textColor="@color/colorGray_darker"
+                    android:textSize="24dp"
+                    android:gravity="start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!--  WaterProvided value -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_waterProvidedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorGray_labelInput_font"
+                    app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_waterProvidedLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--  EquipmentProvided criteria -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailAnnouncement_equipmentProvidedCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="25dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_waterProvidedCriteria"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <!--  EquipmentProvided Label -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_equipmentProvidedLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Equipement fourni"
+                    android:textColor="@color/colorGray_darker"
+                    android:textSize="24dp"
+                    android:gravity="start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!--  EquipmentProvided value -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_equipmentProvidedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorGray_labelInput_font"
+                    app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_equipmentProvidedLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--  DirectAccess criteria -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailAnnouncement_directAccessCriteria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="25dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_equipmentProvidedCriteria"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <!--  DirectAccess Label -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_directAccessLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Accès direct au terrain"
+                    android:textColor="@color/colorGray_darker"
+                    android:textSize="24dp"
+                    android:gravity="start"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <!--  DirectAccess value -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/detailAnnouncement_directAccessValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="18dp"
+                    android:textColor="@color/colorGray_labelInput_font"
+                    app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_directAccessLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/detailAnnouncement_horizontalDivisor2"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_directAccessCriteria"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Description section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_descriptionSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description:"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor2"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Description section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:layout_marginStart="20dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_descriptionSection"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/detailAnnouncement_horizontalDivisor3"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Localization section  -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/detailAnnouncement_localizationSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Localisation:"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor3"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- localization map -->
+            <FrameLayout
+                android:id="@+id/mapContainer"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_localizationSection"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/detailAnnouncement_horizontalDivisor4"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/mapContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- comment container -->
+            <FrameLayout
+                android:id="@+id/commentsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailAnnouncement_horizontalDivisor4" />
+
+            <!--  Horizontal Separator -->
+            <View
+                android:id="@+id/detailAnnouncement_horizontalDivisor5"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorGray_brighter"
+                app:layout_constraintTop_toBottomOf="@id/commentsContainer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!--  Delete button  -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detailAnnouncement_deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailAnnouncement_delete"
+                android:onClick="onClickDelete"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/colorRed"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <!--  Hire button  -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detailAnnouncement_hireButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailAnnouncement_hire"
+                android:onClick="onClickHire"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/colorGreen_brighter"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
