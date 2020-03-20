@@ -35,9 +35,6 @@
             android:name=".activities.HomeActivity"
             android:label="@string/home" />
         <activity
-            android:name=".activities.WalletActivity"
-            android:label="@string/wallet" />
-        <activity
             android:name=".activities.MessagingActivity"
             android:label="@string/messaging" />
         <activity
@@ -58,6 +55,9 @@
         <activity
             android:name=".activities.SearchResultsActivity"
             android:label="@string/searchResultActivity" />
+        <activity
+            android:name=".activities.WalletActivity"
+            android:label="@string/wallet" />
     </application>
 
 </manifest>

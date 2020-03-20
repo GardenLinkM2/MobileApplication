@@ -120,4 +120,6 @@
     <string name="location_succed">Localisation terminée !</string>
     <string name="unavailable">Localisation indisponible.</string>
     <string name="postAnnouncement_max_duration_label">Durée maximal de la location (en mois)</string>
+    <string name="walletTitle">Recharger son compte</string>
+    <string name="walletRemainingCredit">Crédit actuel : </string>
 </resources>
