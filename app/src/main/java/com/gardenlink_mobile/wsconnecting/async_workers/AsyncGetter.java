@@ -37,6 +37,7 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
     private Boolean failure = false;
     private String authorization;
     private Boolean gettingFile = false;
+    private String urlString;
 
     public AsyncGetter(ISerializer<T> serializer, WeakReference<IWebConnectable> sender, Operation operation, HashMap criteria, String authorization) {
         this.serializer = serializer;
@@ -57,6 +58,7 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
         String result = "";
         try {
             URL url = new URL(urls[0]);
+            urlString = url.toString();
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setSSLSocketFactory(CustomSSLSocketFactory.getSSLSocketFactory());
 
@@ -135,6 +137,7 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
             IWebConnectable realSender = sender.get();
             if (realSender != null) {
                 HashMap<String, String> fileMap = new HashMap<>();
+                fileMap.put("url", urlString);
                 fileMap.put("photo", result);
                 realSender.receiveResults(responseCode, fileMap, operation);
             }

@@ -3,6 +3,8 @@ package com.gardenlink_mobile.activities;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +22,9 @@ import com.gardenlink_mobile.serialization.CriteriaSerializer;
 import com.gardenlink_mobile.fragments.CriteriaFragment;
 import com.gardenlink_mobile.adapters.ResultsAdapter;
 import com.gardenlink_mobile.fragments.SearchFragment;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDENS;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
 import org.json.JSONException;
@@ -30,6 +34,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class SearchResultsActivity extends NavigableActivity implements IWebConnectable {
 
@@ -50,6 +57,9 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     private Integer mMaxArea;
     private Double mMinPrice;
     private Double mMaxPrice;
+    private Integer resultsNumber;
+    private Integer photosRetrieved;
+    private Map<String, Garden> resultsMap;
 
     public String getmSearchTitle() {
         return mSearchTitle;
@@ -238,19 +248,23 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
                             mResults = new ArrayList<>();
-                        }
-                        else{
+                        } else {
                             Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                             List<Garden> gardens = (List<Garden>) results;
-                            mResults = new ArrayList<>(gardens);
+                            resultsMap = new HashMap<>();
+                            resultsNumber = gardens.size();
+                            photosRetrieved = 0;
+                            for (Garden g : gardens) {
+                                try {
+                                    String photoUrl = g.getPhotos().get(0).getFileName();
+                                    resultsMap.put(photoUrl, g);
+                                    new GET_PHOTO(photoUrl).perform(new WeakReference<>(this));
+                                } catch (NullPointerException e){
+                                    resultsMap.put(UUID.randomUUID().toString(),g);
+                                    incrementPhotosRetrieved();
+                                }
+                            }
                         }
-                        mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
-                        prepareArrayForPageDisplay();
-                        displayList();
-                        initFields();
-                        prepareNavigationButtonsForPage();
-                        initMenu();
-                        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
@@ -268,8 +282,25 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
-        return;
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Garden garden = (Garden) resultsMap.get(results.get("url"));
+                        garden.setDrawableFirstPhoto(ImageMaster.byteStringToDrawable(results.get("photo")));
+                        incrementPhotosRetrieved();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        incrementPhotosRetrieved();
+                        return;
+                }
+
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
@@ -281,5 +312,25 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     @Override
     public String getTag() {
         return TAG;
+    }
+
+    private void incrementPhotosRetrieved() {
+        photosRetrieved += 1;
+        Log.i("NOMBRE PHOTOS --------------------------",photosRetrieved.toString());
+        if (photosRetrieved == resultsNumber) {
+            Log.i(TAG,"All photos retrieved");
+            mResults = new ArrayList<>();
+            resultsMap.forEach((k, v) -> {
+                        mResults.add((Garden) v);
+                    }
+            );
+            mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
+            prepareArrayForPageDisplay();
+            displayList();
+            initFields();
+            prepareNavigationButtonsForPage();
+            initMenu();
+            ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
+        }
     }
 }

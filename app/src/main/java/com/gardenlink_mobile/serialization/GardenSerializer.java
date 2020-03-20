@@ -33,11 +33,14 @@ public class GardenSerializer implements ISerializer<Garden> {
         garden.setValidation(new Status(input.optString("validation")));
         garden.setCriteria(new CriteriaSerializer().deserialize(input.optJSONObject("criteria")));
 
-        List<Photo> photos = JSONMaster.tryDeserializeMany(new PhotoSerializer(), input.optString("photos"));
-        if (photos != null) garden.setPhotos(photos);
-
-        List<Report> reports = JSONMaster.tryDeserializeMany(new ReportSerializer(), input.optString("reports"));
-        if (reports != null) garden.setReports(reports);
+        try {
+            List<Photo> photos = JSONMaster.tryDeserializeMany(new PhotoSerializer(), input.optString("photos"));
+            if (photos != null) garden.setPhotos(photos);
+        } catch (Exception e) {}
+        try {
+            List<Report> reports = JSONMaster.tryDeserializeMany(new ReportSerializer(), input.optString("reports"));
+            if (reports != null) garden.setReports(reports);
+        } catch (Exception e){}
 
         return garden;
     }
