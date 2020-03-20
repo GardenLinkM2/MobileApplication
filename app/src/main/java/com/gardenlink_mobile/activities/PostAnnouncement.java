@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.entities.Photo;
 import com.gardenlink_mobile.utils.ImageMaster;
+import com.gardenlink_mobile.utils.Escaper;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
@@ -633,7 +635,7 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         ArrayList<Photo> photos = new ArrayList<>();
-                        photos.add(new Photo(results.get("photo")));
+                        photos.add(new Photo(Escaper.escapePhotoURL(results.get("photo"))));
                         garden.setPhotos(photos);
                         new POST_GARDEN(garden).perform(new WeakReference<>(this));
                         return;

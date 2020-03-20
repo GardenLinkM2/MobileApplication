@@ -45,8 +45,9 @@ public class ResultsAdapter extends ArrayAdapter<Garden> {
         lDuration.setText(result.getMinUse()+DURATION_POSTFIX);
         lLocation.setText(result.getLocation().getPostalCode() + " "+result.getLocation().getCity());
 
-        //TODO : call real image
-        lImage.setImageResource(R.drawable.image_not_found);
+        if (result.getDrawableFirstPhoto() != null)
+            lImage.setImageDrawable(result.getDrawableFirstPhoto());
+        else lImage.setImageResource(R.drawable.image_not_found);
         return convertView;
     }
 }

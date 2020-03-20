@@ -103,7 +103,7 @@ public class JSONMaster {
     }
 
     public static <T> List<T> tryDeserializeMany(ISerializer<T> serializer, String input) throws JSONException {
-        if (input != null) return null;
+        if (input == null) return null;
         List<T> results = new ArrayList<>();
         JSONArray jArray;
         try {
