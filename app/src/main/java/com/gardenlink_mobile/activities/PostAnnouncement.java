@@ -19,10 +19,8 @@ import android.content.pm.PackageManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.entities.Garden;
@@ -35,7 +33,6 @@ import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.gardenlink_mobile.wsconnecting.operations.POST_GARDEN;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
