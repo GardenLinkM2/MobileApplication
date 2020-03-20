@@ -44,7 +44,6 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     }
 
     protected void initMenu() {
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
@@ -73,6 +72,19 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
 
         headerView = navigationView.inflateHeaderView(R.layout.header);
         createHeader(headerView);
+    }
+
+    protected void refreshWallet(){
+        Wallet wallet = Session.getInstance().getCurrentUserWallet();
+        TextView userWallet = headerView.findViewById(R.id.user_wallet);
+        if (wallet != null){
+            String amount = NumberFormat.getInstance().format(wallet.getBalance());
+            Locale locale = getResources().getConfiguration().locale;
+            Currency currency = Currency.getInstance(locale);
+            userWallet.setText(amount + currency.getSymbol());
+        } else{
+            userWallet.setText("");
+        }
     }
 
     private void createHeader(View headerView) {
