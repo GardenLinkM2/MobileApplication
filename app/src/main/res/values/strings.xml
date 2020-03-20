@@ -122,4 +122,11 @@
     <string name="postAnnouncement_max_duration_label">Durée maximal de la location (en mois)</string>
     <string name="walletTitle">Recharger son compte</string>
     <string name="walletRemainingCredit">Crédit actuel : </string>
+    <string name="detailAnnouncement_activity">Détail de l\'annonce</string>
+    <string name="yes">oui</string>
+    <string name="no">non</string>
+    <string name="detailAnnouncement_delete">SUPPRIMER</string>
+    <string name="report_announcement">Signaler cette annonce</string>
+    <string name="detailAnnouncement_hire">LOUER</string>
+    <string name="comment">Commentaire</string>
 </resources>

@@ -492,8 +492,9 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         garden.setMinUse(Integer.parseInt(inputForms.get(MIN_DURATION_FORM).getEditText().getText().toString()));
         criteria.setLocationTime(Long.parseLong(inputForms.get(MAX_DURATION_FORM).getEditText().getText().toString()));
         garden.setDescription(descritpionTextArea.getText().toString()); // peut etre null
-        if (inputForms.get(STREET_NUMBER_FORM).getEditText().getText() != null && !inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString().isEmpty())
+        if (!inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString().isEmpty()) {
             location.setStreetNumber(Integer.parseInt(inputForms.get(STREET_NUMBER_FORM).getEditText().getText().toString()));
+        }
         location.setStreet(inputForms.get(STREET_NAME_FORM).getEditText().getText().toString());
         location.setPostalCode(Integer.parseInt(inputForms.get(POSTAL_CODE_FORM).getEditText().getText().toString()));
         location.setCity(inputForms.get(CITY_FORM).getEditText().getText().toString());
@@ -607,7 +608,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                                 .setTitle(getResources().getString(R.string.confirm_demand))
                                 .setMessage(getResources().getString(R.string.demand_pending_validation))
                                 .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
-                                    //todo redirect to detail
+                                    Garden postedGarden = (Garden) results.get(0);
+                                    Intent localIntentDetail = new Intent(PostAnnouncement.this, DetailAnnouncement.class);
+                                    localIntentDetail.putExtra(DetailAnnouncement.EXTRA_MESSAGE, postedGarden.getId());
+                                    startActivity(localIntentDetail);
                                     finish();
                                 })
                                 .create();

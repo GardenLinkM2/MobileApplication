@@ -50,7 +50,7 @@
                         android:layout_centerHorizontal="true"
                         android:paddingTop="30dp">
 
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/my_account_user_avatar"
                             android:layout_width="160dp"
                             android:layout_height="160dp"
@@ -200,7 +200,8 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/phoneInputField"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:inputType="phone"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </RelativeLayout>
