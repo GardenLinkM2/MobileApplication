@@ -151,7 +151,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         }
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
-        queryOptions.addParamNotReserved();
         queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
         queryOptions.addParamArea(criteriaFragment.getMinSize(), criteriaFragment.getMaxSize());
         queryOptions.addParamPrice(criteriaFragment.getMinPrice(), criteriaFragment.getMaxPrice());
