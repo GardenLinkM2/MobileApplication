@@ -5,6 +5,13 @@ public class Photo {
     private String path;
     private String fileName;
 
+    public Photo(){}
+
+    public Photo(String url) {
+        this.path = url;
+        this.fileName = url;
+    }
+
     public String getPath() {
         return path;
     }

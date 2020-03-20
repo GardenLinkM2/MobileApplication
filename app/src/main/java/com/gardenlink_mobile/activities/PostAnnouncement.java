@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,13 +27,15 @@ import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Location;
+import com.gardenlink_mobile.entities.Photo;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.gardenlink_mobile.wsconnecting.operations.POST_GARDEN;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -72,6 +73,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     private ViewGroup earthTypeRadios;
     private RadioButton orientationRadioActivated;
     private RadioButton earthRadioActivated;
+
+    private Boolean hasPicture = false;
+    private Uri pictureUri;
+    private Garden garden = new Garden();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -455,7 +460,9 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
+                hasPicture = true;
                 final Uri uri = data.getData();
+                pictureUri = uri;
                 InputStream inputStream;
                 try {
                     inputStream = getContentResolver().openInputStream(uri);
@@ -474,21 +481,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
     }
 
     public void onClickPost(View v) {
-        Garden garden = new Garden();
         Criteria criteria = new Criteria();
         Location location = new Location();
 
-        // todo: Extract image from ImageView to upload it
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageAnnouncement.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        ByteArrayOutputStream uploadableImage = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, uploadableImage);
-        // you can upload uploadableImage, it is a JEPG image
-        // todo maybe not mandatory
-//        byte[] imageInByte = uploadableImage.toByteArray();
-//        ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
-
-
+// todo: get informations from inputs and radioButton
         if (inputForms.get(TITLE_FORM).getEditText().getText() != null && !inputForms.get(TITLE_FORM).getEditText().getText().toString().isEmpty())
             garden.setName(inputForms.get(TITLE_FORM).getEditText().getText().toString());
         criteria.setPrice(Double.parseDouble(inputForms.get(PRICE_FORM).getEditText().getText().toString()));
@@ -592,7 +588,12 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
         garden.setLocation(location);
         garden.setCriteria(criteria);
 
-        new POST_GARDEN(garden).perform(new WeakReference<>(this));
+        if (hasPicture){
+            byte[] imageBytes = ImageMaster.drawableToBytes(imageAnnouncement.getDrawable());
+            new POST_PHOTO(imageBytes).perform(new WeakReference<>(this));
+        }else{
+            new POST_GARDEN(garden).perform(new WeakReference<>(this));
+        }
     }
 
     @Override
@@ -625,8 +626,25 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
-        return;
+        switch (operation.getName()) {
+            case "POST_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        ArrayList<Photo> photos = new ArrayList<>();
+                        photos.add(new Photo(results.get("photo")));
+                        garden.setPhotos(photos);
+                        new POST_GARDEN(garden).perform(new WeakReference<>(this));
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
