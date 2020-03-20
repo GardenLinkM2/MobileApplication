@@ -19,8 +19,10 @@ import com.gardenlink_mobile.entities.Tokens;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.entities.Wallet;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.utils.PreferenceUtils;
 import com.gardenlink_mobile.utils.Validator;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.GET_SELF_WALLET;
 import com.gardenlink_mobile.wsconnecting.operations.GET_SESSION_TOKEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME;
@@ -46,6 +48,7 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
     private Boolean GET_USER_UUID_flag = false;
     private Boolean GET_USER_ME_flag = false;
     private Boolean GET_SELF_WALLET_flag = false;
+    private Boolean DOWNLOAD_PHOTO_flag = false;
 
     public static final int writeStoragePermission = 0;
 
@@ -164,6 +167,7 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         User user = (User) results.get(0);
                         Session.getInstance().setCurrentUser(user);
                         Session.getInstance().getCurrentUser().setPassword(mPassword.getText().toString());
+                        new GET_PHOTO(user.getPhoto()).perform(new WeakReference<>(this));
                         setGET_USER_ME_flag(true);
                         return;
                     default:
@@ -238,6 +242,22 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         return;
                 }
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        setDOWNLOAD_PHOTO_flag(true);
+                        if (results == null || results.get("photo") == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Session.getInstance().setAvatarDrawable(ImageMaster.byteStringToDrawable(results.get("photo")));
+                        return;
+                    default:
+                        setDOWNLOAD_PHOTO_flag(true);
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
             default:
                 Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
                 return;
@@ -275,8 +295,13 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
         assessFlags();
     }
 
+    public void setDOWNLOAD_PHOTO_flag(Boolean DOWNLOAD_PHOTO_flag){
+        this.DOWNLOAD_PHOTO_flag = DOWNLOAD_PHOTO_flag;
+        assessFlags();
+    }
+
     private void assessFlags() {
-        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag && GET_SELF_WALLET_flag){
+        if (GET_SESSION_TOKEN_flag && GET_USER_UUID_flag && GET_USER_ME_flag && GET_SELF_WALLET_flag && DOWNLOAD_PHOTO_flag){
             Intent lItent = new Intent(this, HomeActivity.class);
             startActivity(lItent);
         }

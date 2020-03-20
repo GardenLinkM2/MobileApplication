@@ -7,4 +7,8 @@ public final class Stripper {
         String postStrip = stripped.replaceAll("_iimmgg", "<img");
         return postStrip;
     }
+
+    public static String stripPhotoURL(String url){
+        return url.substring(2,url.length()-2);
+    }
 }

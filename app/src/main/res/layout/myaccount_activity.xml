@@ -51,7 +51,7 @@
                         android:paddingTop="30dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/user_avatar"
+                            android:id="@+id/my_account_user_avatar"
                             android:layout_width="160dp"
                             android:layout_height="160dp"
                             android:src="@drawable/default_avatar"
@@ -64,7 +64,7 @@
                             android:id="@+id/editAvatarButton"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_alignEnd="@+id/user_avatar"
+                            android:layout_alignEnd="@+id/my_account_user_avatar"
                             app:borderWidth="0dp"
                             app:tint="@null"
                             app:srcCompat="@drawable/ic_edit_white_24dp" />

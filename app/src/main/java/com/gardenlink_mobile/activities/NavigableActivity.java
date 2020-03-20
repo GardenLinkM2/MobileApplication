@@ -27,14 +27,16 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final String TAG = "NavigableActivity";
     public static final String CURRENT_ACTIVITY_ID = "CurrentActivityID";
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private View headerView;
+    protected CircleImageView userAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +78,15 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     private void createHeader(View headerView) {
         User user = Session.getInstance().getCurrentUser();
         Wallet wallet = Session.getInstance().getCurrentUserWallet();
-        CircleImageView userAvatar = headerView.findViewById(R.id.user_avatar);
         TextView userName = headerView.findViewById(R.id.user_name);
         TextView userWallet = headerView.findViewById(R.id.user_wallet);
+        userAvatar = headerView.findViewById(R.id.user_avatar);
         if (user != null) {
-            //TODO: Update with real UserData
-            //Todo:getUserAvatar()
-            userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.sample_avatar));
+            if (Session.getInstance() != null && Session.getInstance().getAvatarDrawable() != null) {
+                userAvatar.setImageDrawable(Session.getInstance().getAvatarDrawable());
+            } else{
+                userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.default_avatar));
+            }
             userName.setText(user.getFirstName() + " " + user.getLastName());
         } else{
             userName.setText("");

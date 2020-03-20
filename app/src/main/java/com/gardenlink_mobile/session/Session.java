@@ -1,5 +1,7 @@
 package com.gardenlink_mobile.session;
 
+import android.graphics.drawable.Drawable;
+
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.entities.Wallet;
@@ -23,6 +25,7 @@ public class Session {
     private String uuid;
     private User currentUser;
     private Wallet currentUserWallet;
+    private Drawable avatarDrawable;
 
     public String getUserName() {
         return userName;
@@ -86,6 +89,14 @@ public class Session {
 
     public void setCurrentUserWallet(Wallet currentUserWallet) {
         this.currentUserWallet = currentUserWallet;
+    }
+
+    public Drawable getAvatarDrawable() {
+        return avatarDrawable;
+    }
+
+    public void setAvatarDrawable(Drawable avatarDrawable) {
+        this.avatarDrawable = avatarDrawable;
     }
 
     public void flush()

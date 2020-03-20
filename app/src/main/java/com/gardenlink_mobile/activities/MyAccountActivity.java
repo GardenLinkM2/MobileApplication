@@ -27,10 +27,14 @@ import androidx.core.app.ActivityCompat;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.ImageMaster;
+import com.gardenlink_mobile.utils.Stripper;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_API;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_AUTH;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.UPDATE_USER;
+import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -80,6 +84,8 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     private User currentUser;
     private User newUser;
+    private String currentlyDisplayedImage = "";
+    private String currentlyDisplayedImageBuffer = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         setContentView(R.layout.myaccount_activity);
         initMenu();
         initInputs();
+        userAvatarCircle = (CircleImageView) findViewById(R.id.my_account_user_avatar);
         loadUserData();
         initUploadAvatar();
     }
@@ -107,10 +114,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     }
 
     private void loadUserData() {
-        // TODO GET AVATAR
-        userAvatarCircle = (CircleImageView) findViewById(R.id.user_avatar);
-        userAvatarCircle.setImageDrawable(getUserAvatar());
-
         TextInputEditText userNameField = (TextInputEditText) findViewById(R.id.nameInputField);
         userNameField.setText(currentUser.getLastName());
         userNameField.addTextChangedListener(textWatcherInputs);
@@ -136,12 +139,26 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         cbNewsLetter = (CheckBox) findViewById(R.id.newsLetter);
         cbNewsLetter.setChecked(currentUser.getNewsletter());
 
+
+        if (currentUser.getPhoto() != null && !currentUser.getPhoto().isEmpty() && currentlyDisplayedImage != currentUser.getPhoto()) { // Le dernier check permet d'éviter de retélécharger l'image si elle est déjà affichée
+            // Il faudra tout de même attendre le 200 comme réponse avant de pouvoir affirmer qu'elle est bien affichée
+            currentlyDisplayedImageBuffer = currentUser.getPhoto();
+            new GET_PHOTO(currentUser.getPhoto()).perform(new WeakReference<>(this));
+        } else{
+            userAvatarCircle.setImageDrawable(getUserAvatar());
+            currentlyDisplayedImage = "placeholder";
+        }
     }
 
-    private void fillNewUserData() {
+    private void uploadNewAvatar() {
+        byte[] imagebytes = ImageMaster.drawableToBytes(userAvatarCircle.getDrawable());
+        new POST_PHOTO(imagebytes).perform(new WeakReference<>(this));
+    }
+
+    private void fillNewUserData(String photo) {
         newUser = new User();
 
-        newUser.setPhoto(currentUser.getPhoto());
+        newUser.setPhoto(photo);
 
         TextInputEditText userFirstNameField = findViewById(R.id.firstNameInputField);
         newUser.setFirstName(userFirstNameField.getText().toString());
@@ -168,7 +185,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         lockMenu = menu;
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,8 +221,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                 .setTitle(getResources().getString(R.string.confirm_changes))
                 .setMessage(getResources().getString(R.string.changes))
                 .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> {
-                    fillNewUserData();
-                    new UPDATE_USER(newUser).perform(new WeakReference<>(this));
+                    uploadNewAvatar();
                 })
                 .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> CloseModification()).show();
     }
@@ -309,7 +324,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     }
 
     public Drawable getUserAvatar() {
-        userAvatar = getResources().getDrawable(R.drawable.sample_avatar);
+        userAvatar = getResources().getDrawable(R.drawable.default_avatar);
         return userAvatar;
     }
 
@@ -331,7 +346,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     inputStream = getContentResolver().openInputStream(uri);
                     final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     Bitmap circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
                     BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                     Paint paint = new Paint();
                     paint.setShader(shader);
@@ -339,6 +353,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     Canvas canvas = new Canvas(circleBitmap);
                     canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
                     userAvatarCircle.setImageBitmap(bitmap);
+                    currentlyDisplayedImage = uri.toString();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.e(TAG, "Error while loading picture, code : " + requestCode);
@@ -366,12 +381,69 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        switch (operation.getName()) {
+            case "POST_GARDEN":
+                switch (responseCode) {
+                    case 201:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        //Toast.makeText(this, ERROR_POST, Toast.LENGTH_LONG).show();
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
+
+
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null || results.get("photo") == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Drawable drawableAvatar = ImageMaster.byteStringToDrawable(results.get("photo"));
+                        userAvatarCircle.setImageDrawable(drawableAvatar);
+                        // On est maintenant sûr que la photo envoyée par l'opération est bien celle qui est présentement affichée
+                        currentlyDisplayedImage = currentlyDisplayedImageBuffer;
+                        return;
+                    default:
+                        if (currentlyDisplayedImage.isEmpty()) {
+                            userAvatarCircle.setImageDrawable(getUserAvatar());
+                            currentlyDisplayedImage = "placeholder";
+                        }
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            case "POST_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        fillNewUserData(Stripper.stripPhotoURL(results.get("photo")));
+                        new UPDATE_USER(newUser).perform(new WeakReference<>(this));
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
@@ -383,7 +455,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         currentUser = newUser;
                         Session.getInstance().setCurrentUser(newUser);
-                        loadUserData();
                         CloseModification();
                         Toast.makeText(this, getResources().getString(R.string.changes_succed), Toast.LENGTH_LONG).show();
                         return;
