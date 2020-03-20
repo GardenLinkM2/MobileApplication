@@ -47,9 +47,4 @@ public class GardenODataQueryOptions extends ODataQueryOptions {
         if (value != null && !value.isEmpty())
             addContainsParam("description","name",value);
     }
-
-    public void addParamNotReserved(){
-        addEqualsParam("isReserved",false);
-    }
-
 }
