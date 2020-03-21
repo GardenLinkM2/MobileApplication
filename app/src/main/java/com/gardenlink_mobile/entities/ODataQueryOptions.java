@@ -11,10 +11,10 @@ abstract class ODataQueryOptions {
 
     public void addEqualsParam(String param, String value) {
         if (firstParam) {
-            urlParams += "criteria/" + param + " eq '" + value + "'";
+            urlParams += "criteria/(tolower(" + param + ") eq '" + value.toLowerCase() + "')";
             firstParam = false;
         } else {
-            urlParams += " and criteria/" + param + " eq '" + value + "'";
+            urlParams += " and criteria/(tolower(" + param + ") eq '" + value.toLowerCase() + "')";
         }
         return;
     }
@@ -94,10 +94,10 @@ abstract class ODataQueryOptions {
 
     public void addContainsParam(String param1, String param2, String value) {
         if (firstParam) {
-            urlParams += "(contains(" + param1 + ",'" + value + "') or contains(" + param2 + ",'" + value + "'))";
+            urlParams += "(contains(tolower(" + param1 + "),'" + value.toLowerCase() + "')) or (contains(tolower(" + param2 + "),'" + value.toLowerCase() + "'))";
             firstParam = false;
         } else {
-            urlParams += " and (contains(" + param1 + ",'" + value + "') or contains(" + param2 + ",'" + value + "'))";
+            urlParams += " and (contains(tolower(" + param1 + "),'" + value.toLowerCase() + "')) or (contains(tolower(" + param2 + "),'" + value.toLowerCase() + "'))";
         }
         return;
     }
