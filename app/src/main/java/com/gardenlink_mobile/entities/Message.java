@@ -6,7 +6,7 @@ public class Message {
 
     private String id;
     private String text;
-    private String creationDate;
+    private Double creationDate;
     private Boolean isRead;
     // Sender ID
     private String sender;
@@ -28,11 +28,11 @@ public class Message {
         this.text = text;
     }
 
-    public String getCreationDate() {
+    public Double getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Double creationDate) {
         this.creationDate = creationDate;
     }
 
