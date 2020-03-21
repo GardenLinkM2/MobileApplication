@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
 import com.gardenlink_mobile.entities.Garden;
@@ -35,6 +35,7 @@ import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.gardenlink_mobile.wsconnecting.operations.POST_GARDEN;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -465,7 +466,11 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                 InputStream inputStream;
                 try {
                     inputStream = getContentResolver().openInputStream(uri);
-                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    if (bitmap.getWidth() > 2000) {
+                        int compressionRatio = bitmap.getWidth()/2000;
+                        bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/compressionRatio, bitmap.getHeight()/compressionRatio, false);
+                    }
                     imageAnnouncement.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -633,6 +638,12 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
             case "POST_PHOTO":
                 switch (responseCode) {
                     case 200:
+                        if (results.get("photo").length() < 5) {
+                            Log.e("TAG","Photo uploading failed.");
+                            Toast.makeText(this, "Impossible d'envoyer l'image sélectionnée. Veuillez essayer avec une autre image.", Toast.LENGTH_SHORT);
+                            imageAnnouncement.setImageDrawable(getResources().getDrawable(R.drawable.image_not_found));
+                            return;
+                        }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         ArrayList<Photo> photos = new ArrayList<>();
                         photos.add(new Photo(Escaper.escapePhotoURL(results.get("photo"))));

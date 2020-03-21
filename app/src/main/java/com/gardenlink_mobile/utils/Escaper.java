@@ -13,6 +13,9 @@ public final class Escaper {
     }
 
     public static String escapePhotoURL(String url){
-        return url.substring(2,url.length()-2);
+        try {
+            return url.substring(2, url.length() - 2);
+        }
+        catch (Exception e) {return null;}
     }
 }
