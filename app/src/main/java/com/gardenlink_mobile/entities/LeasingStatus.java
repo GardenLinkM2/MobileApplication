@@ -21,4 +21,11 @@ public class LeasingStatus {
     public void setLeasingStatus(String leasingStatus) {
         this.leasingStatus = leasingStatus;
     }
+
+    @Override
+    public String toString() {
+        return "LeasingStatus{" +
+                "leasingStatus='" + leasingStatus + '\'' +
+                '}';
+    }
 }

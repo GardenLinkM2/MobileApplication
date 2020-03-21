@@ -1,7 +1,5 @@
 package com.gardenlink_mobile.wsconnecting.operations;
 
-import android.util.Log;
-
 import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.serialization.GardenSerializer;
 import com.gardenlink_mobile.serialization.ISerializer;
@@ -10,19 +8,12 @@ import com.gardenlink_mobile.wsconnecting.Caller;
 
 import java.lang.ref.WeakReference;
 
-public class GET_GARDEN extends Operation {
+public class GET_USER_ME_GARDENS extends Operation {
 
-    private String url = API_URL + "gardens";
+    private String url = API_URL + "Users/me/gardens";
     private static ISerializer serializer = new GardenSerializer();
 
-    public GET_GARDEN(String id) {
-        if (!id.isEmpty()) {
-            url += "/" + id;
-        }
-        else {
-            Log.e("OPERATION_GET_GARDEN", "GET_GARDEN: id is empty");
-        }
-    }
+    public GET_USER_ME_GARDENS(){}
 
     @Override
     public void perform(WeakReference<IWebConnectable> sender){

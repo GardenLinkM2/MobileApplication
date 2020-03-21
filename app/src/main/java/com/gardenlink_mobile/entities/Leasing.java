@@ -5,8 +5,8 @@ public class Leasing {
     private String id;
     private Double creation;
     private Integer time;
-    private String begin;
-    private String end;
+    private Double begin;
+    private Double end;
     private Boolean renew;
     private LeasingStatus state;
     // Garden ID
@@ -32,19 +32,19 @@ public class Leasing {
         this.time = time;
     }
 
-    public String getBegin() {
+    public Double getBegin() {
         return begin;
     }
 
-    public void setBegin(String begin) {
+    public void setBegin(Double begin) {
         this.begin = begin;
     }
 
-    public String getEnd() {
+    public Double getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Double end) {
         this.end = end;
     }
 
