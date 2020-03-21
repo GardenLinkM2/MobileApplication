@@ -24,7 +24,6 @@
         android:maxEms="6"
         android:maxLines="1"
         android:paddingTop="10dp"
-        android:text="TEST TITREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
         android:textSize="20sp"
         android:textColor="@color/colorBlack"
         app:layout_constraintLeft_toRightOf="@id/sender_avatar"
@@ -34,17 +33,24 @@
         android:id="@+id/requestDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5 mois"
         android:textColor="@color/colorGray_brighter"
         app:layout_constraintLeft_toRightOf="@id/sender_avatar"
         app:layout_constraintTop_toBottomOf="@id/requestTitle" />
 
+    <TextView
+        android:id="@+id/requestBeginDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGray_brighter"
+        app:layout_constraintLeft_toRightOf="@id/sender_avatar"
+        app:layout_constraintTop_toBottomOf="@id/requestDuration" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
+        android:paddingTop="20dp"
         app:layout_constraintLeft_toRightOf="@id/sender_avatar"
-        app:layout_constraintTop_toTopOf="@id/requestDuration">
+        app:layout_constraintTop_toTopOf="@id/requestBeginDate">
 
         <TextView
             android:id="@+id/requestSender"
@@ -59,7 +65,6 @@
             android:id="@+id/requestMoment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10h30 10/03/2020"
             android:textSize="10sp"
             android:paddingLeft="15dp"
             app:layout_constraintLeft_toRightOf="@id/sender_avatar"

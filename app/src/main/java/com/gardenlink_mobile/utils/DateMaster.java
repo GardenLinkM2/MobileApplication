@@ -7,7 +7,7 @@ public class DateMaster {
     public static Date TimeStampToDate(Double timestamp){
         Long timestampLong;
         try {
-            timestampLong = Long.parseLong(timestamp.toString());
+            timestampLong = Double.valueOf(timestamp).longValue()*1000;
         }
         catch (Exception e){
             return null;

@@ -1,96 +1,162 @@
 package com.gardenlink_mobile.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.activities.DetailAnnouncement;
+import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
-import com.gardenlink_mobile.entities.Location;
+import com.gardenlink_mobile.entities.LeasingStatus;
 import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.gardenlink_mobile.wsconnecting.operations.PUT_LEASING;
+import com.gardenlink_mobile.utils.DateMaster;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RequestAdapteur extends ArrayAdapter<Leasing> {
+
+public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnectable {
+
+    private static final String TAG = "RequestAdapteur";
 
     private static String DATE_FORMAT = "dd-MM-yyyy";
-    private static String WEEKS = " moi(s)";
+    private static String MONTH = " mois";
     private static User renter;
     private static Garden garden;
+    private Leasing leasing;
+    private ArrayList<Garden> gardensList;
+    private ArrayList<User> rentersList;
 
-    public RequestAdapteur(Context context, ArrayList<Leasing> results) {
+    public RequestAdapteur(Context context, ArrayList<Leasing> results, ArrayList<Garden> gardensList, ArrayList<User> rentersList) {
         super(context, 0, results);
+        this.gardensList = gardensList;
+        this.rentersList = rentersList;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Leasing result = getItem(position);
+        leasing = getItem(position);
+        if (!gardensList.isEmpty()) {
+            garden = gardensList.get(position);
+
+        }
+        if (!rentersList.isEmpty()) {
+            renter = rentersList.get(position);
+        }
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.request_item, parent, false);
         }
 
-        setItemClickListenerOnRequest(convertView, result);
         TextView requestTitle = convertView.findViewById(R.id.requestTitle);
         TextView requestSender = convertView.findViewById(R.id.requestSender);
         CircleImageView requestSenderAvatar = convertView.findViewById(R.id.sender_avatar);
         TextView requestDuration = convertView.findViewById(R.id.requestDuration);
+        TextView requestBeginDate = convertView.findViewById(R.id.requestBeginDate);
         TextView requestMoment = convertView.findViewById(R.id.requestMoment);
 
-        //TODO : refacto
-        renter = new User();
-        renter.setFirstName("Denis");
-        renter.setLastName("Pouglou");
-        garden = new Garden();
-        Location location = new Location();
-        location.setPostalCode(63000);
-        location.setCity("Clermont-Ferrand");
-        garden.setId("1");
-        garden.setLocation(location);
-        garden.setName("petit jardinarzeazeezazeaazzaezaeezazezaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeazea");
-        garden.setLocation(location);
-
-        requestTitle.setText(garden.getName());
-        requestSender.setText(renter.getLastName() + " " + renter.getFirstName());
-        requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
-        Random random = new Random();
-        int randomNumber = random.nextInt(10 - 1 + 1) + 1;
-        requestDuration.setText(Integer.toString(randomNumber) + WEEKS);
-        requestMoment.setText(new SimpleDateFormat(DATE_FORMAT, Locale.getDefault()).format(new Date()));
+        if (garden != null) {
+            requestTitle.setText(garden.getName());
+            if (renter != null) {
+                requestSender.setText(renter.getLastName() + " " + renter.getFirstName());
+                requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
+                Date beginDate = DateMaster.TimeStampToDate(leasing.getBegin());
+                Date endDate = DateMaster.TimeStampToDate(leasing.getEnd());
+                Integer end = getMonthDifference(beginDate, endDate);
+                requestDuration.setText(end + MONTH);
+                requestBeginDate.setText(new SimpleDateFormat(DATE_FORMAT).format(beginDate));
+                Date creationDate = DateMaster.TimeStampToDate(leasing.getCreation());
+                if (creationDate != null) {
+                    requestMoment.setText(new SimpleDateFormat(DATE_FORMAT).format(creationDate));
+                }
+                setItemClickListenerOnRequest(convertView, leasing, leasing.getId(), garden.getId());
+            } else {
+                Log.e(TAG, "Renter doesn't exist for leasing : " + leasing.getId());
+            }
+        } else {
+            Log.e(TAG, "Garden doesn't exist for leasing : " + leasing.getId());
+        }
         return convertView;
     }
 
-    private void setItemClickListenerOnRequest(View convertView, Leasing result) {
+    private void setItemClickListenerOnRequest(View convertView, Leasing leasing, String id, String gardenId) {
         ImageView acceptButton = convertView.findViewById(R.id.accept_button);
         ImageView declineButton = convertView.findViewById(R.id.decline_button);
         ImageView detailsButton = convertView.findViewById(R.id.detail_button);
 
         acceptButton.setOnClickListener(v -> {
-            //TODO : make real call with id in the intent to retrieve the details of the garden
-            // TODO : mix String and Id from R.String.* is not good .... signed NK
-            Toast.makeText(getContext(), R.string.accept_request + renter.getLastName() + " " + renter.getFirstName() + R.string.on_land + garden.getName(), Toast.LENGTH_SHORT).show();
-            remove(result);
+            LeasingStatus inProgress = new LeasingStatus("InProgress");
+            leasing.setState(inProgress);
+            new PUT_LEASING(leasing, id).perform(new WeakReference<>(this));
         });
 
         declineButton.setOnClickListener(v -> {
-            //TODO : make real call with id in the intent to retrieve the details of the garden
-            Toast.makeText(getContext(), R.string.decline_request + renter.getLastName() + " " + renter.getFirstName() + R.string.on_land + garden.getName(), Toast.LENGTH_SHORT).show();
-            remove(result);
+            LeasingStatus refused = new LeasingStatus("Refused");
+            leasing.setState(refused);
+            new PUT_LEASING(leasing, id).perform(new WeakReference<>(this));
         });
 
-        //TODO : make real call with id in the intent to retrieve the details of the garden
-        detailsButton.setOnClickListener(v -> Toast.makeText(getContext(), R.string.show_details + garden.getName(), Toast.LENGTH_SHORT).show());
+        detailsButton.setOnClickListener(v -> {
+            Intent localIntentDetail = new Intent(getContext(), DetailAnnouncement.class);
+            localIntentDetail.putExtra(DetailAnnouncement.EXTRA_MESSAGE, gardenId);
+            getContext().startActivity(localIntentDetail);
+        });
+    }
+
+    @Override
+    public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
+        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+    }
+
+    @Override
+    public void receiveResults(int responseCode, Operation operation) {
+        switch (operation.getName()) {
+            case "PUT_LEASING":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        this.notifyDataSetChanged();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
+    }
+
+    private int getMonthDifference(Date fromDate, Date toDate) {
+        if (fromDate == null || toDate == null)
+            return 0;
+        float days = (float) ((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
+        return (int) (days / 30);
+    }
+
+    @Override
+    public String getTag() {
+        return TAG;
     }
 }
