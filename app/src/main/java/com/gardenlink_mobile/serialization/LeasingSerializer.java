@@ -12,7 +12,7 @@ public class LeasingSerializer implements ISerializer<Leasing> {
     public Leasing deserialize(JSONObject input) {
         Leasing leasing = new Leasing();
         leasing.setId(input.optString("id"));
-        leasing.setCreation(input.optString("creation"));
+        leasing.setCreation(input.optDouble("creation"));
         leasing.setTime(input.optInt("time"));
         leasing.setBegin(input.optString("begin"));
         leasing.setEnd(input.optString("end"));

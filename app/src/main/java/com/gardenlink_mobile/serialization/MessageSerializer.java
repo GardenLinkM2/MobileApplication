@@ -15,7 +15,7 @@ public class MessageSerializer implements ISerializer<Message> {
     @Override
     public Message deserialize(JSONObject input) throws JSONException {
         Message message = new Message();
-        message.setCreationDate(input.optString("creationDate"));
+        message.setCreationDate(input.optDouble("creationDate"));
         message.setId(input.optString("id"));
         try {
             message.setRead(input.getBoolean("isRead"));

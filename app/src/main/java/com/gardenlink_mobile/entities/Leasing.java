@@ -3,7 +3,7 @@ package com.gardenlink_mobile.entities;
 public class Leasing {
 
     private String id;
-    private String creation;
+    private Double creation;
     private Integer time;
     private String begin;
     private String end;
@@ -64,14 +64,6 @@ public class Leasing {
         this.garden = garden;
     }
 
-    public String getCreation() {
-        return creation;
-    }
-
-    public void setCreation(String creation) {
-        this.creation = creation;
-    }
-
     public LeasingStatus getState() {
         return state;
     }
@@ -94,5 +86,13 @@ public class Leasing {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Double getCreation() {
+        return creation;
+    }
+
+    public void setCreation(Double creation) {
+        this.creation = creation;
     }
 }
