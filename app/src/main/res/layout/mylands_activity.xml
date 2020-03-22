@@ -11,6 +11,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/tabPager"
         android:layout_width="match_parent"
@@ -27,5 +28,9 @@
             app:tabBackground="@drawable/tab_color_selector"
             app:tabMode="fixed"
             app:tabTextColor="@color/colorWhite" />
+
     </androidx.viewpager.widget.ViewPager>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.DetailAnnouncement;
 import com.gardenlink_mobile.activities.IWebConnectable;
+import com.gardenlink_mobile.activities.MyLandsActivity;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
 import com.gardenlink_mobile.entities.LeasingStatus;
@@ -39,6 +40,7 @@ public class RequestAdapter extends ArrayAdapter<Leasing> implements IWebConnect
     private static String MONTH = " mois";
     private static User renter;
     private static Garden garden;
+    private final Context myContext;
     private Leasing leasing;
     private ArrayList<Garden> gardensList;
     private ArrayList<User> rentersList;
@@ -47,6 +49,7 @@ public class RequestAdapter extends ArrayAdapter<Leasing> implements IWebConnect
         super(context, 0, results);
         this.gardensList = gardensList;
         this.rentersList = rentersList;
+        this.myContext=context;
     }
 
     @Override
@@ -78,12 +81,16 @@ public class RequestAdapter extends ArrayAdapter<Leasing> implements IWebConnect
                 if (leasing.getRenterObject() != null && leasing.getRenterObject().getPhoto() != null && !leasing.getRenterObject().getPhoto().isEmpty())
                     requestSenderAvatar.setImageDrawable(leasing.getRenterObject().getDrawablePhoto());
                 else
-                    requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
+                    requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.default_avatar));
                 Date beginDate = DateMaster.TimeStampToDate(leasing.getBegin());
                 Date endDate = DateMaster.TimeStampToDate(leasing.getEnd());
-                Integer end = getMonthDifference(beginDate, endDate);
-                requestDuration.setText(end + MONTH);
-                requestBeginDate.setText(new SimpleDateFormat(DATE_FORMAT).format(beginDate));
+                if (beginDate != null) {
+                    requestBeginDate.setText(new SimpleDateFormat(DATE_FORMAT).format(beginDate));
+                    if (endDate != null) {
+                        Integer end = getMonthDifference(beginDate, endDate);
+                        requestDuration.setText(end + MONTH);
+                    }
+                }
                 Date creationDate = DateMaster.TimeStampToDate(leasing.getCreation());
                 if (creationDate != null) {
                     requestMoment.setText(new SimpleDateFormat(DATE_FORMAT).format(creationDate));
@@ -139,7 +146,10 @@ public class RequestAdapter extends ArrayAdapter<Leasing> implements IWebConnect
                 switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        this.notifyDataSetChanged();
+                        Intent intent = new Intent(getContext(), MyLandsActivity.class);
+                        intent.putExtra("viewpager_position", 1);
+                        getContext().startActivity(intent);
+                        ((MyLandsActivity)myContext).finish();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);

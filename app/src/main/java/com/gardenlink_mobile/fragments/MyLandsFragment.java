@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 
@@ -15,9 +15,7 @@ import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.adapters.LandAdapter;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
-import com.gardenlink_mobile.adapters.LeasingAdapter;
 import com.gardenlink_mobile.utils.ImageMaster;
-import com.gardenlink_mobile.wsconnecting.operations.GET_GARDEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME_GARDENS;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
@@ -66,52 +64,6 @@ public class MyLandsFragment extends Fragment implements IWebConnectable {
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
         switch (operation.getName()) {
-            case "GET_MY_LEASING":
-                switch (responseCode) {
-                    case 200:
-                        if (results == null) {
-                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(getContext(), getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        List<Leasing> leasings = (List<Leasing>) results;
-                        getAllLeasing = new ArrayList<>(leasings);
-                        size = results.size();
-                        Log.e(TAG, "Results size : " + size);
-                        for (int i = 0; i < size; i++) {
-                            leasing = getAllLeasing.get(i);
-                            Log.e(TAG, "LEasing : " + leasing.getState().toString());
-                            new GET_GARDEN(leasing.getGarden()).perform(new WeakReference<>(this));
-                        }
-                        new GET_USER_ME_GARDENS().perform(new WeakReference<>(this));
-                        return;
-                    default:
-                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        return;
-                }
-            case "GET_GARDEN":
-                switch (responseCode) {
-                    case 200:
-                        garden = (Garden) results.get(0);
-                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Log.e(TAG, "receiveResults: reception du get : " + garden.toString());
-                        if (leasing.getState() != null) {
-                            Log.e(TAG, "Garden ID = " + garden.getId());
-                            switch (leasing.getState().getLeasingStatus()) {
-                                case "InProgress":
-                                    LeasingAdapter leasingAdapterReserved = new LeasingAdapter(this.getContext(), getAllLeasing, garden);
-                                    listViewLandsReserved.setAdapter(leasingAdapterReserved);
-                                    return;
-                                default:
-                                    return;
-                            }
-                        }
-                        return;
-                    default:
-                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        return;
-                }
             case "GET_USER_ME_GARDENS":
                 switch (responseCode) {
                     case 200:

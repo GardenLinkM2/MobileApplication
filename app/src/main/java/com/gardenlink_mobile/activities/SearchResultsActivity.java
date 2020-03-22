@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -330,6 +331,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
             displayList();
             initFields();
             prepareNavigationButtonsForPage();
+            ((ProgressBar) findViewById((R.id.progress_bar))).setVisibility(View.GONE);
             ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
         }
     }

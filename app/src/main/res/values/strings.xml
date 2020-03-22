@@ -47,7 +47,7 @@
     <string name="Phone">Téléphone</string>
     <string name="NewsLetter">Inscription a la NewsLetter</string>
     <string name="Modification">Modification</string>
-    <string name="save">SAUVERGARDER</string>
+    <string name="save">SAUVEGARDER</string>
     <string name="deleteAccount">SUPPRIMER MON COMPTE</string>
     <string name="search_hint">Rechercher</string>
     <string name="searchResultActivity">Résultats de recherche</string>

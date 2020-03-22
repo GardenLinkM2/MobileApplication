@@ -47,10 +47,17 @@ public class MyLandsActivity extends NavigableActivity implements IWebConnectabl
     }
 
     private void configureViewPagerAndTabs() {
+        Bundle extras = getIntent().getExtras();
+        int position = 0;
         ViewPager pager = (ViewPager) findViewById(R.id.tabPager);
+        if(extras != null) {
+            position = extras.getInt("viewpager_position");
+        }
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(), getApplicationContext()));
         TabLayout tabs = (TabLayout) findViewById(R.id.tabLayout);
         tabs.setupWithViewPager(pager);
+        pager.setCurrentItem(position);
+
         tabs.setTabMode(TabLayout.MODE_FIXED);
     }
 }

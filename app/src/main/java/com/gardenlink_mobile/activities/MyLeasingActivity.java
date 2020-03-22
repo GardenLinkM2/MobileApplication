@@ -2,7 +2,9 @@ package com.gardenlink_mobile.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
@@ -132,7 +134,6 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
                                         okGarden++;
                                         break;
                                     case "InProgress":
-                                        Log.i(TAG, "INprogress success");
                                         gardensListInProgress.add(garden);
                                         okGarden++;
                                         break;
@@ -181,6 +182,7 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
 
     private void assessFlags() {
         if (GET_MY_LEASING_FLAG && GET_GARDEN && okGarden == currentSize) {
+
             LeasingAdapter myLeasing = new LeasingAdapter(this, getAllLeasingInProgress, gardensListInProgress);
             listViewMyLeasing.setAdapter(myLeasing);
 
@@ -189,14 +191,16 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
 
             LeasingAdapter myEndedLeasing = new LeasingAdapter(this, getAllLeasingFinished, gardensListFinished);
             listViewMyEndedLeasing.setAdapter(myEndedLeasing);
+
+            ((ProgressBar) findViewById((R.id.progress_bar_myleasing))).setVisibility(View.GONE);
         }
     }
 
-    public void getLeasing(String id){
-        for(int i =0 ; i<size; i++){
+    public void getLeasing(String id) {
+        for (int i = 0; i < size; i++) {
             Leasing item = getAllLeasing.get(i);
-            if (item.getGarden().equals(id)){
-                leasing= item;
+            if (item.getGarden().equals(id)) {
+                leasing = item;
                 return;
             }
         }

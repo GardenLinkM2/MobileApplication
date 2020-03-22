@@ -149,4 +149,14 @@
         android:onClick="toPost"
         />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:progressDrawable="@drawable/loadscreen"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
