@@ -196,6 +196,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
 
     @Override
     protected void onResume() {
+        refreshWallet();
         refreshAvatar();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
