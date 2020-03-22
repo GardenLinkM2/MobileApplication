@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.DetailAnnouncement;
 import com.gardenlink_mobile.activities.IWebConnectable;
+import com.gardenlink_mobile.activities.MyLandsActivity;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
 import com.gardenlink_mobile.entities.LeasingStatus;
@@ -34,11 +35,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnectable {
 
     private static final String TAG = "RequestAdapteur";
+    private static Boolean GET_MY_LEASING_FLAG = false;
+    private static Boolean toRemove = false;
+    private static Boolean dontRemove = false;
 
     private static String DATE_FORMAT = "dd-MM-yyyy";
     private static String MONTH = " mois";
     private static User renter;
     private static Garden garden;
+    private final Context myContext;
     private Leasing leasing;
     private ArrayList<Garden> gardensList;
     private ArrayList<User> rentersList;
@@ -47,6 +52,7 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
         super(context, 0, results);
         this.gardensList = gardensList;
         this.rentersList = rentersList;
+        this.myContext=context;
     }
 
     @Override
@@ -123,6 +129,23 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
         });
     }
 
+    private void itemToRemove(Leasing leasingToRemove) {
+        while (!GET_MY_LEASING_FLAG){
+            if (toRemove){
+                Log.i(TAG, "Item to remove : " + leasingToRemove.toString());
+                this.remove(leasingToRemove);
+                Log.i(TAG, "Item removed");
+                return;
+            }
+            if (dontRemove){
+                Log.i(TAG, "don't remove item cause of failed put");
+                return;
+            }
+        }
+        return;
+    }
+
+
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
         Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
@@ -140,7 +163,10 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
                 switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        this.notifyDataSetChanged();
+                        Intent intent = new Intent(getContext(), MyLandsActivity.class);
+                        intent.putExtra("viewpager_position", 1);
+                        getContext().startActivity(intent);
+                        ((MyLandsActivity)myContext).finish();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
