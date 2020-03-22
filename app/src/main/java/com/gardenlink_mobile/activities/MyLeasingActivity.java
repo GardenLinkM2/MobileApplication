@@ -2,7 +2,9 @@ package com.gardenlink_mobile.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
@@ -189,6 +191,8 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
 
             LeasingAdapter myEndedLeasing = new LeasingAdapter(this, getAllLeasingFinished, gardensListFinished);
             listViewMyEndedLeasing.setAdapter(myEndedLeasing);
+
+            ((ProgressBar) findViewById((R.id.progress_bar_myleasing))).setVisibility(View.GONE);
         }
     }
 

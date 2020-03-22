@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class SearchFragment extends Fragment {
     private RotateAnimation rotateClose;
     private Integer mCriteriaColor = null;
     private boolean mIsOnResult = false;
+    private ProgressBar progressBar;
 
     public CriteriaFragment getmCriteria() {
         return mCriteria;
@@ -86,6 +88,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.search_fragment, parent, false);
         mView = view;
 
+        progressBar = getActivity().findViewById(R.id.progress_bar);
         View.OnClickListener criteriasListener = view1 -> toggleCriterias(view1);
         view.findViewById(R.id.criteriaArrow).setOnClickListener(criteriasListener);
         view.findViewById(R.id.criteriaText).setOnClickListener(criteriasListener);
@@ -122,6 +125,7 @@ public class SearchFragment extends Fragment {
         searchInputLayout.setEndIconOnClickListener(view -> {
             String lSearchName = ((TextInputEditText) mView.findViewById(R.id.searchField)).getText().toString();
             if (mIsOnResult) {
+                progressBar.setVisibility(View.VISIBLE);
                 ((SearchResultsActivity) getActivity()).setmSearchTitle(lSearchName);
                 ((SearchResultsActivity) getActivity()).loadData();
             } else {

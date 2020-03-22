@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -43,6 +44,7 @@ public class MyLandsFragment extends Fragment implements IWebConnectable {
     private int size;
     private HashMap<String, Garden> gardensMap;
     private int photosToRetrieve;
+    private ProgressBar progressBar;
 
     public static MyLandsFragment newInstance() {
         return (new MyLandsFragment());
@@ -54,6 +56,7 @@ public class MyLandsFragment extends Fragment implements IWebConnectable {
 
         getMyLeasings();
         listViewLandsReserved = view.findViewById(R.id.myLandsList);
+        progressBar = view.findViewById(R.id.progress_bar_mylands);
 
         listViewLandsAvailable = view.findViewById(R.id.myAvailableLandsList);
         return view;
@@ -194,6 +197,7 @@ public class MyLandsFragment extends Fragment implements IWebConnectable {
             listViewLandsAvailable.setAdapter(landAdapterAvailable);
             LandAdapter landAdapterReserved = new LandAdapter(this.getContext(), listGardenReserved);
             listViewLandsReserved.setAdapter(landAdapterReserved);
+            progressBar.setVisibility(View.GONE);
         }
     }
 }
