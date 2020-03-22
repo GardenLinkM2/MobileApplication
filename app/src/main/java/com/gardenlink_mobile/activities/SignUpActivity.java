@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.gardenlink_mobile.BuildConfig;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.CREATE_USER;
@@ -280,7 +281,8 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
         cguCheckBox = findViewById(R.id.signUp_CGUForm);
         cguCheckBox.setText("");
         cgu_text = findViewById(R.id.signUp_CGUText);
-        cgu_text.setText(Html.fromHtml(getResources().getString(R.string.signUp_CGU_HTML)));
+        String html = "J'accepte les <a href=\"" + BuildConfig.WEB_URL + "/conditions-generales-utilisation" + "\">Conditions Générales d'Utilisation</a>";
+        cgu_text.setText(Html.fromHtml(html));
         cgu_text.setClickable(true);
         cgu_text.setMovementMethod(LinkMovementMethod.getInstance());
         cguCheckBox.setOnCheckedChangeListener((compoundButton, state) -> {
