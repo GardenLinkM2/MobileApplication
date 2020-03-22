@@ -69,16 +69,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             try {
                 address=findGPSCoordinates(mGardenLocation);
+                LatLng garden = new LatLng(address.getLatitude(), address.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(garden).title("Localisation du Jardin"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(garden,10f));
             }catch(IOException loE)
             {
                 Log.e(TAG,"Error recovering GPS location");
             }
-
-            LatLng garden = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(garden).title("Localisation du Jardin"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(garden,10f));
-
-
     }
 
     private Address findGPSCoordinates(Location pLocation) throws IOException {
