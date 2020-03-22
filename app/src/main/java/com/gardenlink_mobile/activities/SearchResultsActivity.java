@@ -325,6 +325,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                     }
             );
             mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
+            mCurrentPageNumber = 1;
             prepareArrayForPageDisplay();
             displayList();
             initFields();
