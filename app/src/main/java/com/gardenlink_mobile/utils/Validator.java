@@ -19,7 +19,7 @@ public class Validator {
     public final static String STREET_NUMBER_MESSAGE = "Valeur comprise entre 1 et 9999";
 
     private final static String MAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-    private final static String NAME_REGEX = "[A-Za-z-]{3,25}";
+    private final static String NAME_REGEX = "[\\p{L}-]{3,25}";
     private final static String PHONE_REGEX = "0[0-9]{9}";
     private final static String POST_TITLE_REGEX = "[A-Za-z \\s]{5,255}";
     private final static String INTEGER_REGEX_SIMPLE = "[0-9]{1,4}";
@@ -27,9 +27,9 @@ public class Validator {
     private final static String INTEGER_REGEX_MAX = "10000";
     private final static String DURATION_REGEX_SIMPLE = "[1-2]{0,1}[0-9]";
     private final static String DURATION_REGEX_MAX = "3[0-6]";
-    private final static String STREET_NAME_REGEX = "[A-Za-z \\s]{6,255}";
+    private final static String STREET_NAME_REGEX = "[\\p{L} \\s]{6,255}";
     private final static String POST_CODE_REGEX = "[0-9]{5}";
-    private final static String CITY_REGEX = "[A-Za-z0-9 \\s -]{1,255}";
+    private final static String CITY_REGEX = "[\\p{L}0-9 \\s -]{1,255}";
 
     private static final Pattern mMailPattern = Pattern.compile(MAIL_REGEX);
     private static final Pattern mNamePattern = Pattern.compile(NAME_REGEX);
