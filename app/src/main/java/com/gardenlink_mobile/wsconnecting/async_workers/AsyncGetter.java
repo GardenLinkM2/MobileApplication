@@ -157,7 +157,6 @@ public class AsyncGetter<T> extends AsyncTask<String, Void, String> {
                     realSender.receiveResults(responseCode, mapJsonResult, operation);
             }
         } catch (JSONException e) {
-            Log.e("AsyncGetter", e.getMessage());
         }
     }
 }
