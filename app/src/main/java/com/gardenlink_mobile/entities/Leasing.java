@@ -3,10 +3,10 @@ package com.gardenlink_mobile.entities;
 public class Leasing {
 
     private String id;
-    private String creation;
+    private Double creation;
     private Integer time;
-    private String begin;
-    private String end;
+    private Double begin;
+    private Double end;
     private Boolean renew;
     private LeasingStatus state;
     // Garden ID
@@ -15,6 +15,9 @@ public class Leasing {
     private String renter;
     // Owner ID
     private String owner;
+
+    private Garden gardenObject;
+    private User renterObject;
 
     public String getId() {
         return id;
@@ -32,19 +35,19 @@ public class Leasing {
         this.time = time;
     }
 
-    public String getBegin() {
+    public Double getBegin() {
         return begin;
     }
 
-    public void setBegin(String begin) {
+    public void setBegin(Double begin) {
         this.begin = begin;
     }
 
-    public String getEnd() {
+    public Double getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Double end) {
         this.end = end;
     }
 
@@ -62,14 +65,6 @@ public class Leasing {
 
     public void setGarden(String garden) {
         this.garden = garden;
-    }
-
-    public String getCreation() {
-        return creation;
-    }
-
-    public void setCreation(String creation) {
-        this.creation = creation;
     }
 
     public LeasingStatus getState() {
@@ -94,5 +89,29 @@ public class Leasing {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Double getCreation() {
+        return creation;
+    }
+
+    public void setCreation(Double creation) {
+        this.creation = creation;
+    }
+
+    public Garden getGardenObject() {
+        return gardenObject;
+    }
+
+    public void setGardenObject(Garden gardenObject) {
+        this.gardenObject = gardenObject;
+    }
+
+    public User getRenterObject() {
+        return renterObject;
+    }
+
+    public void setRenterObject(User renterObject) {
+        this.renterObject = renterObject;
     }
 }

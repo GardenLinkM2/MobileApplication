@@ -1,15 +1,15 @@
 package com.gardenlink_mobile.activities;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
@@ -17,11 +17,14 @@ import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.GardenODataQueryOptions;
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.serialization.CriteriaSerializer;
-import com.gardenlink_mobile.utils.CriteriaFragment;
-import com.gardenlink_mobile.utils.ResultsAdapter;
-import com.gardenlink_mobile.utils.SearchFragment;
+import com.gardenlink_mobile.fragments.CriteriaFragment;
+import com.gardenlink_mobile.adapters.ResultsAdapter;
+import com.gardenlink_mobile.fragments.SearchFragment;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDENS;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +33,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class SearchResultsActivity extends NavigableActivity implements IWebConnectable {
 
@@ -50,29 +56,36 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     private Integer mMaxArea;
     private Double mMinPrice;
     private Double mMaxPrice;
+    private Integer resultsNumber;
+    private Integer photosRetrieved;
+    private Map<String, Garden> resultsMap;
+
+    public String getmSearchTitle() {
+        return mSearchTitle;
+    }
+
+    public void setmSearchTitle(String mSearchTitle) {
+        this.mSearchTitle = mSearchTitle;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.search_results_activity);
+        initMenu();
         mSearch = new SearchFragment(R.color.colorBlack, true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.ResultsSearchFragment, mSearch);
-        ft.show(mSearch);
-
-        ft.commit();
+        ft.replace(R.id.ResultsSearchFragment, mSearch).show(mSearch).commit();
         Bundle lIntent = getIntent().getExtras();
 
-        if(lIntent!=null) {
-
+        if (lIntent != null) {
             if (lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT) != null) {
                 mSearchTitle = lIntent.getString(SearchFragment.SEARCH_FIELD_CONTENT);
             } else {
                 mSearchTitle = "";
             }
-
             if (lIntent.getString(SearchFragment.CRITERIA_CONTENT) != null) {
                 try {
                     CriteriaSerializer lSerializer = new CriteriaSerializer();
@@ -81,59 +94,32 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                 } catch (JSONException loE) {
                     Log.e(this.TAG, "error while parsing criteria");
                 }
-
             } else {
-                this.mCriteriaForSearch = new Criteria(); }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MAX_AREA_CONTENT)) != null) {
+                this.mCriteriaForSearch = new Criteria();
+            }
+            if (new Integer(lIntent.getInt(SearchFragment.MAX_AREA_CONTENT)) != null) {
                 this.mMaxArea = lIntent.getInt(SearchFragment.MAX_AREA_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MIN_AREA_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MIN_AREA_CONTENT)) != null) {
                 this.mMinArea = lIntent.getInt(SearchFragment.MIN_AREA_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT)) != null) {
                 this.mMinDuration = lIntent.getInt(SearchFragment.MIN_DURATION_CONTENT);
             }
-
-            if(new Integer(lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT)) != null) {
+            if (new Integer(lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT)) != null) {
                 this.mMaxDuration = lIntent.getInt(SearchFragment.MAX_DURATION_CONTENT);
             }
-
-            if(new Double(lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT)) != null) {
+            if (new Double(lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT)) != null) {
                 this.mMinPrice = lIntent.getDouble(SearchFragment.MIN_PRICE_CONTENT);
             }
-
-            if(new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
+            if (new Double(lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT)) != null) {
                 this.mMaxPrice = lIntent.getDouble(SearchFragment.MAX_PRICE_CONTENT);
             }
             loadDataWithIntentCriteria();
-        }
-        else{
+        } else {
             loadDataWithNoCriteria();
         }
-
-        if (mResults != null) {
-            mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
-
-            prepareArrayForPageDisplay();
-            displayList();
-
-            initFields();
-        }
-        prepareNavigationButtonsForPage();
-        initMenu();
-
-        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                toDetails(mPageResults.get(i));
-            }
-        });
-
     }
-
 
     private void initFields() {
         TextView lResultIndicator = ((TextView) findViewById(R.id.resultsIndicator));
@@ -143,13 +129,9 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     }
 
     private void toDetails(Garden pGarden) {
-        /*
-        Intent toDetailsIntent = new Intent(this, DetailsActivity.class);
-        Bundle newBundle = new Bundle();
-        newBundle.putString("garden_id", pGarden.getId());
-        toDetailsIntent.putExtras(newBundle);
+        Intent toDetailsIntent = new Intent(SearchResultsActivity.this, DetailAnnouncement.class);
+        toDetailsIntent.putExtra(DetailAnnouncement.EXTRA_MESSAGE, pGarden.getId());
         startActivity(toDetailsIntent);
-         */
     }
 
     private void prepareArrayForPageDisplay() {
@@ -157,26 +139,22 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         mPageResults = new ArrayList<Garden>();
 
         int lCurrentIndex = (mCurrentPageNumber - 1) * MAX_RESULTS_PER_PAGE;
-
         if ((mResults.size() - 1) - lCurrentIndex < MAX_RESULTS_PER_PAGE) {
             lElementsToRecover = (mResults.size()) - lCurrentIndex;
         } else {
             lElementsToRecover = MAX_RESULTS_PER_PAGE;
         }
-
         for (int i = 0; i < lElementsToRecover; i++) {
             mPageResults.add(mResults.get(lCurrentIndex + i));
         }
     }
 
-    
     public void loadData() {
         CriteriaFragment criteriaFragment = mSearch.getmCriteria();
-        if (criteriaFragment == null){
+        if (criteriaFragment == null) {
             new GET_GARDENS(null).perform(new WeakReference<>(this));
             return;
         }
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(criteriaFragment.getMinDuration(), criteriaFragment.getMaxDuration());
@@ -194,13 +172,12 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamEquipments(criteriaFragment.getEquipmentProvided());
         queryOptions.addParamWaterAccess(criteriaFragment.getWaterProvided());
         queryOptions.addParamDirectAccess(criteriaFragment.getDirectAccess());
-        queryOptions.addParamInDescription(mSearchTitle);
+        queryOptions.addParamInNameOrDescription(mSearchTitle);
 
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
-    public void loadDataWithIntentCriteria(){
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+    public void loadDataWithIntentCriteria() {
         GardenODataQueryOptions queryOptions = new GardenODataQueryOptions();
 
         queryOptions.addParamLocationTime(mMinDuration, mMaxDuration);
@@ -211,77 +188,14 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         queryOptions.addParamEquipments(mCriteriaForSearch.getEquipments());
         queryOptions.addParamWaterAccess(mCriteriaForSearch.getWaterAccess());
         queryOptions.addParamDirectAccess(mCriteriaForSearch.getDirectAccess());
-        queryOptions.addParamInDescription(mSearchTitle);
+        queryOptions.addParamInNameOrDescription(mSearchTitle);
 
         new GET_GARDENS(queryOptions).perform(new WeakReference<>(this));
     }
 
-    public void loadDataWithNoCriteria(){
-        Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+    public void loadDataWithNoCriteria() {
         new GET_GARDENS(null).perform(new WeakReference<>(this));
     }
-
-    //TODO : test method, to delete
-    public void loadData2() {
-        Garden lTestResult = new Garden();
-        Location lTestLocation = new Location();
-
-        lTestLocation.setPostalCode(63000);
-        lTestLocation.setCity("paris");
-
-        Criteria lCriteria1 = new Criteria();
-        Criteria lCriteria2 = new Criteria();
-        lCriteria1.setPrice(12000.0d);
-        lCriteria2.setPrice(10000.0d);
-
-
-        lTestResult.setId("123");
-        lTestResult.setLocation(lTestLocation);
-        lTestResult.setName("La tour eiffel");
-        lTestResult.setCriteria(lCriteria1);
-        //lTestResult.setSize(100000);
-        lTestResult.setMinUse(25);
-
-        Garden lTestResult2 = new Garden();
-        Location lTestLocation2 = new Location();
-
-        lTestLocation2.setPostalCode(63170);
-        lTestLocation2.setCity("Aubière");
-
-        lTestResult2.setId("1234");
-        lTestResult2.setLocation(lTestLocation2);
-        lTestResult2.setName("grand jardin");
-        lTestResult2.setCriteria(lCriteria2);
-        //lTestResult2.setSize(69);
-        lTestResult2.setMinUse(10);
-
-        mResults = new ArrayList<Garden>();
-
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult2);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-        mResults.add(lTestResult);
-    }
-
 
     private void displayList() {
         ResultsAdapter lAdapter = new ResultsAdapter(this, mPageResults);
@@ -332,16 +246,38 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                     case 200:
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(getApplicationContext(),"Aucun résultat. Veuillez réessayer avec des critères moins restrictifs.",Toast.LENGTH_SHORT).show();
-                            return;
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.resultPage),R.string.no_result,Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                            snackbar.show();
+                            mResults = new ArrayList<>();
+                        } else {
+                            Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                            List<Garden> gardens = (List<Garden>) results;
+                            resultsMap = new HashMap<>();
+                            resultsNumber = gardens.size();
+                            photosRetrieved = 0;
+                            for (Garden g : gardens) {
+                                try {
+                                    String photoUrl = g.getPhotos().get(0).getFileName();
+                                    resultsMap.put(photoUrl, g);
+                                    new GET_PHOTO(photoUrl).perform(new WeakReference<>(this));
+                                } catch (NullPointerException e){
+                                    resultsMap.put(UUID.randomUUID().toString(),g);
+                                    incrementPhotosRetrieved();
+                                }
+                            }
                         }
-                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        List<Garden> gardens = (List<Garden>)results;
-                        mResults = new ArrayList<>(gardens);
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(),"Erreur lors de la recherche",Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.resultPage),R.string.search_error,Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
+                        prepareNavigationButtonsForPage();
+                        initMenu();
+                        ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
                         return;
                 }
             default:
@@ -352,8 +288,25 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
-        return;
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Garden garden = (Garden) resultsMap.get(results.get("url"));
+                        garden.setDrawableFirstPhoto(ImageMaster.byteStringToDrawable(results.get("photo")));
+                        incrementPhotosRetrieved();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        incrementPhotosRetrieved();
+                        return;
+                }
+
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
@@ -365,5 +318,25 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
     @Override
     public String getTag() {
         return TAG;
+    }
+
+    private void incrementPhotosRetrieved() {
+        photosRetrieved += 1;
+        if (photosRetrieved == resultsNumber) {
+            Log.i(TAG,"All photos retrieved");
+            mResults = new ArrayList<>();
+            resultsMap.forEach((k, v) -> {
+                        mResults.add((Garden) v);
+                    }
+            );
+            mMaximumPageOfResult = (mResults.size() / MAX_RESULTS_PER_PAGE) + 1;
+            mCurrentPageNumber = 1;
+            prepareArrayForPageDisplay();
+            displayList();
+            initFields();
+            prepareNavigationButtonsForPage();
+            ((ProgressBar) findViewById((R.id.progress_bar))).setVisibility(View.GONE);
+            ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
+        }
     }
 }

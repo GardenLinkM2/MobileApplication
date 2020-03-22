@@ -21,6 +21,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.DetailAnnouncement"
+            android:label="@string/detailAnnouncement_activity"
+            android:theme="@style/GardenLink"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".activities.PostAnnouncement"
             android:label="@string/postAnnouncement_activity"
             android:theme="@style/GardenLink" />
@@ -35,9 +40,6 @@
             android:name=".activities.HomeActivity"
             android:label="@string/home" />
         <activity
-            android:name=".activities.WalletActivity"
-            android:label="@string/wallet" />
-        <activity
             android:name=".activities.MessagingActivity"
             android:label="@string/messaging" />
         <activity
@@ -48,16 +50,19 @@
             android:label="@string/myLands" />
         <activity
             android:name=".activities.ConnectionActivity"
-            android:label="@string/connexion_activity">
-
-        </activity>
+            android:label="@string/connexion_activity" />
         <activity
             android:name=".activities.ForgottenPasswordActivity"
             android:label="@string/forgotten_password_activity" />
-
         <activity
             android:name=".activities.SearchResultsActivity"
             android:label="@string/searchResultActivity" />
+        <activity
+            android:name=".activities.WalletActivity"
+            android:label="@string/wallet" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA3GSGNUUbmGFio_drFrfWrv_GA9oUf7bk"/>
     </application>
 
 </manifest>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/askHireDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <!--  Min duration container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_minDurationContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Min duration Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_minDurationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min durée location:"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Min value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_minDurationValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_minDurationLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Max duration container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_maxDurationContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_minDurationContainer"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Max duration Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_maxDurationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max durée location:"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Max value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_maxDurationValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:layout_marginStart="5dp"
+                android:gravity="start"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_maxDurationLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Price container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_priceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_maxDurationContainer"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Price Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_priceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prix / mois:"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Price value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_priceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_priceLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Credit container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_creditContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_maxDurationContainer"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!--  credit Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_creditLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crédit restant:"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  credit value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_creditValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_creditLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Horizontal Separator -->
+        <View
+            android:id="@+id/askHireDialog_horizontalDivisor1"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorGray_brighter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_priceContainer"/>
+
+        <!-- begin date picker container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_biginHireDateContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_horizontalDivisor1">
+
+            <!--  Duration Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_biginHireDateLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date de début de location:"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Date picker access-->
+            <ImageView
+                android:id="@+id/askHireDialog_biginHireDateImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Date picker access"
+                android:src="@drawable/baseline_today_black_24dp"
+                android:layout_marginStart="20dp"
+                android:onClick="onClickToDatePicker"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_biginHireDateLabel"
+                app:layout_constraintVertical_bias="0.5"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- leasing duration container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/askHireDialog_leasingDurationContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_biginHireDateContainer">
+
+            <!--  Duration Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_leasingDurationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Durée souhaitée de location"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Duration input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:id="@+id/askHireDialog_durationForm"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/askHireDialog_leasingDurationLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/askHireDialog_durationInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:padding="10dp"
+                    android:gravity="center"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Decrease image -->
+            <ImageView
+                android:id="@+id/askHireDialog_decreaseImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Decrease image"
+                android:src="@drawable/baseline_less_control_point_black_24dp"
+                android:tint="@color/colorGray_darker"
+                android:layout_marginEnd="20dp"
+                android:onClick="onclickSubtractOne"
+                app:layout_constraintTop_toTopOf="@id/askHireDialog_durationForm"
+                app:layout_constraintBottom_toBottomOf="@id/askHireDialog_durationForm"
+                app:layout_constraintEnd_toStartOf="@id/askHireDialog_durationForm"
+                app:layout_constraintVertical_bias="0.5"/>
+
+            <!-- Increase image -->
+            <ImageView
+                android:id="@+id/askHireDialog_increaseImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Increase image"
+                android:src="@drawable/baseline_more_control_point_black_24dp"
+                android:tint="@color/colorGray_darker"
+                android:layout_marginStart="20dp"
+                android:onClick="onClickAddOne"
+                app:layout_constraintTop_toTopOf="@id/askHireDialog_durationForm"
+                app:layout_constraintBottom_toBottomOf="@id/askHireDialog_durationForm"
+                app:layout_constraintStart_toEndOf="@id/askHireDialog_durationForm"
+                app:layout_constraintVertical_bias="0.5"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/askHireDialog_leasingDurationUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="mois"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="18dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                app:layout_constraintTop_toTopOf="@id/askHireDialog_durationForm"
+                app:layout_constraintBottom_toBottomOf="@id/askHireDialog_durationForm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_bias="0.5"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Final price form -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/askHireDialog_finalPriceForm"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Total"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/baseline_euro_black_18"
+            app:endIconContentDescription="euro icon"
+            app:endIconTint="@color/colorGray_labelInput_font"
+            app:layout_constraintTop_toBottomOf="@id/askHireDialog_leasingDurationContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/askHireDialog_finalPriceInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:enabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

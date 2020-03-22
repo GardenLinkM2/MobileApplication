@@ -1,16 +1,22 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.adapters;
+
+import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.gardenlink_mobile.utils.MyLandsFragment;
-import com.gardenlink_mobile.utils.MyRequestsFragment;
+import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.fragments.MyLandsFragment;
+import com.gardenlink_mobile.fragments.MyRequestsFragment;
 
 public class PageAdapter extends FragmentPagerAdapter {
 
-    public PageAdapter(FragmentManager mgr) {
+    private Context context;
+
+    public PageAdapter(FragmentManager mgr, Context ncontext) {
         super(mgr);
+        context = ncontext;
     }
 
     @Override
@@ -34,9 +40,9 @@ public class PageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Mes Terrains";
+                return context.getString(R.string.myLands);
             case 1:
-                return "Mes demandes";
+                return context.getString(R.string.myDemand);
             default:
                 return null;
         }

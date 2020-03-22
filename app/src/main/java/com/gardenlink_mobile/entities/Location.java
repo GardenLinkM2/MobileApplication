@@ -6,6 +6,7 @@ public class Location {
     private String street;
     private Integer postalCode;
     private String city;
+    private Coordinates longitudeAndLatitude;
 
     public Integer getStreetNumber() {
         return streetNumber;
@@ -37,5 +38,13 @@ public class Location {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Coordinates getLongitudeAndLatitude() {
+        return longitudeAndLatitude;
+    }
+
+    public void setLongitudeAndLatitude(Coordinates longitudeAndLatitude) {
+        this.longitudeAndLatitude = longitudeAndLatitude;
     }
 }

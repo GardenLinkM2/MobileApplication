@@ -1,4 +1,4 @@
-package com.gardenlink_mobile.utils;
+package com.gardenlink_mobile.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gardenlink_mobile.R;
@@ -28,12 +29,10 @@ public class ResultsAdapter extends ArrayAdapter<Garden> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Garden result = getItem(position);
-
         if(convertView==null)
         {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.result_item,parent,false);
         }
-
 
         TextView lTitle = convertView.findViewById(R.id.resultTitle);
         TextView lPrice = convertView.findViewById(R.id.resultPrice);
@@ -44,16 +43,15 @@ public class ResultsAdapter extends ArrayAdapter<Garden> {
 
         lTitle.setText(result.getName());
         lPrice.setText(result.getCriteria().getPrice()+PRICE_POSTFIX);
-        //lSize.setText(result.getSize()+SIZE_POSTFIX);
         lDuration.setText(result.getMinUse()+DURATION_POSTFIX);
         lLocation.setText(result.getLocation().getPostalCode() + " "+result.getLocation().getCity());
 
-        //TODO : call real image
-        lImage.setImageResource(R.drawable.image_not_found);
+        if (result.getDrawableFirstPhoto() != null)
 
-
+            lImage.setImageDrawable(result.getDrawableFirstPhoto());
+        else lImage.setImageResource(R.drawable.image_not_found);
+        lImage.setVisibility(View.VISIBLE);
+        ((ProgressBar) convertView.findViewById((R.id.progress_bar_photo))).setVisibility(View.GONE);
         return convertView;
     }
-
-
 }

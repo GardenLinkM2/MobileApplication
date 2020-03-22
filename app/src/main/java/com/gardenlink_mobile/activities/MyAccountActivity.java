@@ -19,20 +19,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.Escaper;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_API;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_SELF_AUTH;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.UPDATE_USER;
+import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -49,10 +54,9 @@ import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class MyAccountActivity extends NavigableActivity implements IWebConnectable{
+public class MyAccountActivity extends NavigableActivity implements IWebConnectable {
 
     boolean isPlay = true;
-    private final String LOGIN_FORM = "loginForm";
     private final String PHONE_FORM = "phoneForm";
     private final String PASSWORD_FORM = "passwordForm";
 
@@ -76,9 +80,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     public static final int readStoragePermission = 0;
 
     private static final String TAG = "MyAccountActivity";
+    private static final String ERROR_SELECT_IMAGE = "Erreur! Le fichier sélectionné n'est pas une image!";
 
     private User currentUser;
     private User newUser;
+    private String currentlyDisplayedImage = "";
+    private String currentlyDisplayedImageBuffer = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         setContentView(R.layout.myaccount_activity);
         initMenu();
         initInputs();
+        userAvatarCircle = (CircleImageView) findViewById(R.id.my_account_user_avatar);
         loadUserData();
         initUploadAvatar();
     }
@@ -94,25 +102,18 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     private void initUploadAvatar() {
         editAvatarButton = (FloatingActionButton) findViewById(R.id.editAvatarButton);
 
-        editAvatarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MyAccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MyAccountActivity.this,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            readStoragePermission);
-                } else {
-                    openImage();
-                }
+        editAvatarButton.setOnClickListener(view -> {
+            if (ActivityCompat.checkSelfPermission(MyAccountActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MyAccountActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        readStoragePermission);
+            } else {
+                openImage();
             }
         });
     }
 
     private void loadUserData() {
-        // TODO GET AVATAR
-        userAvatarCircle = (CircleImageView) findViewById(R.id.user_avatar);
-        userAvatarCircle.setImageDrawable(getUserAvatar());
-
         TextInputEditText userNameField = (TextInputEditText) findViewById(R.id.nameInputField);
         userNameField.setText(currentUser.getLastName());
         userNameField.addTextChangedListener(textWatcherInputs);
@@ -138,13 +139,26 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         cbNewsLetter = (CheckBox) findViewById(R.id.newsLetter);
         cbNewsLetter.setChecked(currentUser.getNewsletter());
 
+
+        if (currentUser.getPhoto() != null && !currentUser.getPhoto().isEmpty() && currentlyDisplayedImage != currentUser.getPhoto()) { // Le dernier check permet d'éviter de retélécharger l'image si elle est déjà affichée
+            // Il faudra tout de même attendre le 200 comme réponse avant de pouvoir affirmer qu'elle est bien affichée
+            currentlyDisplayedImageBuffer = currentUser.getPhoto();
+            new GET_PHOTO(currentUser.getPhoto()).perform(new WeakReference<>(this));
+        } else{
+            userAvatarCircle.setImageDrawable(getUserAvatar());
+            currentlyDisplayedImage = "placeholder";
+        }
     }
 
-    private void fillNewUserData()
-    {
+    private void uploadNewAvatar() {
+        byte[] imagebytes = ImageMaster.drawableToBytes(userAvatarCircle.getDrawable());
+        new POST_PHOTO(imagebytes).perform(new WeakReference<>(this));
+    }
+
+    private void fillNewUserData(String photo) {
         newUser = new User();
 
-        newUser.setAvatar(currentUser.getAvatar());
+        newUser.setPhoto(photo);
 
         TextInputEditText userFirstNameField = findViewById(R.id.firstNameInputField);
         newUser.setFirstName(userFirstNameField.getText().toString());
@@ -171,7 +185,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         lockMenu = menu;
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,31 +218,24 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     public void doSave(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle("Voulez-vous confirmer les changements ?")
-                .setMessage("Les changements seront appliqués a la validation")
-                .setPositiveButton("Valider", (dialog, which) -> {
-                    fillNewUserData();
-                    new UPDATE_USER(newUser).perform(new WeakReference<>(this));
+                .setTitle(getResources().getString(R.string.confirm_changes))
+                .setMessage(getResources().getString(R.string.changes))
+                .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> {
+                    uploadNewAvatar();
                 })
-                .setNegativeButton("Retour", (dialog, which) -> {
-                    loadUserData();
-                }).show();
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> CloseModification()).show();
     }
 
     public void doDeleteAccount(View view) {
         new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                .setTitle("Etes-vous sur de vouloir supprimer votre compte ?")
-                .setMessage("Le compte sera irrécupérable")
-                .setPositiveButton("Supprimer", (dialog, which) -> {
-                    new DELETE_SELF_API().perform(new WeakReference<>(this));
-                })
-                .setNegativeButton("Retour", (dialog, which) -> {
+                .setTitle(getResources().getString(R.string.delete_account_dialog))
+                .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> new DELETE_SELF_API().perform(new WeakReference<>(this)))
+                .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                 }).show();
     }
 
     private void initInputs() {
         inputForms = new HashMap<>();
-        inputForms.put(LOGIN_FORM, (TextInputLayout) findViewById(R.id.loginField));
         inputForms.put(PASSWORD_FORM, (TextInputLayout) findViewById(R.id.passwordField));
         inputForms.put(PHONE_FORM, (TextInputLayout) findViewById(R.id.phoneField));
         cbNewsLetter = (CheckBox) findViewById(R.id.newsLetter);
@@ -239,7 +245,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         inputValidatorMessages = new HashMap<>();
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(PHONE_FORM)).getId(), Validator.PHONE_REGEX_MESSAGE);
         inputValidatorMessages.put(Objects.requireNonNull(inputForms.get(PASSWORD_FORM)).getId(), PASSWORD_ERROR);
-
 
         inputForms.values().forEach(layout -> layout.setEnabled(false));
 
@@ -261,7 +266,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
             public void afterTextChanged(Editable editable) {
             }
         };
-
         inputForms.values().forEach(layout -> Objects.requireNonNull(layout.getEditText()).addTextChangedListener(textWatcherInputs));
     }
 
@@ -272,12 +276,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
         if (okPhone) {
             userPhoneLayout.setError(null);
         } else {
-            userPhoneLayout.setError("Erreur ! " + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
+            userPhoneLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PHONE_FORM).getId())));
         }
         if (okPassword) {
             userPasswordLayout.setError(null);
         } else {
-            userPasswordLayout.setError("Erreur ! " + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
+            userPasswordLayout.setError(getResources().getString(R.string.error) + Objects.requireNonNull(inputValidatorMessages.get(inputForms.get(PASSWORD_FORM).getId())));
         }
         if (okPhone && okPassword) {
             enableSaveButton();
@@ -289,15 +293,12 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     private void enableSaveButton() {
         saveButton.setEnabled(true);
         saveButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_brighter));
-
     }
 
     private void disableSaveButton() {
         saveButton.setEnabled(false);
         saveButton.setBackgroundColor(getResources().getColor(R.color.colorGreen_disabledButton));
-
     }
-
 
     private boolean passwordIsOk(final String password) {
         return !password.isEmpty() && Validator.passwordValidator(password);
@@ -322,7 +323,7 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
     }
 
     public Drawable getUserAvatar() {
-        userAvatar = getResources().getDrawable(R.drawable.sample_avatar);
+        userAvatar = getResources().getDrawable(R.drawable.default_avatar);
         return userAvatar;
     }
 
@@ -344,7 +345,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     inputStream = getContentResolver().openInputStream(uri);
                     final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     Bitmap circleBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-
                     BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                     Paint paint = new Paint();
                     paint.setShader(shader);
@@ -352,12 +352,21 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     Canvas canvas = new Canvas(circleBitmap);
                     canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
                     userAvatarCircle.setImageBitmap(bitmap);
+                    currentlyDisplayedImage = uri.toString();
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, "Erreur !", Toast.LENGTH_LONG).show();
+                    Log.e(TAG,e.getMessage());
+                    Log.e(TAG, "Error while loading picture, code : " + requestCode);
+                    Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.error),Snackbar.LENGTH_LONG);
+                    View sbView= snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                    snackbar.show();
                 }
             } else {
-                Toast.makeText(this, "Ce n'est pas une image !", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Loading something else than picture !");
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),ERROR_SELECT_IMAGE,Snackbar.LENGTH_LONG);
+                View sbView= snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                snackbar.show();
             }
         }
     }
@@ -377,32 +386,103 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {
-        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        switch (operation.getName()) {
+            case "POST_GARDEN":
+                switch (responseCode) {
+                    case 201:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        //Toast.makeText(this, ERROR_POST, Toast.LENGTH_LONG).show();
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
+
+
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG,"Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null || results.get("photo") == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Drawable drawableAvatar = ImageMaster.byteStringToDrawable(results.get("photo"));
+                        userAvatarCircle.setImageDrawable(drawableAvatar);
+                        // On est maintenant sûr que la photo envoyée par l'opération est bien celle qui est présentement affichée
+                        currentlyDisplayedImage = currentlyDisplayedImageBuffer;
+                        Session.getInstance().setAvatarDrawable(drawableAvatar);
+                        refreshAvatar();
+                        return;
+                    default:
+                        if (currentlyDisplayedImage.isEmpty()) {
+                            userAvatarCircle.setImageDrawable(getUserAvatar());
+                            currentlyDisplayedImage = "placeholder";
+                        }
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            case "POST_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        fillNewUserData(Escaper.escapePhotoURL(results.get("photo")));
+                        new UPDATE_USER(newUser).perform(new WeakReference<>(this));
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
     public void receiveResults(int responseCode, Operation operation) {
         switch (operation.getName()) {
             case "UPDATE_USER":
-                switch (responseCode){
+                switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
                         currentUser = newUser;
                         Session.getInstance().setCurrentUser(newUser);
-                        loadUserData();
-                        editMode(isPlay);
-                        isPlay = !isPlay;
-                        lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
+                        CloseModification();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.changes_succed),Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                        snackbar.show();
                         return;
-                        // TODO : Petit message de succès
+                    case 504:
+                        Log.i(TAG, "Back server failed to answer before timeout threshold.");
+                        Intent intent = new Intent(this, HomeActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(intent);
+                        this.finish();
+                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.update_request_timeout),Snackbar.LENGTH_LONG);
+                        View sbView1= snackbar1.getView();
+                        sbView1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar1.show();
+                        return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        // TODO : Gérer l'échec
+                        CloseModification();
+                        // TODO : Gérer l'échec (timeout)
                         return;
                 }
             case "DELETE_SELF_AUTH":
@@ -429,6 +509,23 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                 Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
                 return;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isPlay) {
+            CloseModification();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void CloseModification() {
+        loadUserData();
+        editMode(isPlay);
+        isPlay = !isPlay;
+        userPasswordLayout.setEndIconMode(TextInputLayout.END_ICON_PASSWORD_TOGGLE);
+        lockMenu.findItem(R.id.action_lock).setIcon(R.drawable.ic_lock_white_24dp);
     }
 
     @Override

@@ -50,8 +50,8 @@
                         android:layout_centerHorizontal="true"
                         android:paddingTop="30dp">
 
-                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/user_avatar"
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/my_account_user_avatar"
                             android:layout_width="160dp"
                             android:layout_height="160dp"
                             android:src="@drawable/default_avatar"
@@ -64,7 +64,7 @@
                             android:id="@+id/editAvatarButton"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_alignEnd="@+id/user_avatar"
+                            android:layout_alignEnd="@+id/my_account_user_avatar"
                             app:borderWidth="0dp"
                             app:tint="@null"
                             app:srcCompat="@drawable/ic_edit_white_24dp" />
@@ -100,8 +100,7 @@
                                 android:id="@+id/nameInputField"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
-                                android:text="@string/NameField" />
+                                android:enabled="false"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </RelativeLayout>
@@ -121,28 +120,7 @@
                                 android:id="@+id/firstNameInputField"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
-                                android:text="@string/FirstNameField" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/loginField"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:helperText="@string/Login"
-                            app:helperTextEnabled="false">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/loginInputField"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/LoginField" />
+                                android:enabled="false" />
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </RelativeLayout>
@@ -184,8 +162,7 @@
                                 android:id="@+id/mailInputField"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:enabled="false"
-                                android:text="@string/MailField" />
+                                android:enabled="false"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </RelativeLayout>
@@ -205,7 +182,7 @@
                                 android:id="@+id/phoneInputField"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/PhoneField" />
+                                android:inputType="phone"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
                     </RelativeLayout>

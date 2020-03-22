@@ -11,7 +11,6 @@ public class Criteria {
     private Boolean waterAccess;
     private Boolean directAccess;
 
-
     public Long getLocationTime() {
         return locationTime;
     }
@@ -74,5 +73,19 @@ public class Criteria {
 
     public void setDirectAccess(Boolean directAccess) {
         this.directAccess = directAccess;
+    }
+
+    @Override
+    public String toString() {
+        return "Criteria{" +
+                "locationTime=" + locationTime +
+                ", area=" + area +
+                ", price=" + price +
+                ", orientation='" + orientation + '\'' +
+                ", typeOfClay='" + typeOfClay + '\'' +
+                ", equipments=" + equipments +
+                ", waterAccess=" + waterAccess +
+                ", directAccess=" + directAccess +
+                '}';
     }
 }

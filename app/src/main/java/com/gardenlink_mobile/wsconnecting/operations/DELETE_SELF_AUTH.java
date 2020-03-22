@@ -15,8 +15,8 @@ public class DELETE_SELF_AUTH extends Operation {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.delete(sender, url, criteria,this, Session.getInstance().getUserToken());
+        Caller.delete(sender, url, criteria, this, Session.getInstance().getUserToken());
     }
 }

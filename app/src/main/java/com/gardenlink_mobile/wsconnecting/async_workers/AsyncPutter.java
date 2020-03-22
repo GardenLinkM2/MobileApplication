@@ -44,7 +44,6 @@ public class AsyncPutter<T> extends AsyncTask<String, Void, String> {
             if (authorization != null) conn.setRequestProperty("Authorization",authorization);
 
             conn.setRequestMethod("PUT");
-
             if (jsonInputString != null) {
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setDoOutput(true);
@@ -55,9 +54,7 @@ public class AsyncPutter<T> extends AsyncTask<String, Void, String> {
                 osw.flush();
                 osw.close();
             }
-
             responseCode = conn.getResponseCode();
-
             conn.disconnect();
         } catch (Exception e) {
             Log.e("Error", e.getMessage());

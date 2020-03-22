@@ -1,5 +1,7 @@
 package com.gardenlink_mobile.entities;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.List;
 
 public class Garden {
@@ -15,6 +17,9 @@ public class Garden {
     private Status validation;
     private Criteria criteria;
     private List<Photo> photos;
+    // N'est utilisé que pour l'affichage des résultats de recherche. Ne doit pas faire partie des sérialiseurs
+    private Drawable drawableFirstPhoto;
+    private List<Report> reports;
 
     public String getId() {
         return id;
@@ -72,14 +77,6 @@ public class Garden {
         this.photos = photos;
     }
 
-    public Boolean getReserved() {
-        return isReserved;
-    }
-
-    public void setReserved(Boolean reserved) {
-        isReserved = reserved;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -102,5 +99,21 @@ public class Garden {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
+
+    public Drawable getDrawableFirstPhoto() {
+        return drawableFirstPhoto;
+    }
+
+    public void setDrawableFirstPhoto(Drawable drawableFirstPhoto) {
+        this.drawableFirstPhoto = drawableFirstPhoto;
     }
 }

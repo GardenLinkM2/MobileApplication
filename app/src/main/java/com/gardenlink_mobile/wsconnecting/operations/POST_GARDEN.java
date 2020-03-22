@@ -19,8 +19,8 @@ public class POST_GARDEN extends Operation {
     }
 
     @Override
-    public void perform(WeakReference<IWebConnectable> sender){
+    public void perform(WeakReference<IWebConnectable> sender) {
         super.perform(sender);
-        Caller.post(sender, url, serializer, argument,this, Session.getInstance().getSessionToken());
+        Caller.post(sender, url, serializer, argument, this, Session.getInstance().getSessionToken());
     }
 }

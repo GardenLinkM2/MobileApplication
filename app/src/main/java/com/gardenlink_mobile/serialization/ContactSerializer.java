@@ -13,7 +13,7 @@ public class ContactSerializer implements ISerializer<Contact> {
         Contact contact = new Contact();
         contact.setId(input.optString("id"));
         contact.setContact(new UserSerializer().deserialize(input.optJSONObject("contact")));
-        contact.setStatus(new Status(input.optInt("status")));
+        contact.setStatus(new Status(input.optString("status")));
         contact.setFirstMessage(input.optString("firstMessage"));
         return contact;
     }
@@ -22,10 +22,10 @@ public class ContactSerializer implements ISerializer<Contact> {
     public JSONObject serialize(Contact input) throws JSONException {
         if (input == null) return null;
         JSONObject output = new JSONObject();
-        output.putOpt("id",input.getId());
-        output.putOpt("contact",new UserSerializer().serialize(input.getContact()));
-        output.putOpt("status",input.getStatus().getStatus());
-        output.putOpt("firstMessage",input.getFirstMessage());
+        output.putOpt("id", input.getId());
+        output.putOpt("contact", new UserSerializer().serialize(input.getContact()));
+        output.putOpt("status", input.getStatus().getStatus());
+        output.putOpt("firstMessage", input.getFirstMessage());
         return output;
     }
 }

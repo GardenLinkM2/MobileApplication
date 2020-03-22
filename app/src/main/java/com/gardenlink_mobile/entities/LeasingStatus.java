@@ -2,27 +2,30 @@ package com.gardenlink_mobile.entities;
 
 public class LeasingStatus {
 
-    /*
-    0 : Pending
-    1 : Refused
-    2 : In progress
-    3 : Finished
+    /* Valeurs possibles :
+    InDemand
+    Refused
+    InProgress
+    Finished
      */
-    private Integer leasingStatus;
+    private String leasingStatus;
 
-    public LeasingStatus(Integer leasingStatus) {
+    public LeasingStatus(String leasingStatus) {
         this.leasingStatus = leasingStatus;
     }
 
-    public Integer getLeasingStatus() {
+    public String getLeasingStatus() {
         return leasingStatus;
     }
 
-    public void setLeasingStatus(Integer leasingStatus) {
-        if (leasingStatus == 1 ||
-                leasingStatus == 2 ||
-                leasingStatus == 3){
-            this.leasingStatus = leasingStatus;
-        }
+    public void setLeasingStatus(String leasingStatus) {
+        this.leasingStatus = leasingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "LeasingStatus{" +
+                "leasingStatus='" + leasingStatus + '\'' +
+                '}';
     }
 }

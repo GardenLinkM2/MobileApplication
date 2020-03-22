@@ -2,6 +2,7 @@ package com.gardenlink_mobile.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.gardenlink_mobile.R;
+import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.entities.Wallet;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.utils.PreferenceUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -25,25 +28,16 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/*
-Every Activities need to extends NavigableActivity
-Every Layouts need to include @layout/menu_hamburger
-    <include
-      layout="@layout/menu_hamburger"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent"/>
-Need to call initMenu() in onCreate methode */
-public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class NavigableActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private static final String TAG = "NavigableActivity";
     public static final String CURRENT_ACTIVITY_ID = "CurrentActivityID";
 
-    //Menu
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-
-    //User Data
     private View headerView;
+    protected CircleImageView userAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +45,8 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
     }
 
     protected void initMenu() {
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        {
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
@@ -83,23 +75,48 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         createHeader(headerView);
     }
 
-    private void createHeader(View headerView) {
-        //TODO: Update with real UserData
-        //Todo:getUserAvatar()
-        CircleImageView userAvatar = headerView.findViewById(R.id.user_avatar);
-        userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.sample_avatar));
-
-        //Todo: getUserName()
-        TextView userName = headerView.findViewById(R.id.user_name);
-        userName.setText("Pouglou Denis");
-
-        //TODO: Currency ?
-        //Todo:getWalletAmount()
+    protected void refreshWallet(){
+        Wallet wallet = Session.getInstance().getCurrentUserWallet();
         TextView userWallet = headerView.findViewById(R.id.user_wallet);
-        String amount = NumberFormat.getInstance().format(346546.5);
-        Locale locale = getResources().getConfiguration().locale;
-        Currency currency = Currency.getInstance(locale);
-        userWallet.setText(amount + currency.getSymbol());
+        if (wallet != null){
+            String amount = NumberFormat.getInstance().format(wallet.getBalance());
+            Locale locale = getResources().getConfiguration().locale;
+            Currency currency = Currency.getInstance(locale);
+            userWallet.setText(amount + currency.getSymbol());
+        } else{
+            userWallet.setText("");
+        }
+    }
+
+    protected void refreshAvatar(){
+        if (Session.getInstance().getAvatarDrawable() != null)
+            userAvatar.setImageDrawable(Session.getInstance().getAvatarDrawable());
+    }
+
+    private void createHeader(View headerView) {
+        User user = Session.getInstance().getCurrentUser();
+        Wallet wallet = Session.getInstance().getCurrentUserWallet();
+        TextView userName = headerView.findViewById(R.id.user_name);
+        TextView userWallet = headerView.findViewById(R.id.user_wallet);
+        userAvatar = headerView.findViewById(R.id.user_avatar);
+        if (user != null) {
+            if (Session.getInstance() != null && Session.getInstance().getAvatarDrawable() != null) {
+                userAvatar.setImageDrawable(Session.getInstance().getAvatarDrawable());
+            } else{
+                userAvatar.setImageDrawable(getResources().getDrawable(R.drawable.default_avatar));
+            }
+            userName.setText(user.getFirstName() + " " + user.getLastName());
+        } else{
+            userName.setText("");
+        }
+        if (wallet != null){
+            String amount = NumberFormat.getInstance().format(wallet.getBalance());
+            Locale locale = getResources().getConfiguration().locale;
+            Currency currency = Currency.getInstance(locale);
+            userWallet.setText(amount + currency.getSymbol());
+        } else{
+            userWallet.setText("");
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -135,9 +152,9 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
                 break;
             case R.id.signOut:
                 new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                        .setTitle("Voulez-vous vraiment vous déconnecter ?")
-                        .setPositiveButton("Valider", (dialog, which) -> doSignOut())
-                        .setNegativeButton("Retour", (dialog, which) -> {
+                        .setTitle(getResources().getString(R.string.signout_dialog))
+                        .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> doSignOut())
+                        .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                         }).show();
                 return true;
         }
@@ -155,7 +172,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         PreferenceUtils.saveEmail(null, this);
         Intent intent = new Intent(this, ConnectionActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }
@@ -165,7 +182,6 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         newBundle.putInt(CURRENT_ACTIVITY_ID, id);
         intent.putExtras(newBundle);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -180,10 +196,12 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
 
     @Override
     protected void onResume() {
+        refreshWallet();
+        refreshAvatar();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
             Bundle currentBundle = getIntent().getExtras();
-            if(currentBundle != null) {
+            if (currentBundle != null) {
                 int id = currentBundle.getInt(CURRENT_ACTIVITY_ID);
                 navigationView.setCheckedItem(id);
             }

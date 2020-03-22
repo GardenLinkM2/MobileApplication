@@ -10,6 +10,7 @@ public class WalletSerializer implements ISerializer<Wallet> {
     @Override
     public Wallet deserialize(JSONObject input) {
         Wallet wallet = new Wallet();
+        wallet.setId(input.optString("id"));
         wallet.setBalance((float) input.optDouble("balance"));
         return wallet;
     }
@@ -18,7 +19,8 @@ public class WalletSerializer implements ISerializer<Wallet> {
     public JSONObject serialize(Wallet input) throws JSONException {
         if (input == null) return null;
         JSONObject output = new JSONObject();
-        output.putOpt("wallet",input.getBalance());
+        output.putOpt("id",input.getId());
+        output.putOpt("wallet", input.getBalance());
         return output;
     }
 }

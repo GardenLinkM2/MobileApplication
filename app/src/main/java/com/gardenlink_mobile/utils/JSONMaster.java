@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
 public class JSONMaster {
@@ -42,7 +41,7 @@ public class JSONMaster {
         JSONObject trueResult = new JSONObject(output);
         JSONArray jArray;
         try {
-            jArray = new JSONArray(trueResult.getJSONArray("data"));
+            jArray = trueResult.getJSONArray("data");
             IntStream.range(0, jArray.length()).forEach(index -> {
                 try {
                     results.add(serializer.deserialize(jArray.getJSONObject(index)));
@@ -52,10 +51,10 @@ public class JSONMaster {
             });
         } catch (JSONException e) {
             try {
-                results.add(serializer.deserialize(trueResult));
+                results.add(serializer.deserialize(trueResult.getJSONObject("data")));
             }
             catch (Exception e1) {
-                results.add(serializer.deserialize(trueResult.getJSONObject("data")));
+                results.add(serializer.deserialize(trueResult));
                 return results;
             }
         }
@@ -81,7 +80,6 @@ public class JSONMaster {
         return results;
     }
 
-
     /***
      * This method processes a Json output when it is known in advance that it will be deserializable to an array of entities contained in a "data" Json object
      * @param output
@@ -105,8 +103,7 @@ public class JSONMaster {
     }
 
     public static <T> List<T> tryDeserializeMany(ISerializer<T> serializer, String input) throws JSONException {
-        if (input != null) return null;
-
+        if (input == null || input.isEmpty()) return null;
         List<T> results = new ArrayList<>();
         JSONArray jArray;
         try {

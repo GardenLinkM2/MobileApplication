@@ -12,14 +12,14 @@ public abstract class Operation {
 
     protected static final String API_URL = BuildConfig.API_URL;
     protected static final String AUTHENTICATION_URL = BuildConfig.AUTHENTICATION_URL;
-    protected static HashMap<String,Object> criteria = null;
+    protected static HashMap<String, Object> criteria = null;
 
     public void perform(WeakReference<IWebConnectable> sender) {
-        Log.i(sender.get().getTag(),"Invoking operation " + this.getName());
+        Log.i(sender.get().getTag(), "Invoking operation " + this.getName());
     }
 
     public String getName() {
         String[] splitName = this.getClass().toString().split("\\.");
-        return splitName[splitName.length-1];
+        return splitName[splitName.length - 1];
     }
 }

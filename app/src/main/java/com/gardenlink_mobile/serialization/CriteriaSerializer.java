@@ -11,12 +11,29 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
     public Criteria deserialize(JSONObject input) throws JSONException {
         Criteria criteria = new Criteria();
         criteria.setArea(input.optInt("area"));
-        criteria.setDirectAccess(input.optBoolean("directAccess"));
-        criteria.setEquipments(input.optBoolean("equipments"));
+        criteria.setLocationTime(input.optLong("locationTime"));
+        // The only way to retrieve null if the key doesn't exist is to surround a required get() with try/catch
+        try {
+            criteria.setDirectAccess(input.getBoolean("directAccess"));
+        }
+        catch(Exception e){
+            criteria.setDirectAccess(null);
+        }
+        try {
+            criteria.setEquipments(input.getBoolean("equipments"));
+        }
+        catch(Exception e){
+            criteria.setDirectAccess(null);
+        }
         criteria.setOrientation(input.optString("orientation"));
         criteria.setPrice(input.optDouble("price"));
         criteria.setTypeOfClay(input.optString("typeOfClay"));
-        criteria.setWaterAccess(input.optBoolean("waterAccess"));
+        try {
+            criteria.setWaterAccess(input.getBoolean("waterAccess"));
+        }
+        catch (Exception e){
+            criteria.setWaterAccess(null);
+        }
         return criteria;
     }
 
@@ -25,13 +42,13 @@ public class CriteriaSerializer implements ISerializer<Criteria> {
         if (input == null) return null;
         JSONObject output = new JSONObject();
         output.putOpt("area", input.getArea());
-        output.putOpt("directAccess",input.getDirectAccess());
-        output.putOpt("equipments",input.getEquipments());
-        output.putOpt("locationTime",input.getLocationTime());
-        output.putOpt("orientation",input.getOrientation());
-        output.putOpt("price",input.getPrice());
-        output.putOpt("typeOfClay",input.getTypeOfClay());
-        output.putOpt("waterAccess",input.getWaterAccess());
+        output.putOpt("directAccess", input.getDirectAccess());
+        output.putOpt("equipments", input.getEquipments());
+        output.putOpt("locationTime", input.getLocationTime());
+        output.putOpt("orientation", input.getOrientation());
+        output.putOpt("price", input.getPrice());
+        output.putOpt("typeOfClay", input.getTypeOfClay());
+        output.putOpt("waterAccess", input.getWaterAccess());
         return output;
     }
 }
