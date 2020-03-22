@@ -2,6 +2,7 @@ package com.gardenlink_mobile.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,6 +86,11 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
         } else{
             userWallet.setText("");
         }
+    }
+
+    protected void refreshAvatar(){
+        if (Session.getInstance().getAvatarDrawable() != null)
+            userAvatar.setImageDrawable(Session.getInstance().getAvatarDrawable());
     }
 
     private void createHeader(View headerView) {
@@ -190,6 +196,7 @@ public abstract class NavigableActivity extends AppCompatActivity implements Nav
 
     @Override
     protected void onResume() {
+        refreshAvatar();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (!this.getClass().getSimpleName().contains("MainActivity")) {
             Bundle currentBundle = getIntent().getExtras();

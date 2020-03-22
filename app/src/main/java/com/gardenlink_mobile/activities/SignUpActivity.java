@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import com.gardenlink_mobile.BuildConfig;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.CREATE_USER;
@@ -54,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
     private static final String PHONE_FORM = "phoneForm";
     private static final String PASSWORD_FORM = "passwordForm";
     private static final String PASSWORD_AGAIN_FORM = "passwordAgainForm";
-    private static final String PASSWORD_ERROR = "Les mots de passe doivent être identiques";
+    private static final String PASSWORD_ERROR = "Les mots de passe doivent être identiques et inclure au moins 5 caractères";
     private static final String URL_VERIFY_ON_SERVER = "https://www.google.com/recaptcha/api/siteverify";
 
     private Map<String, TextInputLayout> inputForms;
@@ -280,7 +281,8 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
         cguCheckBox = findViewById(R.id.signUp_CGUForm);
         cguCheckBox.setText("");
         cgu_text = findViewById(R.id.signUp_CGUText);
-        cgu_text.setText(Html.fromHtml(getResources().getString(R.string.signUp_CGU_HTML)));
+        String html = "J'accepte les <a href=\"" + BuildConfig.WEB_URL + "/conditions-generales-utilisation" + "\">Conditions Générales d'Utilisation</a>";
+        cgu_text.setText(Html.fromHtml(html));
         cgu_text.setClickable(true);
         cgu_text.setMovementMethod(LinkMovementMethod.getInstance());
         cguCheckBox.setOnCheckedChangeListener((compoundButton, state) -> {
@@ -390,6 +392,11 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
                         Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
                         startActivity(intent);
                         finish();
+                        return;
+                    case 400:
+                        Log.i(TAG, "Operation" + operation.getName() + " failed with response code " + responseCode);
+                        Toast.makeText(getApplicationContext(), "Un utilisateur existe déjà avec cette adresse email.", Toast.LENGTH_SHORT).show();
+                        inputForms.get(EMAIL_FORM).getEditText().setText("");
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);

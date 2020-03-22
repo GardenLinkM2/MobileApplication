@@ -414,6 +414,8 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         userAvatarCircle.setImageDrawable(drawableAvatar);
                         // On est maintenant sûr que la photo envoyée par l'opération est bien celle qui est présentement affichée
                         currentlyDisplayedImage = currentlyDisplayedImageBuffer;
+                        Session.getInstance().setAvatarDrawable(drawableAvatar);
+                        refreshAvatar();
                         return;
                     default:
                         if (currentlyDisplayedImage.isEmpty()) {
