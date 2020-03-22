@@ -1,16 +1,20 @@
 package com.gardenlink_mobile.entities;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.List;
 
 public class Message {
 
     private String id;
     private String text;
-    private Double creationDate;
+    private Number creationDate;
     private Boolean isRead;
     // Sender ID
     private String sender;
     private List<Photo> photos;
+    //Not in serialization
+    private List<Drawable> messagesPhotos;
 
     public String getId() {
         return id;
@@ -28,11 +32,11 @@ public class Message {
         this.text = text;
     }
 
-    public Double getCreationDate() {
+    public Number getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Double creationDate) {
+    public void setCreationDate(Number creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -59,4 +63,8 @@ public class Message {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+    public List<Drawable> getMessagesPhotos() {return this.messagesPhotos;}
+
+    public void setMessagesPhotos(List<Drawable> pMessagesPhotos) {this.messagesPhotos = pMessagesPhotos;}
 }

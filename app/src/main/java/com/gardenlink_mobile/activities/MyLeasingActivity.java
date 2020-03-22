@@ -143,6 +143,7 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
                                         okGarden++;
                                         break;
                                     default:
+                                        okGarden++;
                                         break;
                                 }
                             }
