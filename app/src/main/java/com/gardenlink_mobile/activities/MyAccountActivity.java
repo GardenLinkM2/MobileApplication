@@ -19,10 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.User;
@@ -37,6 +37,7 @@ import com.gardenlink_mobile.wsconnecting.operations.UPDATE_USER;
 import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -353,13 +354,19 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                     userAvatarCircle.setImageBitmap(bitmap);
                     currentlyDisplayedImage = uri.toString();
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    Log.e(TAG,e.getMessage());
                     Log.e(TAG, "Error while loading picture, code : " + requestCode);
-                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.error),Snackbar.LENGTH_LONG);
+                    View sbView= snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                    snackbar.show();
                 }
             } else {
                 Log.e(TAG, "Loading something else than picture !");
-                Toast.makeText(this, ERROR_SELECT_IMAGE, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),ERROR_SELECT_IMAGE,Snackbar.LENGTH_LONG);
+                View sbView= snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                snackbar.show();
             }
         }
     }
@@ -456,7 +463,10 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         currentUser = newUser;
                         Session.getInstance().setCurrentUser(newUser);
                         CloseModification();
-                        Toast.makeText(this, getResources().getString(R.string.changes_succed), Toast.LENGTH_LONG).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.changes_succed),Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                        snackbar.show();
                         return;
                     case 504:
                         Log.i(TAG, "Back server failed to answer before timeout threshold.");
@@ -464,7 +474,10 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
                         this.finish();
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.update_request_timeout), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.myAccount_Activity),getResources().getString(R.string.update_request_timeout),Snackbar.LENGTH_LONG);
+                        View sbView1= snackbar1.getView();
+                        sbView1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar1.show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);

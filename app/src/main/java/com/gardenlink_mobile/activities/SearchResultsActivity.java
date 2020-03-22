@@ -1,18 +1,15 @@
 package com.gardenlink_mobile.activities;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
@@ -27,6 +24,7 @@ import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDENS;
 import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -248,7 +246,10 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                     case 200:
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.resultPage),R.string.no_result,Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                            snackbar.show();
                             mResults = new ArrayList<>();
                         } else {
                             Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
@@ -270,7 +271,10 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.search_error), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.resultPage),R.string.search_error,Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         prepareNavigationButtonsForPage();
                         initMenu();
                         ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));

@@ -7,6 +7,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.adapters.LeasingAdapter;
 import com.gardenlink_mobile.entities.Garden;
@@ -14,6 +16,7 @@ import com.gardenlink_mobile.entities.Leasing;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_MY_LEASING;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -76,7 +79,10 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
                     case 200:
                         if (results == null) {
                             Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                            Toast.makeText(this, getResources().getString(R.string.no_result), Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.myLeasing_Activity), getResources().getString(R.string.no_result), Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                            snackbar.show();
                             return;
                         }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
@@ -113,7 +119,10 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(this, getResources().getString(R.string.search_error), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.myLeasing_Activity), getResources().getString(R.string.search_error), Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         return;
                 }
             case "GET_GARDEN":

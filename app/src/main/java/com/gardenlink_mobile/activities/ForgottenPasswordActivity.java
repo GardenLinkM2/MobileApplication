@@ -7,14 +7,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.utils.Validator;
 import com.gardenlink_mobile.wsconnecting.operations.FORGOTTEN_PASSWORD;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
@@ -85,18 +86,27 @@ public class ForgottenPasswordActivity extends AppCompatActivity implements IWeb
                 switch (responseCode) {
                     case 200:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.request_send), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.forgottenPasswordActivity),getResources().getString(R.string.request_send),Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                        snackbar.show();
                         Intent lIntent = new Intent(this, ConnectionActivity.class);
                         startActivity(lIntent);
                         finish();
                         return;
                     case 504:
                         Log.i(TAG, "Email server failed to answer before timeout threshold.");
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.mail_request_timeout), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.forgottenPasswordActivity),getResources().getString(R.string.mail_request_timeout),Snackbar.LENGTH_LONG);
+                        View sbView1 = snackbar1.getView();
+                        sbView1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar1.show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.request_send), Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar2 = Snackbar.make(findViewById(R.id.forgottenPasswordActivity),getResources().getString(R.string.request_send),Snackbar.LENGTH_LONG);
+                        View sbView2 = snackbar2.getView();
+                        sbView2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                        snackbar2.show();
                         Intent lIntent2 = new Intent(this, ConnectionActivity.class);
                         startActivity(lIntent2);
                         finish();
