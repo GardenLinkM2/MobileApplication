@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "API_URL", API_DEV_URL
         buildConfigField "String", "AUTHENTICATION_URL", AUTH_DEV_URL
