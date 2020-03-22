@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,24 +18,38 @@ import android.widget.Toast;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Garden;
+import com.gardenlink_mobile.entities.Leasing;
 import com.gardenlink_mobile.entities.Location;
 import com.gardenlink_mobile.entities.Report;
 import com.gardenlink_mobile.entities.User;
+import com.gardenlink_mobile.entities.Wallet;
 import com.gardenlink_mobile.fragments.CommentsFragment;
 import com.gardenlink_mobile.fragments.MapFragment;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.DateMaster;
 import com.gardenlink_mobile.utils.Escaper;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.wsconnecting.operations.DELETE_GARDEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDEN;
+import com.gardenlink_mobile.wsconnecting.operations.GET_MY_LEASING;
+import com.gardenlink_mobile.wsconnecting.operations.GET_SELF_WALLET;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.gardenlink_mobile.wsconnecting.operations.POST_LEASING;
 import com.gardenlink_mobile.wsconnecting.operations.POST_REPORT;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.lang.ref.WeakReference;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +63,6 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     private static final String ERROR_GET_ANNOUNCEMENT = "L'annonce n'a pas pu être récupérée.";
     private static final String DEFAULT_TEXT_VALUE = "NA";
     private static final String CURRENCY_SYMBOL = "€";
-    private static final String CURRENCY = "euro";
     private static final String UNIT_TIME = "mois";
     // define CURRENCY_SYMBOL and UNIT_TIME before this line
     private static final String UNIT_PRICE_IN_UNIT_TIME = CURRENCY_SYMBOL + " / " + UNIT_TIME;
@@ -69,6 +83,7 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
 
     private String garden_id;
     private Garden garden;
+    private Leasing leasing;
     private Map<String, MaterialTextView> textViews;
     private ImageView imageView;
     private MaterialButton deleteButton;
@@ -77,6 +92,16 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     private MapFragment mMap;
     private CommentsFragment commentsFragment;
     private TextInputLayout durationLookingFor;
+    private TextInputLayout totalPrice;
+    private MaterialButton contactButton;
+    private int minDuration;
+    private int maxDuration;
+    private double oldBalance;
+    private double totalPayedPrice;
+    private Timestamp beginDate;
+    private Timestamp limitDateBefore;
+    private boolean myGarden = false;
+    private boolean iHaveActiveLeasings = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +109,8 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
         setContentView(R.layout.detail_announcement_activity);
         initMenu();
         currentUser = Session.getInstance().getCurrentUser();
+        oldBalance = Session.getInstance().getCurrentUserWallet().getBalance();
+        limitDateBefore = DateMaster.now();
         imageView = findViewById(R.id.detailAnnouncement_image);
         initTextViews();
 
@@ -100,14 +127,17 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     private void initButton() {
         deleteButton = (MaterialButton) findViewById(R.id.detailAnnouncement_deleteButton);
         hireButton = (MaterialButton) findViewById(R.id.detailAnnouncement_hireButton);
+        contactButton = (MaterialButton) findViewById(R.id.detailAnnouncement_contactButton);
 
-        if (garden != null && (garden.getOwner().equals(currentUser.getId()))) {
-            hireButton.setVisibility(View.GONE);
-            deleteButton.setVisibility(View.VISIBLE);
-        } else if (garden != null && !(garden.getOwner().equals(currentUser.getId()))) {
-            deleteButton.setVisibility(View.GONE);
-            hireButton.setVisibility(View.VISIBLE);
-        } else {
+
+        if (garden != null) {
+            if (myGarden) deleteButton.setVisibility(View.VISIBLE);
+            else deleteButton.setVisibility(View.GONE);
+            if (iHaveActiveLeasings || myGarden) hireButton.setVisibility(View.GONE);
+            else hireButton.setVisibility(View.VISIBLE);
+            if (iHaveActiveLeasings && !myGarden) contactButton.setVisibility(View.VISIBLE);
+            else contactButton.setVisibility(View.GONE);
+        }else {
             Log.e(TAG, "initButton: garden NULL");
         }
     }
@@ -130,9 +160,6 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     }
 
     private void initData(Garden garden) {
-        // For the detail main page
-        // todo init photo
-//        imageView.setImageDrawable(garden.getPhotos().get(0));
 
         Objects.requireNonNull(textViews.get(TITLE_VIEW))
                 .setText((garden.getName().isEmpty()) ? DEFAULT_TEXT_VALUE : Escaper.escapeHTLMTags(garden.getName()));
@@ -184,7 +211,7 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
         if (!garden.getIsReserved()) {
             View customLayout = getLayoutInflater().inflate(R.layout.ask_hire_dialog, null);
             MaterialTextView alerteTitle = new MaterialTextView(this);
-            alerteTitle.setText("Demande de location");
+            alerteTitle.setText(getResources().getString(R.string.detailAnnouncement_hireDialog_title));
             alerteTitle.setTextSize(24);
             alerteTitle.setGravity(Gravity.CENTER);
             alerteTitle.setPadding(0, 10, 0, 10);
@@ -193,77 +220,102 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
             MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
                     .setCustomTitle(alerteTitle)
                     .setView(customLayout)
-                    .setPositiveButton("Demander", (dialog1, which) -> {
-                        Toast.makeText(this, "MOK reservation demandée", Toast.LENGTH_SHORT);
+                    .setPositiveButton(getResources().getString(R.string.hireDialog_askButton), (dialog1, which) -> {
+                        int duraton = Integer.parseInt(durationLookingFor.getEditText().getText().toString());
+                        if (duraton < minDuration || duraton > maxDuration) {
+                            Snackbar.make(view, getResources().getString(R.string.hireDialog_errorLimit_message), Snackbar.LENGTH_SHORT)
+                                    .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                                    .show();
+                        } else if (Session.getInstance().getCurrentUserWallet().getBalance() < Double.parseDouble(totalPrice.getEditText().getText().toString())) {
+                            Snackbar.make(view, getResources().getString(R.string.hireDialog_balanceTooLow_message), Snackbar.LENGTH_LONG)
+                                    .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                                    .show();
+                        }
+                        else {
+                            postLeasing();
+                        }
                     })
-                    .setNegativeButton("Annuler", (dialog1, which) -> {
-                        Toast.makeText(this, "MOK reservation annulée", Toast.LENGTH_SHORT);
-                    });
+                    .setNegativeButton(getResources().getString(R.string.hireDialog_CancelButton), null);
             alertDialogBuilder.create();
             alertDialogBuilder.show();
-            initHireDialog(customLayout);
+            initHireDialog(customLayout, alertDialogBuilder);
         } else {
-            Toast.makeText(this, "Trop tard! Cette annonce est déjà réservée.", Toast.LENGTH_LONG);
+            Snackbar.make(view, getResources().getString(R.string.detailAnnouncement_hireNotAvailable_message), Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                    .show();
         }
     }
 
-    private void initHireDialog(View view) {
+    private void postLeasing() {
+        leasing = new Leasing();
+        leasing.setGarden(garden.getId());
+        if (beginDate == null) {
+            beginDate = limitDateBefore;
+        }
+        // Add duration to begin date
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(beginDate.getTime());
+        cal.add(Calendar.MONTH, Integer.parseInt(durationLookingFor.getEditText().getText().toString()));
+        Timestamp endDate = new Timestamp(cal.getTime().getTime());
 
+        Date beginInDate = new Date(beginDate.getTime());
+        Date endInDate = new Date(endDate.getTime());
+
+        Double beginDouble = Double.valueOf(Long.toString(beginInDate.getTime() / 1000));
+        Double endDouble = Double.valueOf(Long.toString(endInDate.getTime() / 1000));
+        leasing.setBegin(beginDouble.doubleValue());
+        leasing.setEnd(endDouble.doubleValue());
+
+        new POST_LEASING(leasing).perform(new WeakReference<>(this));
+    }
+
+    private void initHireDialog(View view, MaterialAlertDialogBuilder alertDialogBuilder) {
+        // link with id
         MaterialTextView maxDurationHire = (MaterialTextView) view.findViewById(R.id.askHireDialog_maxDurationValue);
         MaterialTextView minDurationHire = (MaterialTextView) view.findViewById(R.id.askHireDialog_minDurationValue);
         MaterialTextView priceHire = (MaterialTextView) view.findViewById(R.id.askHireDialog_priceValue);
         MaterialTextView creditAvailableHire = (MaterialTextView) view.findViewById(R.id.askHireDialog_creditValue);
         durationLookingFor = (TextInputLayout) view.findViewById(R.id.askHireDialog_durationForm);
-        TextInputLayout totalPrice = (TextInputLayout) view.findViewById(R.id.askHireDialog_finalPriceForm);
-        Integer minDurationHirable = garden.getMinUse() < 0 ? 0 : garden.getMinUse();
-        Integer maxDurationHirable = garden.getCriteria().getLocationTime() < 0 ? 0 : garden.getMinUse();
+        totalPrice = (TextInputLayout) view.findViewById(R.id.askHireDialog_finalPriceForm);
 
+        // init text view
         maxDurationHire.setText(garden.getCriteria().getLocationTime().toString().isEmpty() ? DEFAULT_TEXT_VALUE : garden.getCriteria().getLocationTime().toString());
         minDurationHire.setText(garden.getMinUse().toString().isEmpty() ? DEFAULT_TEXT_VALUE : garden.getMinUse().toString());
         priceHire.setText(garden.getCriteria().getPrice().toString().isEmpty() ? DEFAULT_TEXT_VALUE : garden.getCriteria().getPrice().toString());
-        if (Session.getInstance() != null) {
-            if (Session.getInstance().getCurrentUserWallet() != null) {
-                if (Session.getInstance().getCurrentUserWallet().getBalance() != null) {
-                    Log.e(TAG, "initHireDialog: solde = " + Session.getInstance().getCurrentUserWallet().getBalance().toString());
-                } else {
-                    Log.e(TAG, "initHireDialog: solde null");
-                }
-            } else {
-                Log.e(TAG, "initHireDialog: Erreur getCurrentWallet() null");
-            }
-        }else {
-            Log.e(TAG, "initHireDialog: Erreur getInstance() null");
-        }
         creditAvailableHire.setText(Double.toString(Session.getInstance().getCurrentUserWallet().getBalance()));
+
+        // init price
+        minDuration = garden.getMinUse() < 0 ? 0 : garden.getMinUse();
+        maxDuration = (int) (garden.getCriteria().getLocationTime() < 0 ? 0 : garden.getCriteria().getLocationTime());
+        Double price = Double.parseDouble(priceHire.getText().toString().isEmpty() ? "0.0" : priceHire.getText().toString());
+        Double valueNewPrice = minDuration * price;
+        totalPrice.getEditText().setText(Double.toString(valueNewPrice));
+
+        // init edit text duration
         durationLookingFor.getEditText().setText(minDurationHire.getText());
 
-        TextWatcher durationLookkingForListenner = new TextWatcher() {
+        TextWatcher durationLookingForListenner = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Integer value = Integer.valueOf(s.toString());
-                if (value < minDurationHirable) {
-                    durationLookingFor.getEditText().setText(minDurationHirable.toString());
-                }
-                else if (value > maxDurationHirable) {
-                    durationLookingFor.getEditText().setText(maxDurationHirable.toString());
-                }
-                else {
-                    durationLookingFor.getEditText().setText(value.toString());
-                }
-
-                // update total
-                totalPrice.getEditText().setText(Double.toString(Double.valueOf(durationLookingFor.getEditText().getText().toString()) * Double.valueOf(priceHire.getText().toString())));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                int value = 0;
+                if (!s.toString().isEmpty()){
+                    value = Integer.parseInt(s.toString());
+                }
+                double priceValue =  Double.parseDouble(priceHire.getText().toString().isEmpty() ? "0.0" : priceHire.getText().toString());
+                double total = value * priceValue;
+                totalPayedPrice = total;
+                totalPrice.getEditText().setText(Double.toString(total));
             }
         };
-        durationLookingFor.getEditText().addTextChangedListener(durationLookkingForListenner);
+        durationLookingFor.getEditText().addTextChangedListener(durationLookingForListenner);
     }
 
     public void doReport(View view) {
@@ -298,21 +350,48 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     public void onClickDelete(View view) {
         if (!garden.getIsReserved()) {
             new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
-                    .setTitle("Etes-vous sur de vouloir supprimer cette annonce ?")
+                    .setTitle(getResources().getString(R.string.detailAnnouncement_deleteDialog_title))
                     .setPositiveButton(getResources().getString(R.string.confirm), (dialog, which) -> new DELETE_GARDEN(garden_id).perform(new WeakReference<>(this)))
                     .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> {
                     }).show();
         } else {
-            Toast.makeText(this, "Ce jardin est réservé. Veuillez attendre la conclusion du contrat avant de retirer l'annonce.", Toast.LENGTH_LONG).show();
+            Snackbar.make(view, getResources().getString(R.string.detailAnnouncement_deleteDialog_error), Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                    .show();
         }
     }
 
     public void onClickAddOne(View view) {
-        durationLookingFor.getEditText().setText(Integer.toString((Integer.parseInt(durationLookingFor.getEditText().getText().toString())) + 1));
+        String alphaValue = durationLookingFor.getEditText().getText().toString();
+        int numValue = alphaValue.isEmpty() ? 0 : Integer.parseInt(alphaValue);
+        numValue += 1;
+        durationLookingFor.getEditText().setText(Integer.toString(numValue));
     }
 
     public void onclickSubtractOne(View view) {
-        durationLookingFor.getEditText().setText(Integer.toString((Integer.parseInt(durationLookingFor.getEditText().getText().toString())) - 1));
+        String alphaValue = durationLookingFor.getEditText().getText().toString();
+        int numValue = alphaValue.isEmpty() ? 0 : Integer.parseInt(alphaValue);
+        numValue -= 1;
+        durationLookingFor.getEditText().setText(Integer.toString(numValue));
+    }
+
+    public void onClickToDatePicker(View view) {
+        MaterialDatePicker.Builder<Long> pickerDateBuilder = MaterialDatePicker.Builder.datePicker();
+        pickerDateBuilder.setTitleText(getResources().getString(R.string.hireDialog_selectDateDialog_title));
+        pickerDateBuilder.setSelection(limitDateBefore.getTime());
+        pickerDateBuilder.setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR);
+        MaterialDatePicker<Long> datePicker = pickerDateBuilder.build();
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            beginDate = new Timestamp(selection);
+            try {
+                if (beginDate.before(limitDateBefore)) {
+                    beginDate = limitDateBefore;
+                }
+            } catch (Exception e) {
+                beginDate = limitDateBefore;
+            }
+        });
+        datePicker.show(getSupportFragmentManager(), datePicker.toString());
     }
 
     @Override
@@ -323,26 +402,91 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
                     case 200:
                         garden = (Garden) results.get(0);
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Log.e(TAG, "receiveResults: reception du get : " + garden.toString());
+                        Log.i(TAG, "receiveResults: reception du get : " + garden.toString());
+                        if (garden.getOwner().equals(Session.getInstance().getCurrentUser().getId())) myGarden = true;
                         initData(garden);
-                        initButton();
+                        new GET_MY_LEASING().perform(new WeakReference<>(this));
                         initMap();
-                        initComments();
+                        initComments(garden.getId());
+                        if (garden.getPhotos() != null
+                                && !garden.getPhotos().isEmpty()
+                                && garden.getPhotos().get(0) != null
+                                && garden.getPhotos().get(0).getFileName() != null
+                                && !garden.getPhotos().get(0).getFileName().isEmpty()){
+                            new GET_PHOTO(garden.getPhotos().get(0).getFileName()).perform(new WeakReference<>(this));
+                        }
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         Toast.makeText(this, ERROR_GET_ANNOUNCEMENT, Toast.LENGTH_LONG).show();
+                        finish();
                         return;
                 }
             case "POST_REPORT":
                 switch (responseCode) {
                     case 201:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Toast.makeText(this, SUCCESS_POST_REPORT, Toast.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.detailAnnouncement), SUCCESS_POST_REPORT, Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(R.color.colorGreen_snackbar))
+                                .show();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(this, ERROR_POST_REPORT, Toast.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.detailAnnouncement), ERROR_POST_REPORT, Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                                .show();
+                        return;
+                }
+            case "POST_LEASING":
+                switch (responseCode) {
+                    case 201:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        leasing = (Leasing) results.get(0);
+                        new GET_SELF_WALLET().perform(new WeakReference<>(this));
+                        iHaveActiveLeasings = true;
+                        initButton();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        Snackbar.make(findViewById(R.id.detailAnnouncement), getResources().getString(R.string.detailAnnouncement_postFail_message), Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(R.color.colorRed))
+                                .show();
+                        return;
+                }
+            case "GET_SELF_WALLET":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Wallet wallet = (Wallet) results.get(0);
+                        Session.getInstance().setCurrentUserWallet(wallet);
+                        toConfirmHireDialog();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            case "GET_MY_LEASING":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        List<Leasing> leasingsResult = (List<Leasing>) results;
+                        for (Leasing leasing : leasingsResult) {
+                            if ((leasing.getState().getLeasingStatus().equals("InDemand") || leasing.getState().getLeasingStatus().equals("InProgress")) && leasing.getRenter().equals(Session.getInstance().getCurrentUser().getId()) && leasing.getGarden().equals(garden_id)){
+                                iHaveActiveLeasings = true;
+                            }
+                        }
+                        initButton();
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         return;
                 }
             default:
@@ -351,8 +495,60 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
         }
     }
 
-    private void initComments() {
-        commentsFragment = new CommentsFragment();
+    private void toConfirmHireDialog() {
+        View customLayout = getLayoutInflater().inflate(R.layout.confirm_hire_dialog, null);
+        MaterialTextView alerteTitle = new MaterialTextView(this);
+        alerteTitle.setText("Demande envoyée");
+        alerteTitle.setTextSize(24);
+        alerteTitle.setGravity(Gravity.CENTER);
+        alerteTitle.setPadding(0, 10, 0, 10);
+        alerteTitle.setBackgroundColor(getResources().getColor(R.color.colorGreen_brighter));
+        alerteTitle.setTextColor(Color.BLACK);
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme)
+                .setCustomTitle(alerteTitle)
+                .setView(customLayout)
+                .setPositiveButton(getResources().getString(R.string.confirmHireDialog_messagingButton), (dialog1, which) -> {
+                    onClickMessaging(null);
+                })
+                .setNegativeButton(getResources().getString(R.string.confirmHireDialog_cancelButton), null);
+        alertDialogBuilder.create();
+        alertDialogBuilder.show();
+        initConfirmHireDialog(customLayout);
+    }
+
+    public void onClickMessaging(View view) {
+        Intent localIntentMessagerie = new Intent(DetailAnnouncement.this, MessagingActivity.class);
+        localIntentMessagerie.putExtra(MessagingActivity.NEW_MESSAGE_USER_ID, garden.getOwner());
+        startActivity(localIntentMessagerie);
+        finish();
+    }
+
+    private void initConfirmHireDialog(View customLayout) {
+        MaterialTextView hireDuration = customLayout.findViewById(R.id.confirmHireDialog_durationValue);
+        MaterialTextView price = customLayout.findViewById(R.id.confirmHireDialog_priceValue);
+        MaterialTextView payedPrice = customLayout.findViewById(R.id.confirmHireDialog_payedPriceValue);
+        MaterialTextView initalCredit = customLayout.findViewById(R.id.confirmHireDialog_initialCreditValue);
+        MaterialTextView finalCredit = customLayout.findViewById(R.id.confirmHireDialog_finalCreditValue);
+
+        Duration hireExactDuration = Duration.ofSeconds(leasing.getTime());
+        hireDuration.setText(Long.toString(hireExactDuration.toDays()/30));
+        price.setText(Double.toString(garden.getCriteria().getPrice()) + " " + UNIT_PRICE_IN_UNIT_TIME);
+        payedPrice.setText(Double.toString(totalPayedPrice));
+        initalCredit.setText(Double.toString(oldBalance));
+        finalCredit.setText(Double.toString(Session.getInstance().getCurrentUserWallet().getBalance()));
+
+    }
+
+    public void newComment(View view){
+        commentsFragment.newComment(view);
+    }
+
+    public void answerComment(View view){
+        commentsFragment.answerComment(view);
+    }
+
+    private void initComments(String gardenId) {
+        commentsFragment = new CommentsFragment(gardenId);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.commentsContainer, commentsFragment);
         fragmentTransaction.show(commentsFragment);
@@ -360,14 +556,7 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
     }
 
     private void initMap() {
-        Location lLocation = new Location();
-        lLocation.setStreetNumber(20);
-        lLocation.setStreet("Rue Jacques prévert");
-        lLocation.setPostalCode(630000);
-        lLocation.setCity("Clermont-Ferrand");
-
-        mMap = new MapFragment(lLocation);
-//        mMap = new MapFragment(garden.getLocation());
+        mMap = new MapFragment(garden.getLocation());
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mapContainer, mMap);
@@ -377,8 +566,27 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
-
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        if (results == null || results.get("photo") == null) {
+                            Log.w(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
+                            return;
+                        }
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        Drawable drawableImage = ImageMaster.byteStringToDrawable(results.get("photo"));
+                        imageView = findViewById(R.id.detailAnnouncement_image);
+                        imageView.setImageDrawable(drawableImage);
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        return;
+                }
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
@@ -388,9 +596,12 @@ public class DetailAnnouncement extends NavigableActivity implements IWebConnect
                 switch (responseCode) {
                     case 204:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Log.e(TAG, "Garden deleted :" + garden_id);
+                        Log.i(TAG, "Garden deleted :" + garden_id);
                         this.finish();
-                        Toast.makeText(this, "Ce jardin a bien été supprimé", Toast.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.detailAnnouncement), getResources().getString(R.string.detailAnnouncement_hireNotAvailable_message), Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(R.color.colorGreen_snackbar))
+                                .show();
+                        Toast.makeText(this, getResources().getString(R.string.detailAnnouncement_confirmDelete), Toast.LENGTH_LONG).show();
                         return;
                     default:
                         Log.e(TAG, "Failed " + operation.getName() + " with response code " + responseCode);

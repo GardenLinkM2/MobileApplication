@@ -12,7 +12,6 @@ public class User {
     private String phone;
     private String photo;
     private Boolean newsletter;
-
     private Drawable drawablePhoto;
 
     public Boolean getNewsletter() {

@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gardenlink_mobile.R;
-import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Score;
 import com.gardenlink_mobile.fragments.CommentsFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommentAdapter extends ArrayAdapter<Score> {
@@ -38,11 +36,12 @@ public class CommentAdapter extends ArrayAdapter<Score> {
         }
         TextView lUsername = convertView.findViewById(R.id.commentUserName);
         ImageView lPicture = convertView.findViewById(R.id.commentPicture);
-        lUsername.setText(lComment.getRater().getFirstName());
+        lUsername.setText(lComment.getRatingUser().getFirstName());
         parseTextForResponseTag(lComment.getComment(),convertView);
-
-        //TODO : make the real call for the image
-        lPicture.setImageResource(R.drawable.image_not_found);
+        if (lComment.getRatingUser().getDrawablePhoto() != null)
+            lPicture.setImageDrawable(lComment.getRatingUser().getDrawablePhoto());
+        else
+            lPicture.setImageResource(R.drawable.image_not_found);
         convertView.setOnClickListener(null);
         return convertView;
     }

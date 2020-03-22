@@ -14,7 +14,7 @@ public class ScoreSerializer implements ISerializer<Score> {
         score.setId(input.optString("id"));
         score.setMark(input.optInt("mark"));
         score.setRated(input.optString("rated"));
-        score.setRater(new UserSerializer().deserialize(input.optJSONObject("rater")));
+        score.setRater(input.optString("rater"));
         return score;
     }
 
@@ -26,7 +26,7 @@ public class ScoreSerializer implements ISerializer<Score> {
         output.putOpt("id", input.getId());
         output.putOpt("mark", input.getMark());
         output.putOpt("rated", input.getRated());
-        output.putOpt("rater", new UserSerializer().serialize(input.getRater()));
+        output.putOpt("rater", input.getRater());
         return output;
     }
 }

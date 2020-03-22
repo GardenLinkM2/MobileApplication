@@ -17,4 +17,8 @@ public class DateMaster {
         Date date = new Date(ts.getTime());
         return date;
     }
+
+    public static Timestamp now() {
+        return new Timestamp(System.currentTimeMillis());
+    }
 }

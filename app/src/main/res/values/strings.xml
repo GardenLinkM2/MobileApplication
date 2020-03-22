@@ -128,4 +128,22 @@
     <string name="report_announcement">Signaler cette annonce</string>
     <string name="detailAnnouncement_hire">LOUER</string>
     <string name="comment">Commentaire</string>
+    <string name="confirmHireDialog_duration_label">Durée de location:</string>
+    <string name="confirmHireDialog_price_label">Prix / mois:</string>
+    <string name="confirmHireDialog_initalBalance_label">Solde initial:</string>
+    <string name="confirmHireDialog_totalPrice_label">Prix total:</string>
+    <string name="confirmHireDialog_resultBalance_label">Solde restant:</string>
+    <string name="confirmHireDialog_messagingButton">CONTACTER</string>
+    <string name="confirmHireDialog_cancelButton">FERMER</string>
+    <string name="detailAnnouncement_hireDialog_title">Demande de location</string>
+    <string name="hireDialog_errorLimit_message">Le temps de location est hors des limites de l\'annonce.</string>
+    <string name="hireDialog_balanceTooLow_message">Votre solde est insufisant, veuillez recharger et refaire la demande.</string>
+    <string name="hireDialog_askButton">DEMANDER</string>
+    <string name="hireDialog_CancelButton">ANNULER</string>
+    <string name="hireDialog_selectDateDialog_title">Selectionner une date</string>
+    <string name="detailAnnouncement_hireNotAvailable_message">Trop tard! Cette annonce est déjà réservée.</string>
+    <string name="detailAnnouncement_deleteDialog_title">Etes-vous sur de vouloir supprimer cette annonce ?</string>
+    <string name="detailAnnouncement_deleteDialog_error">Ce jardin est réservé. Veuillez attendre la conclusion du contrat avant de retirer l\'annonce.</string>
+    <string name="detailAnnouncement_confirmDelete">Ce jardin a bien été supprimé</string>
+    <string name="detailAnnouncement_postFail_message">Erreur! Impossible de poster la demande.</string>
 </resources>
