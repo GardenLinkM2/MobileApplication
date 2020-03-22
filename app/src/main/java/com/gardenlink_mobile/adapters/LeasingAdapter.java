@@ -79,13 +79,15 @@ public class LeasingAdapter extends ArrayAdapter<Leasing> {
                         Log.i(TAG, "Leasing InDemand");
                         break;
                     case "InProgress":
-                        Integer end = getWeeksDifference(beginDate, endDate);
-                        if (end != null) {
-                            landDuration.setText(end + DURATION_POSTFIX);
-                            if (end <= SEUIL) {
-                                landDuration.setTextColor(Color.RED);
-                            } else {
-                                landDuration.setTextColor(Color.BLACK);
+                        if (beginDate != null && endDate != null) {
+                            Integer end = getWeeksDifference(beginDate, endDate);
+                            if (end != null) {
+                                landDuration.setText(end + DURATION_POSTFIX);
+                                if (end <= SEUIL) {
+                                    landDuration.setTextColor(Color.RED);
+                                } else {
+                                    landDuration.setTextColor(Color.BLACK);
+                                }
                             }
                         }
                         Log.i(TAG, "Leasing InProgress");

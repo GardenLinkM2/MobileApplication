@@ -56,7 +56,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyAccountActivity extends NavigableActivity implements IWebConnectable {
 
     boolean isPlay = true;
-    private final String LOGIN_FORM = "loginForm";
     private final String PHONE_FORM = "phoneForm";
     private final String PASSWORD_FORM = "passwordForm";
 
@@ -236,7 +235,6 @@ public class MyAccountActivity extends NavigableActivity implements IWebConnecta
 
     private void initInputs() {
         inputForms = new HashMap<>();
-        inputForms.put(LOGIN_FORM, (TextInputLayout) findViewById(R.id.loginField));
         inputForms.put(PASSWORD_FORM, (TextInputLayout) findViewById(R.id.passwordField));
         inputForms.put(PHONE_FORM, (TextInputLayout) findViewById(R.id.phoneField));
         cbNewsLetter = (CheckBox) findViewById(R.id.newsLetter);

@@ -78,9 +78,13 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
                 requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
                 Date beginDate = DateMaster.TimeStampToDate(leasing.getBegin());
                 Date endDate = DateMaster.TimeStampToDate(leasing.getEnd());
-                Integer end = getMonthDifference(beginDate, endDate);
-                requestDuration.setText(end + MONTH);
-                requestBeginDate.setText(new SimpleDateFormat(DATE_FORMAT).format(beginDate));
+                if (beginDate != null) {
+                    requestBeginDate.setText(new SimpleDateFormat(DATE_FORMAT).format(beginDate));
+                    if (endDate != null) {
+                        Integer end = getMonthDifference(beginDate, endDate);
+                        requestDuration.setText(end + MONTH);
+                    }
+                }
                 Date creationDate = DateMaster.TimeStampToDate(leasing.getCreation());
                 if (creationDate != null) {
                     requestMoment.setText(new SimpleDateFormat(DATE_FORMAT).format(creationDate));
