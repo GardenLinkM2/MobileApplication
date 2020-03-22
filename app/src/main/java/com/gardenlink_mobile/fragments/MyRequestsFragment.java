@@ -77,7 +77,7 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
                         List<Leasing> leasingsResult = (List<Leasing>) results;
                         gardensToRetrieve = 0;
                         for (Leasing leasing : leasingsResult) {
-                            if (leasing.getState().getLeasingStatus().equals("InDemand") && leasing.getRenter() != Session.getInstance().getCurrentUser().getId()) {
+                            if (leasing.getState().getLeasingStatus().equals("InDemand") && leasing.getOwner().equals(Session.getInstance().getCurrentUser().getId())) {
                                 leasings.add(leasing);
                                 if (leasingsMap.get(leasing.getGarden()) != null) {
                                     leasingsMap.get(leasing.getGarden()).add(leasing);
@@ -102,7 +102,8 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
                         if (user.getPhoto() != null && !user.getPhoto().isEmpty()) {
                             usersMap.put(user.getPhoto(), user);
                         } else {
-                            usersMap.put(UUID.randomUUID().toString(), user);
+                            for (Leasing leasing : leasingsMap.get(user.getId()))
+                                leasing.setRenterObject(user);
                         }
                         decrementUsersToRetrieve();
                         return;
@@ -117,7 +118,8 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
                         if (garden.getPhotos() != null && !garden.getPhotos().isEmpty() && garden.getPhotos().get(0) != null) {
                             gardensMap.put(garden.getPhotos().get(0).getFileName(), garden);
                         } else {
-                            gardensMap.put(UUID.randomUUID().toString(), garden);
+                            for (Leasing leasing : leasingsMap.get(garden.getId()))
+                                leasing.setGardenObject(garden);
                         }
                         decrementGardensToRetrieve();
                         return;
@@ -184,9 +186,15 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
         if (gardensToRetrieve == 0) {
             gettingGardensPhotos = true;
             gardensPhotosToRetrieve = gardensMap.size();
-            gardensMap.forEach((k, v) -> {
-                new GET_PHOTO(k).perform(new WeakReference<>(this));
-            });
+            if (gardensPhotosToRetrieve > 0) {
+                gardensMap.forEach((k, v) -> {
+                    new GET_PHOTO(k).perform(new WeakReference<>(this));
+                });
+            }
+            else {
+                gardensPhotosToRetrieve = 1;
+                decrementGardensPhotosToRetrieve();
+            }
         }
     }
 
@@ -220,9 +228,14 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
             gettingGardensPhotos = false;
             gettingUsersPhotos = true;
             usersPhotosToRetrieve = usersMap.size();
-            usersMap.forEach((k, v) -> {
-                new GET_PHOTO(k).perform(new WeakReference<>(this));
-            });
+            if (usersPhotosToRetrieve > 0) {
+                usersMap.forEach((k, v) -> {
+                    new GET_PHOTO(k).perform(new WeakReference<>(this));
+                });
+            } else {
+                usersPhotosToRetrieve = 1;
+                decrementUsersPhotosToRetrieve();
+            }
         }
     }
 
@@ -230,6 +243,7 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
     private void decrementUsersPhotosToRetrieve() {
         usersPhotosToRetrieve -= 1;
         if (usersPhotosToRetrieve == 0) {
+            leasings.clear();
             for(List<Leasing> leasingsList : leasingsMap.values())
                 for(Leasing leasing : leasingsList)
                     leasings.add(leasing);
