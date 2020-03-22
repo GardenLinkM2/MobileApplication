@@ -16,6 +16,9 @@ public class Leasing {
     // Owner ID
     private String owner;
 
+    private Garden gardenObject;
+    private User renterObject;
+
     public String getId() {
         return id;
     }
@@ -94,5 +97,21 @@ public class Leasing {
 
     public void setCreation(Double creation) {
         this.creation = creation;
+    }
+
+    public Garden getGardenObject() {
+        return gardenObject;
+    }
+
+    public void setGardenObject(Garden gardenObject) {
+        this.gardenObject = gardenObject;
+    }
+
+    public User getRenterObject() {
+        return renterObject;
+    }
+
+    public void setRenterObject(User renterObject) {
+        this.renterObject = renterObject;
     }
 }

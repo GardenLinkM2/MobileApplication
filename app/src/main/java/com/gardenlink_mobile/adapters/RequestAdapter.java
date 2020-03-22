@@ -32,12 +32,9 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnectable {
+public class RequestAdapter extends ArrayAdapter<Leasing> implements IWebConnectable {
 
-    private static final String TAG = "RequestAdapteur";
-    private static Boolean GET_MY_LEASING_FLAG = false;
-    private static Boolean toRemove = false;
-    private static Boolean dontRemove = false;
+    private static final String TAG = "RequestAdapter";
 
     private static String DATE_FORMAT = "dd-MM-yyyy";
     private static String MONTH = " mois";
@@ -48,7 +45,7 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
     private ArrayList<Garden> gardensList;
     private ArrayList<User> rentersList;
 
-    public RequestAdapteur(Context context, ArrayList<Leasing> results, ArrayList<Garden> gardensList, ArrayList<User> rentersList) {
+    public RequestAdapter(Context context, ArrayList<Leasing> results, ArrayList<Garden> gardensList, ArrayList<User> rentersList) {
         super(context, 0, results);
         this.gardensList = gardensList;
         this.rentersList = rentersList;
@@ -81,7 +78,10 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
             requestTitle.setText(garden.getName());
             if (renter != null) {
                 requestSender.setText(renter.getLastName() + " " + renter.getFirstName());
-                requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.sample_avatar));
+                if (leasing.getRenterObject() != null && leasing.getRenterObject().getPhoto() != null && !leasing.getRenterObject().getPhoto().isEmpty())
+                    requestSenderAvatar.setImageDrawable(leasing.getRenterObject().getDrawablePhoto());
+                else
+                    requestSenderAvatar.setImageDrawable(getContext().getDrawable(R.drawable.default_avatar));
                 Date beginDate = DateMaster.TimeStampToDate(leasing.getBegin());
                 Date endDate = DateMaster.TimeStampToDate(leasing.getEnd());
                 if (beginDate != null) {
@@ -128,23 +128,6 @@ public class RequestAdapteur extends ArrayAdapter<Leasing> implements IWebConnec
             getContext().startActivity(localIntentDetail);
         });
     }
-
-    private void itemToRemove(Leasing leasingToRemove) {
-        while (!GET_MY_LEASING_FLAG){
-            if (toRemove){
-                Log.i(TAG, "Item to remove : " + leasingToRemove.toString());
-                this.remove(leasingToRemove);
-                Log.i(TAG, "Item removed");
-                return;
-            }
-            if (dontRemove){
-                Log.i(TAG, "don't remove item cause of failed put");
-                return;
-            }
-        }
-        return;
-    }
-
 
     @Override
     public <T> void receiveResults(int responseCode, List<T> results, Operation operation) {

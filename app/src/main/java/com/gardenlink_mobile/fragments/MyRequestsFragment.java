@@ -13,7 +13,7 @@ import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.IWebConnectable;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
-import com.gardenlink_mobile.adapters.RequestAdapteur;
+import com.gardenlink_mobile.adapters.RequestAdapter;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDEN;
@@ -165,7 +165,7 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
 
     private void assessFlags() {
         if (GET_MY_LEASING_FLAG && GET_GARDEN && GET_USER && okUser == currentSize && okGarden == currentSize) {
-            RequestAdapteur requestAdapter = new RequestAdapteur(this.getContext(), currentAllLeaging, gardensList, rentersList);
+            RequestAdapter requestAdapter = new RequestAdapter(this.getContext(), currentAllLeaging, gardensList, rentersList);
             listViewDemand.setAdapter(requestAdapter);
         }
     }
