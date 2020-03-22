@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "API_URL", API_DEV_URL
         buildConfigField "String", "AUTHENTICATION_URL", AUTH_DEV_URL
+        buildConfigField "String", "WEB_URL", WEB_DEV_URL
     }
     buildTypes {
         release {
@@ -23,6 +24,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "API_URL", API_PROD_URL
             buildConfigField "String", "AUTHENTICATION_URL", AUTH_PROD_URL
+            buildConfigField "String", "WEB_URL", WEB_PROD_URL
         }
     }
     compileOptions {
