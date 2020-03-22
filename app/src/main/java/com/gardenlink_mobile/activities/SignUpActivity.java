@@ -55,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
     private static final String PHONE_FORM = "phoneForm";
     private static final String PASSWORD_FORM = "passwordForm";
     private static final String PASSWORD_AGAIN_FORM = "passwordAgainForm";
-    private static final String PASSWORD_ERROR = "Les mots de passe doivent être identiques";
+    private static final String PASSWORD_ERROR = "Les mots de passe doivent être identiques et inclure au moins 5 caractères";
     private static final String URL_VERIFY_ON_SERVER = "https://www.google.com/recaptcha/api/siteverify";
 
     private Map<String, TextInputLayout> inputForms;
