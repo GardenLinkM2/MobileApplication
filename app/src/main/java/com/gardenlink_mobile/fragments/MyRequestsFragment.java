@@ -1,6 +1,7 @@
 package com.gardenlink_mobile.fragments;
 
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,15 @@ import androidx.fragment.app.Fragment;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.IWebConnectable;
+import com.gardenlink_mobile.adapters.RequestAdapter;
 import com.gardenlink_mobile.entities.Garden;
 import com.gardenlink_mobile.entities.Leasing;
-import com.gardenlink_mobile.adapters.RequestAdapteur;
 import com.gardenlink_mobile.entities.User;
 import com.gardenlink_mobile.session.Session;
+import com.gardenlink_mobile.utils.ImageMaster;
 import com.gardenlink_mobile.wsconnecting.operations.GET_GARDEN;
 import com.gardenlink_mobile.wsconnecting.operations.GET_MY_LEASING;
+import com.gardenlink_mobile.wsconnecting.operations.GET_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 
@@ -25,26 +28,28 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class MyRequestsFragment extends Fragment implements IWebConnectable {
 
     private static final String TAG = "MyRequestsFrament";
-    private Boolean GET_MY_LEASING_FLAG = false;
-    private Boolean GET_USER = false;
-    private Boolean GET_GARDEN = false;
-    private User currentUser;
 
     private ListView listViewDemand;
-    private ArrayList<Leasing> getAllLeasing;
-    private ArrayList<Leasing> currentAllLeaging;
-    private Leasing leasing;
-    private Garden garden;
-    private User renter;
-    private ArrayList<User> rentersList;
-    private ArrayList<Garden> gardensList;
-    private int okUser = 0;
-    private int okGarden = 0;
-    private int currentSize = 0;
+
+    private ArrayList<Leasing> leasings = new ArrayList<>();
+
+    private int usersToRetrieve;
+    private int gardensToRetrieve;
+    private int usersPhotosToRetrieve;
+    private int gardensPhotosToRetrieve;
+
+    private boolean gettingGardensPhotos = false;
+    private boolean gettingUsersPhotos = false;
+
+    private HashMap<String, List<Leasing>> leasingsMap = new HashMap<>();
+    private HashMap<String, Garden> gardensMap = new HashMap<>();
+    private HashMap<String, User> usersMap = new HashMap<>();
+
 
     public static MyRequestsFragment newInstance() {
         return (new MyRequestsFragment());
@@ -53,16 +58,9 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.myrequests_fragment, container, false);
-        currentUser = Session.getInstance().getCurrentUser();
-        loadData();
+        new GET_MY_LEASING().perform(new WeakReference<>(this));
         listViewDemand = view.findViewById(R.id.myRequestList);
         return view;
-    }
-
-    private void loadData() {
-        rentersList = new ArrayList<>();
-        gardensList = new ArrayList<>();
-        new GET_MY_LEASING().perform(new WeakReference<>(this));
     }
 
     @Override
@@ -76,22 +74,21 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
                             return;
                         }
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        List<Leasing> leasings = (List<Leasing>) results;
-                        int size = leasings.size();
-                        getAllLeasing = new ArrayList<>(leasings);
-                        currentAllLeaging = new ArrayList<Leasing>();
-                        for (int i = 0; i < size; i++) {
-                            Leasing item = leasings.get(i);
-                            if (!getAllLeasing.get(i).getRenter().equals(currentUser.getId()) && item.getState().getLeasingStatus().equals("InDemand")) {
-                                Log.e(TAG, "Results size : " + size);
-                                leasing = item;
-                                currentAllLeaging.add(leasing);
-                                Log.e(TAG, "Leasing : " + leasing.toString());
-                                new GET_GARDEN(leasing.getGarden()).perform(new WeakReference<>(this));
+                        List<Leasing> leasingsResult = (List<Leasing>) results;
+                        gardensToRetrieve = 0;
+                        for (Leasing leasing : leasingsResult) {
+                            if (leasing.getState().getLeasingStatus().equals("InDemand") && leasing.getRenter() != Session.getInstance().getCurrentUser().getId()) {
+                                leasings.add(leasing);
+                                if (leasingsMap.get(leasing.getGarden()) != null) {
+                                    leasingsMap.get(leasing.getGarden()).add(leasing);
+                                } else {
+                                    leasingsMap.put(leasing.getGarden(), new ArrayList<>());
+                                    leasingsMap.get(leasing.getGarden()).add(leasing);
+                                    gardensToRetrieve += 1;
+                                    new GET_GARDEN(leasing.getGarden()).perform(new WeakReference<>(this));
+                                }
                             }
                         }
-                        currentSize = currentAllLeaging.size();
-                        setGET_MY_LEASING_FLAG(true);
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
@@ -100,12 +97,14 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
             case "GET_USER":
                 switch (responseCode) {
                     case 200:
-                        renter = (User) results.get(0);
-                        rentersList.add(renter);
-                        okUser++;
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Log.e(TAG, "receiveResults: reception du get : " + garden.toString());
-                        setGET_USER(true);
+                        User user = (User) results.get(0);
+                        if (user.getPhoto() != null && !user.getPhoto().isEmpty()) {
+                            usersMap.put(user.getPhoto(), user);
+                        } else {
+                            usersMap.put(UUID.randomUUID().toString(), user);
+                        }
+                        decrementUsersToRetrieve();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
@@ -114,19 +113,13 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
             case "GET_GARDEN":
                 switch (responseCode) {
                     case 200:
-                        garden = (Garden) results.get(0);
-                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
-                        Log.e(TAG, "receiveResults: reception du get : " + garden.toString());
-                        if (leasing.getState() != null) {
-                            switch (leasing.getState().getLeasingStatus()) {
-                                case "InDemand":
-                                    gardensList.add(garden);
-                                    okGarden++;
-                                    new GET_USER(leasing.getRenter()).perform(new WeakReference<>(this));
-                                    setGET_GARDEN(true);
-                                    return;
-                            }
+                        Garden garden = (Garden) results.get(0);
+                        if (garden.getPhotos() != null && !garden.getPhotos().isEmpty() && garden.getPhotos().get(0) != null) {
+                            gardensMap.put(garden.getPhotos().get(0).getFileName(), garden);
+                        } else {
+                            gardensMap.put(UUID.randomUUID().toString(), garden);
                         }
+                        decrementGardensToRetrieve();
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
@@ -140,7 +133,45 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
 
     @Override
     public void receiveResults(int responseCode, HashMap<String, String> results, Operation operation) {
-        Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+        switch (operation.getName()) {
+            case "GET_PHOTO":
+                switch (responseCode) {
+                    case 200:
+                        Log.i(TAG, "Operation " + operation.getName() + " completed successfully.");
+                        if (gettingGardensPhotos) {
+                            Garden garden = (Garden) gardensMap.get(results.get("url"));
+                            if (garden == null) {
+                                decrementGardensPhotosToRetrieve();
+                                return;
+                            }
+                            garden.setDrawableFirstPhoto(ImageMaster.byteStringToDrawable(results.get("photo")));
+                            for (Leasing leasing : leasingsMap.get(garden.getId()))
+                                leasing.setGardenObject(garden);
+                            decrementGardensPhotosToRetrieve();
+                        }
+                        if (gettingUsersPhotos) {
+                            User user = (User) usersMap.get(results.get("url"));
+                            if (user == null) {
+                                decrementUsersPhotosToRetrieve();
+                                return;
+                            }
+                            user.setDrawablePhoto(ImageMaster.byteStringToDrawable(results.get("photo")));
+                            for (Leasing leasing : leasingsMap.get(user.getId()))
+                                leasing.setRenterObject(user);
+                            decrementUsersPhotosToRetrieve();
+                        }
+                        return;
+                    default:
+                        Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                        if (gettingGardensPhotos) decrementGardensPhotosToRetrieve();
+                        if (gettingGardensPhotos) decrementUsersPhotosToRetrieve();
+                        return;
+                }
+
+            default:
+                Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
+                return;
+        }
     }
 
     @Override
@@ -148,24 +179,69 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
         Log.e(TAG, "Received results from uninmplemented operation " + operation.getName() + " with response code " + responseCode);
     }
 
-    public void setGET_MY_LEASING_FLAG(Boolean GET_SESSION_TOKEN_flag) {
-        this.GET_MY_LEASING_FLAG = GET_SESSION_TOKEN_flag;
-        assessFlags();
+    private void decrementGardensToRetrieve() {
+        gardensToRetrieve -= 1;
+        if (gardensToRetrieve == 0) {
+            gettingGardensPhotos = true;
+            gardensPhotosToRetrieve = gardensMap.size();
+            gardensMap.forEach((k, v) -> {
+                new GET_PHOTO(k).perform(new WeakReference<>(this));
+            });
+        }
     }
 
-    public void setGET_USER(Boolean GET_SESSION_TOKEN_flag) {
-        this.GET_USER = GET_SESSION_TOKEN_flag;
-        assessFlags();
+    private void decrementGardensPhotosToRetrieve() {
+        gardensPhotosToRetrieve -= 1;
+        if (gardensPhotosToRetrieve == 0) {
+            leasings = new ArrayList<>();
+            for(List<Leasing> leasingsList : leasingsMap.values()) {
+                for (Leasing leasing : leasingsList) {
+                    leasings.add(leasing);
+                }
+            }
+            leasingsMap = new HashMap<>();
+            usersToRetrieve = 0;
+            for (Leasing leasing : leasings) {
+                if (leasingsMap.get(leasing.getRenter()) != null) {
+                    leasingsMap.get(leasing.getRenter()).add(leasing);
+                } else {
+                    leasingsMap.put(leasing.getRenter(), new ArrayList<>());
+                    leasingsMap.get(leasing.getRenter()).add(leasing);
+                    usersToRetrieve += 1;
+                    new GET_USER(leasing.getRenter()).perform(new WeakReference<>(this));
+                }
+            }
+        }
     }
 
-    public void setGET_GARDEN(Boolean GET_SESSION_TOKEN_flag) {
-        this.GET_GARDEN = GET_SESSION_TOKEN_flag;
-        assessFlags();
+    private void decrementUsersToRetrieve() {
+        usersToRetrieve -= 1;
+        if (usersToRetrieve == 0) {
+            gettingGardensPhotos = false;
+            gettingUsersPhotos = true;
+            usersPhotosToRetrieve = usersMap.size();
+            usersMap.forEach((k, v) -> {
+                new GET_PHOTO(k).perform(new WeakReference<>(this));
+            });
+        }
     }
 
-    private void assessFlags() {
-        if (GET_MY_LEASING_FLAG && GET_GARDEN && GET_USER && okUser == currentSize && okGarden == currentSize) {
-            RequestAdapteur requestAdapter = new RequestAdapteur(this.getContext(), currentAllLeaging, gardensList, rentersList);
+
+    private void decrementUsersPhotosToRetrieve() {
+        usersPhotosToRetrieve -= 1;
+        if (usersPhotosToRetrieve == 0) {
+            for(List<Leasing> leasingsList : leasingsMap.values())
+                for(Leasing leasing : leasingsList)
+                    leasings.add(leasing);
+            ArrayList<Leasing> leasingsForAdapter = new ArrayList<>();
+            ArrayList<Garden> gardensForAdapter = new ArrayList<>();
+            ArrayList<User> usersForAdapter = new ArrayList<>();
+            for(Leasing leasing : leasings){
+                leasingsForAdapter.add(leasing);
+                gardensForAdapter.add(leasing.getGardenObject());
+                usersForAdapter.add(leasing.getRenterObject());
+            }
+            RequestAdapter requestAdapter = new RequestAdapter(this.getContext(), leasingsForAdapter, gardensForAdapter, usersForAdapter);
             listViewDemand.setAdapter(requestAdapter);
         }
     }

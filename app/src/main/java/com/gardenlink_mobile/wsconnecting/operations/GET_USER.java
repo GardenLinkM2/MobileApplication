@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 
 public class GET_USER extends Operation {
 
-    private String url = AUTHENTICATION_URL + "Users";
+    private String url = AUTHENTICATION_URL + "users";
     private static ISerializer serializer = new UserSerializer();
 
     public GET_USER(String id) {

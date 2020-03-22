@@ -1,5 +1,7 @@
 package com.gardenlink_mobile.entities;
 
+import android.graphics.drawable.Drawable;
+
 public class User {
 
     private String id;
@@ -10,6 +12,8 @@ public class User {
     private String phone;
     private String photo;
     private Boolean newsletter;
+
+    private Drawable drawablePhoto;
 
     public Boolean getNewsletter() {
         return newsletter;
@@ -73,5 +77,13 @@ public class User {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public Drawable getDrawablePhoto() {
+        return drawablePhoto;
+    }
+
+    public void setDrawablePhoto(Drawable drawablePhoto) {
+        this.drawablePhoto = drawablePhoto;
     }
 }
