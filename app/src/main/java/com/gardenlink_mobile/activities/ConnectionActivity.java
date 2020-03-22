@@ -9,10 +9,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Tokens;
@@ -29,6 +29,7 @@ import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_TOKENS;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_UUID;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
@@ -152,7 +153,10 @@ public class ConnectionActivity extends AppCompatActivity implements IWebConnect
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), "Identifiants incorrects", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.connectionActivity),"Identifiants incorrects",Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         ((TextInputEditText) doConnectionParent.findViewById(R.id.passwordField)).setText("");
                         return;
                 }

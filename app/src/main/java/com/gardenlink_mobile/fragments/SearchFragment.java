@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,12 +28,12 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gardenlink_mobile.activities.HomeActivity;
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.activities.SearchResultsActivity;
 import com.gardenlink_mobile.entities.Criteria;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -180,7 +181,15 @@ public class SearchFragment extends Fragment {
         }
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_in_progress), Toast.LENGTH_SHORT).show();
+            Snackbar snackbar;
+            try {
+                snackbar = Snackbar.make(getActivity().findViewById(R.id.resultPage), getResources().getString(R.string.location_in_progress), Snackbar.LENGTH_LONG);
+            } catch (Exception e) {
+                snackbar = Snackbar.make(getActivity().findViewById(R.id.home_Activity), getResources().getString(R.string.location_in_progress), Snackbar.LENGTH_LONG);
+            }
+            View sbView= snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorBlue_accueil_postButton));
+            snackbar.show();
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } else {
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -213,17 +222,41 @@ public class SearchFragment extends Fragment {
                 Log.e(TAG, "Error trying to get location");
             }
             if (addreses == null) {
-                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_failed), Toast.LENGTH_SHORT).show();
+                Snackbar snackbar;
+                try {
+                    snackbar = Snackbar.make(getActivity().findViewById(R.id.resultPage), getResources().getString(R.string.location_succed), Snackbar.LENGTH_LONG);
+                } catch (Exception e) {
+                    snackbar = Snackbar.make(getActivity().findViewById(R.id.home_Activity), getResources().getString(R.string.location_succed), Snackbar.LENGTH_LONG);
+                }
+                View sbView= snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
+                snackbar.show();
             } else {
                 mCriteria.setCityField(addreses.get(0).getLocality());
                 mCriteria.setPostCodeField(addreses.get(0).getPostalCode());
                 mCriteria.setStreetNameField(addreses.get(0).getThoroughfare());
                 mCriteria.setStreetNumberField(addreses.get(0).getSubThoroughfare());
                 //TODO:add location detail to session
-                Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.location_succed), Toast.LENGTH_SHORT).show();
+                Snackbar snackbar;
+                try {
+                    snackbar = Snackbar.make(getActivity().findViewById(R.id.resultPage), getResources().getString(R.string.location_succed), Snackbar.LENGTH_LONG);
+                } catch (Exception e) {
+                    snackbar = Snackbar.make(getActivity().findViewById(R.id.home_Activity), getResources().getString(R.string.location_succed), Snackbar.LENGTH_LONG);
+                }
+                View sbView= snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorGreen_snackbar));
+                snackbar.show();
             }
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), getResources().getString(R.string.unavailable), Toast.LENGTH_SHORT).show();
+            Snackbar snackbar;
+            try {
+                snackbar = Snackbar.make(getActivity().findViewById(R.id.resultPage), getResources().getString(R.string.unavailable), Snackbar.LENGTH_LONG);
+            } catch (Exception e) {
+                snackbar = Snackbar.make(getActivity().findViewById(R.id.home_Activity), getResources().getString(R.string.unavailable), Snackbar.LENGTH_LONG);
+            }
+            View sbView= snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
+            snackbar.show();
         }
     }
 

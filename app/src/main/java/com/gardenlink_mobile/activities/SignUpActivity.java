@@ -1,6 +1,7 @@
 package com.gardenlink_mobile.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.safetynet.SafetyNet;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
@@ -342,14 +343,23 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
                         boolean success = jsonObject.getBoolean("success");
 
                         if (success) {
-                            Toast.makeText(getApplicationContext(), CAPTCHA_SUCCESS_MESSAGE, Toast.LENGTH_SHORT).show();
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.signUpActivity),CAPTCHA_SUCCESS_MESSAGE,Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                            snackbar.show();
                             captchaCheckBox.setChecked(true);
                         } else {
-                            Toast.makeText(getApplicationContext(), CAPTCHA_FAIL_MESSAGE, Toast.LENGTH_LONG).show();
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.signUpActivity),CAPTCHA_FAIL_MESSAGE,Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                            snackbar.show();
                             captchaCheckBox.setChecked(false);
                         }
                     } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.json_error) + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.signUpActivity),getResources().getString(R.string.json_error),Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         Log.e(TAG, "verifyTokenOnServer(): " + e.getMessage());
                     }
                 }, error -> Log.e(TAG, "Error: " + error.getMessage())) {
@@ -388,19 +398,28 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
                 switch (responseCode) {
                     case 201:
                         Log.i(TAG, "Operation " + operation.getName() + " completed successfully with empty results.");
-                        Toast.makeText(getApplicationContext(), SUCCESS_USER_CREATED, Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.signUpActivity),SUCCESS_USER_CREATED,Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGreen_snackbar));
+                        snackbar.show();
                         Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
                         startActivity(intent);
                         finish();
                         return;
                     case 400:
                         Log.i(TAG, "Operation" + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), "Un utilisateur existe déjà avec cette adresse email.", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar1 = Snackbar.make(findViewById(R.id.signUpActivity),"Un utilisateur existe déjà avec cette adresse email.",Snackbar.LENGTH_LONG);
+                        View sbView1= snackbar1.getView();
+                        sbView1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar1.show();
                         inputForms.get(EMAIL_FORM).getEditText().setText("");
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), FAIL_USER_NOT_CREATED, Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar2 = Snackbar.make(findViewById(R.id.signUpActivity),FAIL_USER_NOT_CREATED,Snackbar.LENGTH_LONG);
+                        View sbView2= snackbar2.getView();
+                        sbView2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar2.show();
                         return;
                 }
             default:

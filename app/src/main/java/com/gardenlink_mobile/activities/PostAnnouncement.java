@@ -18,9 +18,9 @@ import android.widget.ImageView;
 import android.content.pm.PackageManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Criteria;
@@ -34,6 +34,7 @@ import com.gardenlink_mobile.wsconnecting.operations.POST_PHOTO;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
 import com.gardenlink_mobile.wsconnecting.operations.POST_GARDEN;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.FileNotFoundException;
@@ -473,13 +474,19 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     }
                     imageAnnouncement.setImageBitmap(bitmap);
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_LONG).show();
+                    Log.e(TAG,e.getMessage());
+                    Snackbar snackbar = Snackbar.make(findViewById(R.id.postAnnouncement),R.string.error,Snackbar.LENGTH_LONG);
+                    View sbView= snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                    snackbar.show();
                 } catch (Exception e) {
                     Log.e(TAG, "onActivityResult: ", e);
                 }
             } else {
-                Toast.makeText(this, ERROR_SELECT_IMAGE, Toast.LENGTH_LONG).show();
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.postAnnouncement),ERROR_SELECT_IMAGE,Snackbar.LENGTH_LONG);
+                View sbView= snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                snackbar.show();
             }
         }
     }
@@ -623,7 +630,10 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(this, ERROR_POST, Toast.LENGTH_LONG).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.postAnnouncement),ERROR_POST,Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         return;
                 }
             default:
@@ -640,7 +650,11 @@ public class PostAnnouncement extends NavigableActivity implements IWebConnectab
                     case 200:
                         if (results.get("photo").length() < 5) {
                             Log.e("TAG","Photo uploading failed.");
-                            Toast.makeText(this, "Impossible d'envoyer l'image sélectionnée. Veuillez essayer avec une autre image.", Toast.LENGTH_SHORT);
+                            Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
+                            Snackbar snackbar = Snackbar.make(findViewById(R.id.postAnnouncement),"Impossible d'envoyer l'image sélectionnée. Veuillez réessayer avec une autre image.",Snackbar.LENGTH_LONG);
+                            View sbView= snackbar.getView();
+                            sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                            snackbar.show();
                             imageAnnouncement.setImageDrawable(getResources().getDrawable(R.drawable.image_not_found));
                             return;
                         }

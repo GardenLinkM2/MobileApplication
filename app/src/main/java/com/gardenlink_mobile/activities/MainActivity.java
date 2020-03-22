@@ -6,10 +6,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.gardenlink_mobile.R;
 import com.gardenlink_mobile.entities.Tokens;
@@ -25,6 +26,7 @@ import com.gardenlink_mobile.wsconnecting.operations.GET_USER_ME;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_TOKENS;
 import com.gardenlink_mobile.wsconnecting.operations.GET_USER_UUID;
 import com.gardenlink_mobile.wsconnecting.operations.Operation;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -107,7 +109,10 @@ public class MainActivity extends AppCompatActivity implements IWebConnectable {
                         return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
-                        Toast.makeText(getApplicationContext(), "Identifiants incorrects", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(findViewById(R.id.main_Activity),"Identifiants incorrects",Snackbar.LENGTH_LONG);
+                        View sbView= snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorRed));
+                        snackbar.show();
                         return;
                 }
             case "GET_USER_ME":
