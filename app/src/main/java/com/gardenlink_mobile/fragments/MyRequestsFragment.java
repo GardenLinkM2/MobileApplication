@@ -47,8 +47,6 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
     private boolean gettingGardensPhotos = false;
     private boolean gettingUsersPhotos = false;
 
-    private ProgressBar progressBar;
-
     private HashMap<String, List<Leasing>> leasingsMap = new HashMap<>();
     private HashMap<String, Garden> gardensMap = new HashMap<>();
     private HashMap<String, User> usersMap = new HashMap<>();
@@ -63,7 +61,7 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
         View view = inflater.inflate(R.layout.myrequests_fragment, container, false);
         new GET_MY_LEASING().perform(new WeakReference<>(this));
         listViewDemand = view.findViewById(R.id.myRequestList);
-        progressBar = view.findViewById(R.id.progress_bar_myrequests);
+
         return view;
     }
 
@@ -261,7 +259,6 @@ public class MyRequestsFragment extends Fragment implements IWebConnectable {
             }
             RequestAdapter requestAdapter = new RequestAdapter(this.getContext(), leasingsForAdapter, gardensForAdapter, usersForAdapter);
             listViewDemand.setAdapter(requestAdapter);
-            progressBar.setVisibility(View.GONE);
         }
     }
 }

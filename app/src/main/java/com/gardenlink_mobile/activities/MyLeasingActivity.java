@@ -134,7 +134,6 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
                                         okGarden++;
                                         break;
                                     case "InProgress":
-                                        Log.i(TAG, "INprogress success");
                                         gardensListInProgress.add(garden);
                                         okGarden++;
                                         break;
@@ -183,6 +182,7 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
 
     private void assessFlags() {
         if (GET_MY_LEASING_FLAG && GET_GARDEN && okGarden == currentSize) {
+
             LeasingAdapter myLeasing = new LeasingAdapter(this, getAllLeasingInProgress, gardensListInProgress);
             listViewMyLeasing.setAdapter(myLeasing);
 
@@ -196,11 +196,11 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
         }
     }
 
-    public void getLeasing(String id){
-        for(int i =0 ; i<size; i++){
+    public void getLeasing(String id) {
+        for (int i = 0; i < size; i++) {
             Leasing item = getAllLeasing.get(i);
-            if (item.getGarden().equals(id)){
-                leasing= item;
+            if (item.getGarden().equals(id)) {
+                leasing = item;
                 return;
             }
         }
