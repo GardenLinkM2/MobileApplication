@@ -391,6 +391,11 @@ public class SignUpActivity extends AppCompatActivity implements IWebConnectable
                         startActivity(intent);
                         finish();
                         return;
+                    case 400:
+                        Log.i(TAG, "Operation" + operation.getName() + " failed with response code " + responseCode);
+                        Toast.makeText(getApplicationContext(), "Un utilisateur existe déjà avec cette adresse email.", Toast.LENGTH_SHORT).show();
+                        inputForms.get(EMAIL_FORM).getEditText().setText("");
+                        return;
                     default:
                         Log.e(TAG, "Operation " + operation.getName() + " failed with response code " + responseCode);
                         Toast.makeText(getApplicationContext(), FAIL_USER_NOT_CREATED, Toast.LENGTH_SHORT).show();
