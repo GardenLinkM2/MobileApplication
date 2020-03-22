@@ -52,7 +52,9 @@ public class LeasingAdapter extends ArrayAdapter<Leasing> {
         leasing = getItem(position);
 
         if (!gardensList.isEmpty()) {
-            garden = gardensList.get(position);
+            if (position < gardensList.size()) {
+                garden = gardensList.get(position);
+            }
         }
 
         if (convertView == null) {
@@ -63,13 +65,14 @@ public class LeasingAdapter extends ArrayAdapter<Leasing> {
         TextView landDuration = convertView.findViewById(R.id.resultDuration_State);
         TextView landLocation = convertView.findViewById(R.id.resultLocation);
         ImageView landImage = convertView.findViewById(R.id.resultPhoto);
-        setItemClickListenerOnRequest(convertView, garden.getId());
+
 
         if (garden != null) {
             landTitle.setText(garden.getName());
 
             Date beginDate = DateMaster.TimeStampToDate(leasing.getBegin());
             Date endDate = DateMaster.TimeStampToDate(leasing.getEnd());
+            setItemClickListenerOnRequest(convertView, garden.getId());
 
 
             if (leasing.getState() != null) {
