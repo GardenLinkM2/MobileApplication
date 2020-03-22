@@ -64,6 +64,7 @@ public class MyLeasingActivity extends NavigableActivity implements IWebConnecta
     }
 
     private void getMyLeasing() {
+        Toast.makeText(this, "Chargement en cours...", Toast.LENGTH_SHORT).show();
         new GET_MY_LEASING().perform(new WeakReference<>(this));
     }
 
