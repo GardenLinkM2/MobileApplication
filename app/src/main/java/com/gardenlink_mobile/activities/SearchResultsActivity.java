@@ -74,6 +74,7 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.search_results_activity);
+        initMenu();
         mSearch = new SearchFragment(R.color.colorBlack, true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -316,7 +317,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
 
     private void incrementPhotosRetrieved() {
         photosRetrieved += 1;
-        Log.i("NOMBRE PHOTOS --------------------------",photosRetrieved.toString());
         if (photosRetrieved == resultsNumber) {
             Log.i(TAG,"All photos retrieved");
             mResults = new ArrayList<>();
@@ -329,7 +329,6 @@ public class SearchResultsActivity extends NavigableActivity implements IWebConn
             displayList();
             initFields();
             prepareNavigationButtonsForPage();
-            initMenu();
             ((ListView) findViewById(R.id.resultsLists)).setOnItemClickListener((adapterView, view, i, l) -> toDetails(mPageResults.get(i)));
         }
     }
