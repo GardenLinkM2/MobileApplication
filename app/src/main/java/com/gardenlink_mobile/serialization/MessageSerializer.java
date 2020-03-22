@@ -24,7 +24,7 @@ public class MessageSerializer implements ISerializer<Message> {
             message.setRead(null);
         }
         message.setSender(input.optString("sender"));
-        message.setText(input.optString("texts"));
+        message.setText(input.optString("text"));
         List<Photo> photos = JSONMaster.tryDeserializeMany(new PhotoSerializer(), input.optString("photos"));
         if (photos != null) message.setPhotos(photos);
         return message;
@@ -39,7 +39,7 @@ public class MessageSerializer implements ISerializer<Message> {
         output.putOpt("id", input.getId());
         output.putOpt("isRead", input.getRead());
         output.putOpt("sender", input.getSender());
-        output.putOpt("texts", input.getText());
+        output.putOpt("text", input.getText());
         if (input.getPhotos() != null) {
             JSONArray jPhotos = new JSONArray();
             for (Photo photo : input.getPhotos()) {

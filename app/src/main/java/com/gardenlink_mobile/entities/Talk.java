@@ -7,8 +7,8 @@ public class Talk {
     private String id;
     private String subject;
     private Boolean isArchived;
-    private User sender;
-    private User receiver;
+    private String sender;
+    private String receiver;
     private List<Message> messages;
 
     public String getId() {
@@ -35,19 +35,19 @@ public class Talk {
         isArchived = archived;
     }
 
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 
@@ -57,5 +57,17 @@ public class Talk {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public String toString() {
+        return "Talk{" +
+                "id='" + id + '\'' +
+                ", subject='" + subject + '\'' +
+                ", isArchived=" + isArchived +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", messages=" + messages +
+                '}';
     }
 }

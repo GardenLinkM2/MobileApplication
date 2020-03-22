@@ -18,8 +18,8 @@ public class TalkSerializer implements ISerializer<Talk> {
         talk.setSubject(input.getString("subject"));
         talk.setId(input.getString("id"));
         talk.setArchived(input.getBoolean("isArchived"));
-        talk.setReceiver(new UserSerializer().deserialize(input.getJSONObject("receiver")));
-        talk.setSender(new UserSerializer().deserialize(input.getJSONObject("sender")));
+        talk.setReceiver(input.getString("receiver"));
+        talk.setSender(input.getString("sender"));
 
         List<Message> messages = JSONMaster.tryDeserializeMany(new MessageSerializer(), input.optString("messages"));
         if (messages != null) talk.setMessages(messages);
@@ -33,8 +33,8 @@ public class TalkSerializer implements ISerializer<Talk> {
         output.putOpt("isArchived", input.getArchived());
         output.putOpt("id", input.getId());
         output.putOpt("subject", input.getSubject());
-        output.putOpt("sender", new UserSerializer().serialize((input.getSender())));
-        output.putOpt("receiver", new UserSerializer().serialize((input.getReceiver())));
+        output.putOpt("sender", input.getSender());
+        output.putOpt("receiver", input.getReceiver());
         if (input.getMessages() != null) {
             JSONArray jMessages = new JSONArray();
             for (Message message : input.getMessages()) {
