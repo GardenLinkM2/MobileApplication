@@ -1,5 +1,6 @@
 package com.gardenlink_mobile.fragments;
 
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.gardenlink_mobile.R;
@@ -18,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,6 +79,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }catch(IOException loE)
             {
                 Log.e(TAG,"Error recovering GPS location");
+            }catch (Exception e){
+                Log.e(TAG, "Error recovering the position of the location");
+                Snackbar.make(getActivity().findViewById(R.id.detailAnnouncement), "Impossible d'afficher la localisation de l'annonce.", Snackbar.LENGTH_SHORT)
+                        .setTextColor(Color.BLACK)
+                        .setBackgroundTint(ContextCompat.getColor(getActivity(), R.color.colorYellow))
+                        .show();
             }
     }
 
@@ -84,7 +94,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         List<Address> lAddreses = geocoder.getFromLocationName(lLocationName,1);
 
         return lAddreses.get(0);
-
-
     }
 }

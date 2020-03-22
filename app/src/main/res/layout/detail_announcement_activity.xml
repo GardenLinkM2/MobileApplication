@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailAnnouncement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DetailAnnouncement">
@@ -28,7 +29,7 @@
             <!-- Image -->
             <ImageView
                 android:id="@+id/detailAnnouncement_image"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:contentDescription="@string/postAnnouncement_image_description"
                 android:src="@drawable/image_not_found"
@@ -451,6 +452,22 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <!--  Contact button  -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detailAnnouncement_contactButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_messagingButton"
+                android:onClick="onClickMessaging"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/colorGreen_brighter"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/detailAnnouncement_horizontalDivisor5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

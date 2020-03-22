@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/confirmHireDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <!--  Duration container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmHireDialog_durationContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Duration Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_durationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_duration_label"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Duration value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_durationValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_durationLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Price container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmHireDialog_priceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_durationContainer"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Price Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_priceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_price_label"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Price value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_priceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_priceLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Initial credit container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmHireDialog_initialCreditContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_durationContainer"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!--  Initial credit Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_initialCreditLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_initalBalance_label"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Initial credit value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_initialCreditValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_initialCreditLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Payed price container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmHireDialog_payedPriceContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_priceContainer"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <!--  Price Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_payedPriceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_totalPrice_label"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Price value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_payedPriceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_payedPriceLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--  Final credit container -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/confirmHireDialog_finalCreditContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_priceContainer"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!--  Final credit Label -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_finalCreditLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/confirmHireDialog_resultBalance_label"
+                android:textColor="@color/colorGray_darker"
+                android:textSize="24dp"
+                android:gravity="start"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!--  Initial credit value -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/confirmHireDialog_finalCreditValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NA"
+                android:textSize="18dp"
+                android:gravity="start"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/colorGray_labelInput_font"
+                app:layout_constraintTop_toBottomOf="@id/confirmHireDialog_finalCreditLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
